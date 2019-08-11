@@ -7,12 +7,13 @@ import styles from './style.module.scss'
 
 @Form.create()
 @connect(({ user }) => ({ user }))
-class Login extends Component {
+class Signup extends Component {
   onSubmit = event => {
     event.preventDefault()
     const { form, dispatch } = this.props
     form.validateFields((error, values) => {
       if (!error) {
+        console.log("VALUES:", values)
         dispatch({
           type: 'user/LOGIN',
           payload: values,
@@ -64,17 +65,17 @@ class Login extends Component {
                         rules: [{ required: true, message: 'Please input your password' }],
                       })(<Input size="default" type="password" />)}
                     </Form.Item>
+                    <Form.Item label="Password-Confirmation">
+                      {form.getFieldDecorator('password-confirmation', {
+                        initialValue: 'cleanui',
+                        rules: [{ required: true, message: 'Please repeat your password' }],
+                      })(<Input size="default" type="password" />)}
+                    </Form.Item>
                     <Form.Item>
                       {form.getFieldDecorator('remember', {
                         valuePropName: 'checked',
                         initialValue: true,
                       })(<Checkbox>Remember me</Checkbox>)}
-                      <Link
-                        to="/user/forgot"
-                        className="utils__link--blue utils__link--underlined pull-right"
-                      >
-                        Forgot password?
-                      </Link>
                     </Form.Item>
                     <div className="form-actions">
                       <Button
@@ -83,13 +84,13 @@ class Login extends Component {
                         htmlType="submit"
                         loading={loading}
                       >
-                        Login
+                        Signup
                       </Button>
                       <Link
-                        to="/user/signup"
+                        to="/user/login"
                         className="utils__link--blue utils__link--underlined pull-right"
                       >
-                        Signup
+                        Login
                       </Link>
                     </div>
                     <div className="form-group">
@@ -120,4 +121,4 @@ class Login extends Component {
   }
 }
 
-export default Login
+export default Signup
