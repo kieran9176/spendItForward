@@ -1,5 +1,7 @@
-import Amplify, { Auth } from 'aws-amplify';
+import Amplify, { Auth, API, graphqlOperation } from 'aws-amplify';
 import { notification } from 'antd'
+import * as queries from 'graphql/queries'
+import awsmobile from 'aws-exports'
 
 Amplify.configure({
   Auth: {
@@ -14,9 +16,11 @@ Amplify.configure({
     userPoolWebClientId: '4m03impsp8i9lmp6g6ko6ilmb2',
 
     // OPTIONAL - Enforce user authentication prior to accessing AWS resources or not
-    mandatorySignIn: true,
-  }
+    mandatorySignIn: false,
+  },
 });
+
+Amplify.configure(awsmobile)
 
 export async function login(email, password) {
   return Auth.signIn(email, password)
@@ -31,6 +35,10 @@ export async function login(email, password) {
 
 export async function currentAccount() {
   return Auth.currentAuthenticatedUser();
+}
+
+export async function currentAccountProfile (sub) {
+  return API.graphql(graphqlOperation(queries.getProfile, { account_id: sub }))
 }
 
 export async function logout() {

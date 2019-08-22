@@ -1,4 +1,6 @@
 import React from 'react'
+import { API, graphqlOperation } from 'aws-amplify';
+import * as queries from 'graphql/queries'
 import { Button, Progress, Calendar, Tabs, Upload, Icon, Input, Menu, Dropdown } from 'antd'
 import { Helmet } from 'react-helmet'
 import Avatar from 'components/CleanUIComponents/Avatar'
@@ -26,21 +28,33 @@ const actions = (
 )
 
 class ProfileApp extends React.Component {
+
   state = {
-    name: '',
-    nickname: '',
-    photo: '',
-    background: '',
-    post: '',
-    postsCount: '',
-    followersCount: '',
-    lastActivity: '',
-    status: '',
+    name: data.name,
+    nickname: data.nickname,
+    photo: data.photo,
+    background: data.background,
+    post: data.post,
+    postsCount: data.postsCount,
+    followersCount: data.followersCount,
+    lastActivity: data.lastActivity,
+    status: data.status,
+    skills: data.skills,
+    coursesEnd: data.coursesEnd,
+    adress: data.adress,
+    profSkills: data.profSkills,
+    lastCompanies: data.lastCompanies,
+    personal: data.personal,
+    posts: data.posts,
   }
 
-  componentWillMount() {
+  async componentDidMount() {
+
+    const profile = await this.getProfile("dee652d3-30d5-460d-bea1-4e8df10101d7")
+    console.log("PROFILE", profile)
+
     this.setState({
-      name: data.name,
+      name: profile.data.getProfile.first_name,
       nickname: data.nickname,
       photo: data.photo,
       background: data.background,
@@ -58,6 +72,8 @@ class ProfileApp extends React.Component {
       posts: data.posts,
     })
   }
+
+  getProfile = async (sub) => API.graphql(graphqlOperation(queries.getProfile, { account_id: sub }))
 
   render() {
     const {

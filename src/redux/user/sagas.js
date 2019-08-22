@@ -1,6 +1,7 @@
 import { all, takeEvery, put, call } from 'redux-saga/effects'
 import { notification } from 'antd'
-import { login, currentAccount, logout } from 'services/cognito-user'
+// import { login, currentAccountProfile, logout } from 'services/cognito-user'
+import { login, logout } from 'services/cognito-user'
 import actions from './actions'
 
 export function* LOGIN({ payload }) {
@@ -31,12 +32,21 @@ export function* LOAD_CURRENT_ACCOUNT() {
     },
   })
 
-  const response = yield call(currentAccount)
-  console.log("RESPONSE:", response)
+  // const account = yield call(currentAccount)
+  const account = { username: "Kieran", attributes: {
+    sub: "dee652d3-30d5-460d-bea1-4e8df10101d7",
+    email: "kderfus@gmail.com"
+  }}
 
-  if (response) {
-    const { username } = response
-    const { sub, email } = response.attributes
+  // const profile = yield call(currentAccountProfile(account.attributes.sub))
+
+  console.log("RESPONSE:", account)
+  // console.log("PROFILE:", profile)
+
+  if (account) {
+    console.log("ACCOUNT: ", account)
+    const { username } = account
+    const { sub, email } = account.attributes
     yield put({
       type: 'user/SET_STATE',
       payload: {
