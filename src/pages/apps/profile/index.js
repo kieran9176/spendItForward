@@ -1,6 +1,7 @@
 import React from 'react'
-import { API, graphqlOperation } from 'aws-amplify';
-import * as queries from 'graphql/queries'
+import { connect } from 'react-redux'
+// import { API, graphqlOperation } from 'aws-amplify';
+// import * as queries from 'graphql/queries'
 import { Button, Progress, Calendar, Tabs, Upload, Icon, Input, Menu, Dropdown } from 'antd'
 import { Helmet } from 'react-helmet'
 import Avatar from 'components/CleanUIComponents/Avatar'
@@ -48,13 +49,15 @@ class ProfileApp extends React.Component {
     posts: data.posts,
   }
 
-  async componentDidMount() {
+  componentWillMount() {
 
-    const profile = await this.getProfile("dee652d3-30d5-460d-bea1-4e8df10101d7")
-    console.log("PROFILE", profile)
+    // const profile = await this.getProfile("dee652d3-30d5-460d-bea1-4e8df10101d7")
+    // console.log("PROFILE", profile)
+
+    const { profile } = this.props
 
     this.setState({
-      name: profile.data.getProfile.first_name,
+      name: profile.firstName,
       nickname: data.nickname,
       photo: data.photo,
       background: data.background,
@@ -73,7 +76,7 @@ class ProfileApp extends React.Component {
     })
   }
 
-  getProfile = async (sub) => API.graphql(graphqlOperation(queries.getProfile, { account_id: sub }))
+  // getProfile = async (sub) => API.graphql(graphqlOperation(queries.getProfile, { account_id: sub }))
 
   render() {
     const {
@@ -370,4 +373,13 @@ class ProfileApp extends React.Component {
   }
 }
 
-export default ProfileApp
+const mapStateToProps = (state) => {
+  return {
+    profile: state.profile
+  }
+}
+
+export default connect(
+  mapStateToProps,
+  null
+)(ProfileApp)
