@@ -1,11 +1,9 @@
 // import { all, takeEvery, put, call } from 'redux-saga/effects'
 import { all, takeEvery, put } from 'redux-saga/effects'
-// import { notification } from 'antd'
-// import { login, currentAccountProfile, logout } from 'services/cognito-user'
-// import { login, logout } from 'services/cognito-user'
+import { editProfile } from 'services/profile'
 import actions from './actions'
 
-export function* LOAD_CURRENT_PROFILE() {
+export function* LOAD_CURRENT_PROFILE(sub) {
   yield put({
     type: 'profile/SET_STATE',
     payload: {
@@ -14,6 +12,7 @@ export function* LOAD_CURRENT_PROFILE() {
   })
 
   // const profile = yield call(currentAccountProfile(profile.attributes.sub))
+
   const profile = {
     "username": "Kieran",
     "firstName": "Kieran",
@@ -64,20 +63,23 @@ export function* LOAD_CURRENT_PROFILE() {
   ],
     "intro": [
     {
-      "account_id": "dee652d3-30d5-460d-bea1-4e8df10101d7"
+      "account_id": "dee652d3-30d5-460d-bea1-4e8df10101d7",
+      "content": "Hi, I'm Kieran Derfus",
+      "id": "57704f70-c41b-4717-8dda-8da263be8bc6"
     }
   ]
 }
 
   if (profile) {
-    console.log("PROFILE: ", profile)
-    const { username, firstName, lastName } = profile
+    const { username, firstName, lastName, intro } = profile
     yield put({
       type: 'profile/SET_STATE',
       payload: {
         username,
         firstName,
         lastName,
+        intro,
+        sub
       },
     })
   }
@@ -89,19 +91,19 @@ export function* LOAD_CURRENT_PROFILE() {
   })
 }
 
-export function* EDIT_PROFILE() {
-  yield put({
-    type: 'profile/SET_STATE',
-    payload: {
-      loading: true,
-    },
-  })
+export function EDIT_PROFILE( { payload }) {
+  const { mutation, data } = payload
+  try {
+    editProfile(mutation, data)
+  }
+  catch (err) {
+    console.log(err)
+  }
 }
 
 export default function* rootSaga() {
   yield all([
     takeEvery(actions.EDIT_PROFILE, EDIT_PROFILE),
     takeEvery(actions.LOAD_CURRENT_PROFILE, LOAD_CURRENT_PROFILE),
-    LOAD_CURRENT_PROFILE(), // run once on app load to get user profile
   ])
 }

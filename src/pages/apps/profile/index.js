@@ -1,7 +1,5 @@
 import React from 'react'
 import { connect } from 'react-redux'
-// import { API, graphqlOperation } from 'aws-amplify';
-// import * as queries from 'graphql/queries'
 import { Button, Progress, Calendar, Tabs, Upload, Icon, Input, Menu, Dropdown } from 'antd'
 import { Helmet } from 'react-helmet'
 import Avatar from 'components/CleanUIComponents/Avatar'
@@ -28,6 +26,7 @@ const actions = (
   </Menu>
 )
 
+@connect(({ profile }) => ({ profile }))
 class ProfileApp extends React.Component {
 
   state = {
@@ -51,10 +50,11 @@ class ProfileApp extends React.Component {
 
   componentWillMount() {
 
-    // const profile = await this.getProfile("dee652d3-30d5-460d-bea1-4e8df10101d7")
-    // console.log("PROFILE", profile)
-
     const { profile } = this.props
+
+    console.log("PROPS", this.props)
+
+    this.onSubmit()
 
     this.setState({
       name: profile.firstName,
@@ -73,6 +73,24 @@ class ProfileApp extends React.Component {
       lastCompanies: data.lastCompanies,
       personal: data.personal,
       posts: data.posts,
+    })
+  }
+
+  onSubmit = () => {
+    const { dispatch } = this.props
+    dispatch({
+      type: 'profile/EDIT_PROFILE',
+      payload: {
+        mutation: "updateIntro",
+        data: {
+          intro: [
+            {
+              id: "57704f70-c41b-4717-8dda-8da263be8bc6",
+              content: "Hi, I'm Joey Bag O Donuts."
+            }
+          ]
+        }
+      }
     })
   }
 
@@ -373,13 +391,15 @@ class ProfileApp extends React.Component {
   }
 }
 
-const mapStateToProps = (state) => {
-  return {
-    profile: state.profile
-  }
-}
+// const mapStateToProps = (state) => {
+//   return {
+//     profile: state.profile
+//   }
+// }
+//
+// export default connect(
+//   mapStateToProps,
+//   null
+// )(ProfileApp)
 
-export default connect(
-  mapStateToProps,
-  null
-)(ProfileApp)
+export default ProfileApp

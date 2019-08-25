@@ -10,7 +10,7 @@ import styles from './style.module.scss'
 class Login extends Component {
   onSubmit = event => {
     event.preventDefault()
-    const { form, dispatch } = this.props
+    const {form, dispatch} = this.props
     form.validateFields((error, values) => {
       if (!error) {
         dispatch({

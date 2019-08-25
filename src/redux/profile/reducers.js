@@ -50,7 +50,9 @@ const initialState = {
   ],
   intro: [
     {
-      account_id: ""
+      account_id: "",
+      content: "",
+      id: ""
     }
   ],
   loading: false
@@ -61,7 +63,7 @@ export default function userReducer(state = initialState, action) {
     case actions.SET_STATE:
       return { ...state, ...action.payload }
     case actions.EDIT_PROFILE:
-      return { ...state, ...action.payload }
+      return { ...state, ...action.payload.data }
     default:
       return state
   }

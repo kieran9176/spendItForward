@@ -2,6 +2,7 @@ import { all, takeEvery, put, call } from 'redux-saga/effects'
 import { notification } from 'antd'
 // import { login, currentAccountProfile, logout } from 'services/cognito-user'
 import { login, logout } from 'services/cognito-user'
+import { LOAD_CURRENT_PROFILE } from "../profile/sagas"
 import actions from './actions'
 
 export function* LOGIN({ payload }) {
@@ -38,15 +39,16 @@ export function* LOAD_CURRENT_ACCOUNT() {
     email: "kderfus@gmail.com"
   }}
 
-  // const profile = yield call(currentAccountProfile(account.attributes.sub))
-
   console.log("RESPONSE:", account)
-  // console.log("PROFILE:", profile)
 
   if (account) {
-    console.log("ACCOUNT: ", account)
+
     const { username } = account
     const { sub, email } = account.attributes
+
+    // Call LOAD_CURRENT_PROFILE after we've fetched the 'sub' attribute from Cognito
+    yield call(LOAD_CURRENT_PROFILE, sub)
+
     yield put({
       type: 'user/SET_STATE',
       payload: {

@@ -1,31 +1,17 @@
-// import Amplify, { Auth, API, graphqlOperation } from 'aws-amplify';
-// import { notification } from 'antd'
-// import * as queries from 'graphql/queries'
-//
-// export async function login(email, password) {
-//   return Auth.signIn(email, password)
-//     .then(() => true)
-//     .catch(error => {
-//       notification.warning({
-//         message: error.code,
-//         description: error.message,
-//       })
-//     })
-// }
-//
-// export async function editProfile(action) {
-//   switch (action.type) {
-//     case actions.SET_STATE:
-//       return { ...state, ...action.payload }
-//     default:
-//       return state
-//   }
-//   return Auth.signIn(email, password)
-//     .then(() => true)
-//     .catch(error => {
-//       notification.warning({
-//         message: error.code,
-//         description: error.message,
-//       })
-//     })
-// }
+import { API, graphqlOperation } from 'aws-amplify';
+import * as mutations from 'graphql/mutations'
+
+export async function helloWorld() {
+  return "Hello World"
+}
+
+export async function editProfile(mutation, data) {
+
+  switch (mutation) {
+    case "updateIntro":
+      // console.log({ id: data.intro[0].id, content: data.intro[0].content })
+      return API.graphql(graphqlOperation(mutations.updateIntro, { input: { id: data.intro[0].id, content: data.intro[0].content }}))
+    default:
+      return "Could not update profile"
+  }
+}
