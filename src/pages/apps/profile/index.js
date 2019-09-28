@@ -1,11 +1,12 @@
 import React from 'react'
 import { connect } from 'react-redux'
-import { Button, Progress, Calendar, Tabs, Upload, Icon, Input, Menu, Dropdown } from 'antd'
+import { Form, Button, Progress, Calendar, Tabs, Upload, Icon, Input, Menu, Dropdown } from 'antd'
 import { Helmet } from 'react-helmet'
 import Avatar from 'components/CleanUIComponents/Avatar'
 import Donut from 'components/CleanUIComponents/Donut'
 import Chat from 'components/CleanUIComponents/Chat'
 import SettingsForm from './SettingsForm'
+import ExperienceForm from './ExperienceForm'
 import data from './data.json'
 import style from './style.module.scss'
 
@@ -26,6 +27,7 @@ const actions = (
   </Menu>
 )
 
+@Form.create()
 @connect(({ profile }) => ({ profile }))
 class ProfileApp extends React.Component {
 
@@ -51,10 +53,6 @@ class ProfileApp extends React.Component {
   componentWillMount() {
 
     const { profile } = this.props
-
-    console.log("PROPS", this.props)
-
-    this.onSubmit()
 
     this.setState({
       name: profile.firstName,
@@ -144,17 +142,18 @@ class ProfileApp extends React.Component {
                   </div>
                 </div>
               </div>
+              <ExperienceForm />
               <div className="card">
                 <div className="card-body">
                   <h5 className="mb-3 text-black">
                     <strong>Actions</strong>
                   </h5>
                   <div className={style.actions}>
-                    <Button style={{ display: 'block', width: '100%' }}>Send Message</Button>
-                    <Button style={{ display: 'block', width: '100%' }}>Send File</Button>
-                    <Button style={{ display: 'block', width: '100%' }}>Access History</Button>
-                    <Button style={{ display: 'block', width: '100%' }}>Rename User</Button>
-                    <Button style={{ display: 'block', width: '100%' }}>Ban User</Button>
+                    <Button style={{display: 'block', width: '100%'}}>Send Message</Button>
+                    <Button style={{display: 'block', width: '100%'}}>Send File</Button>
+                    <Button style={{display: 'block', width: '100%'}}>Access History</Button>
+                    <Button style={{display: 'block', width: '100%'}}>Rename User</Button>
+                    <Button style={{display: 'block', width: '100%'}}>Ban User</Button>
                   </div>
                 </div>
               </div>
