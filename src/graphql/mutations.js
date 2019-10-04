@@ -356,10 +356,9 @@ export const deleteReference = `mutation DeleteReference($input: DeleteReference
 `;
 export const createExperience = `mutation CreateExperience($input: CreateExperienceInput!) {
   createExperience(input: $input) {
-    id
-    account_id
     position
-    date
+    start_date
+    end_date
     company
     link
   }
@@ -368,9 +367,9 @@ export const createExperience = `mutation CreateExperience($input: CreateExperie
 export const updateExperience = `mutation UpdateExperience($input: UpdateExperienceInput!) {
   updateExperience(input: $input) {
     id
-    account_id
     position
-    date
+    start_date
+    end_date
     company
     link
   }

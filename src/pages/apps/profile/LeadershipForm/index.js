@@ -11,7 +11,7 @@ let id = 0;
 
 @Form.create()
 @connect(({ profile }) => ({ profile }))
-class ExperienceForm extends React.Component {
+class LeadershipForm extends React.Component {
 
   remove = k => {
     const {form} = this.props;
@@ -137,11 +137,11 @@ class ExperienceForm extends React.Component {
       const children = []
       children.push (
         <Form.Item
-          label={`Company ${index + 1}`}
+          label={`Organization ${index + 1}`}
           required={false}
           key={k}
         >
-          {getFieldDecorator(`companies[${k}]`, {
+          {getFieldDecorator(`organizations[${k}]`, {
             validateTrigger: ['onChange', 'onBlur'],
             rules: [
               {
@@ -153,11 +153,11 @@ class ExperienceForm extends React.Component {
           })(<Input placeholder="e.g. EY" style={{width: '60%', marginRight: 8}} />)}
         </Form.Item>,
         <Form.Item
-          label={`Company ${index + 1} Hyperlink`}
+          label={`Organization ${index + 1} Hyperlink`}
           required={false}
           key={k+1}
         >
-          {getFieldDecorator(`companyLinks[${k}]`, {
+          {getFieldDecorator(`organizationLinks[${k}]`, {
             validateTrigger: ['onChange', 'onBlur'],
             rules: [
               {
@@ -239,4 +239,4 @@ class ExperienceForm extends React.Component {
   }
 }
 
-export default ExperienceForm
+export default LeadershipForm

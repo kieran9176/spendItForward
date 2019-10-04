@@ -57,6 +57,7 @@
     "prop-types": "^15.7.2",
     "qs": "^6.7.0",
     "rc-drawer": "^1.10.1",
+    "rc-tween-one": "^2.6.3",
     "react": "^16.8.6",
     "react-c3js": "^0.1.20",
     "react-chartist": "^0.13.3",
