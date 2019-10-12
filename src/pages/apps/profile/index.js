@@ -7,6 +7,8 @@ import SkillsForm from './SkillsForm'
 import CourseworkForm from './CourseworkForm'
 import EducationForm from './EducationForm'
 import LeadershipForm from './LeadershipForm';
+import OtherForm from './OtherForm';
+import ArticleForm from './ArticleForm';
 import style from './style.module.scss'
 
 @connect(({ profile }) => ({ profile }))
@@ -16,25 +18,15 @@ class ProfileApp extends React.Component {
 
     const {Panel} = Collapse;
 
-    const experienceText = `
-    Input any professional experience you have. If you don't have any, no worries! This is an optional section.
-    `;
-
-    const skillsText = `
-    You got mad skillz?
-    `;
-
-    const courseworkText = `
-    Tell us about all that ish you done learnt.
-    `;
-
-    const educationText = `
-    Maths? Science? MBA in Craft Beer Brewing?
-    `;
-
-    const leadershipText = `
-    If your actions inspire others to dream more, learn more, do more and become more, you are a leader.
-    `;
+    const text = {
+      experienceText: "Input any professional experience you have. If you don't have any, no worries! This is an optional section.",
+      skillsText: "You got mad skillz?",
+      courseworkText: "Tell us about all that ish you done learnt.",
+      educationText: "Maths? Science? MBA in Craft Beer Brewing?",
+      leadershipText: "If your actions inspire others to dream more, learn more, do more and become more, you are a leader.",
+      bragsText: "Brag about yourself. You deserve it.",
+      articlesText: "What have you been reading lately?"
+    }
 
     const customPanelStyle = {
       background: '#ffffff',
@@ -55,7 +47,7 @@ class ProfileApp extends React.Component {
               expandIcon={({isActive}) => <Icon type="caret-right" rotate={isActive ? 90 : 0} />}
             >
               <Panel header="Experience" key="1" style={customPanelStyle}>
-                <p>{experienceText}</p>
+                <p>{text.experienceText}</p>
                 <ExperienceForm />
               </Panel>
             </Collapse>
@@ -65,7 +57,7 @@ class ProfileApp extends React.Component {
               expandIcon={({isActive}) => <Icon type="caret-right" rotate={isActive ? 90 : 0} />}
             >
               <Panel header="Skills" key="2" style={customPanelStyle}>
-                <p>{skillsText}</p>
+                <p>{text.skillsText}</p>
                 <SkillsForm />
               </Panel>
             </Collapse>
@@ -75,7 +67,7 @@ class ProfileApp extends React.Component {
               expandIcon={({isActive}) => <Icon type="caret-right" rotate={isActive ? 90 : 0} />}
             >
               <Panel header="Coursework" key="3" style={customPanelStyle}>
-                <p>{courseworkText}</p>
+                <p>{text.courseworkText}</p>
                 <CourseworkForm />
               </Panel>
             </Collapse>
@@ -85,7 +77,7 @@ class ProfileApp extends React.Component {
               expandIcon={({isActive}) => <Icon type="caret-right" rotate={isActive ? 90 : 0} />}
             >
               <Panel header="Education" key="4" style={customPanelStyle}>
-                <p>{educationText}</p>
+                <p>{text.educationText}</p>
                 <EducationForm />
               </Panel>
             </Collapse>
@@ -95,8 +87,28 @@ class ProfileApp extends React.Component {
               expandIcon={({isActive}) => <Icon type="caret-right" rotate={isActive ? 90 : 0} />}
             >
               <Panel header="Leadership" key="4" style={customPanelStyle}>
-                <p>{leadershipText}</p>
+                <p>{text.leadershipText}</p>
                 <LeadershipForm />
+              </Panel>
+            </Collapse>
+            <Collapse
+              bordered={false}
+              defaultActiveKey={['1']}
+              expandIcon={({isActive}) => <Icon type="caret-right" rotate={isActive ? 90 : 0} />}
+            >
+              <Panel header="Above and Beyond / Brags" key="5" style={customPanelStyle}>
+                <p>{text.bragsText}</p>
+                <OtherForm />
+              </Panel>
+            </Collapse>
+            <Collapse
+              bordered={false}
+              defaultActiveKey={['1']}
+              expandIcon={({isActive}) => <Icon type="caret-right" rotate={isActive ? 90 : 0} />}
+            >
+              <Panel header="Favorite Articles" key="6" style={customPanelStyle}>
+                <p>{text.articlesText}</p>
+                <ArticleForm />
               </Panel>
             </Collapse>
           </div>

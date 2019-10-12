@@ -378,11 +378,6 @@ export const updateExperience = `mutation UpdateExperience($input: UpdateExperie
 export const deleteExperience = `mutation DeleteExperience($input: DeleteExperienceInput!) {
   deleteExperience(input: $input) {
     id
-    account_id
-    position
-    date
-    company
-    link
   }
 }
 `;

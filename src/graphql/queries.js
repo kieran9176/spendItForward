@@ -13,67 +13,57 @@ export const articles = `query Articles {
 `;
 export const getProfile = `query GetProfile($account_id: String!) {
   getProfile(account_id: $account_id) {
-    id
-    account_id
     username
     first_name
     last_name
     articles {
-      id
-      account_id
       title
       caption
       url
-    }
+    	}
     references {
-      id
-      account_id
       content
       author_name
-      author_position
       author_company
+      author_position
     }
     experience {
       id
-      account_id
       position
-      date
       company
       link
+      start_date
+      end_date
     }
     leadership {
+      position
+      organization
       id
       account_id
-      position
-      date
-      organization
-      link
     }
     other {
       id
-      account_id
       content
     }
     intro {
-      id
-      account_id
       content
+      account_id
+      id
     }
     skills {
-      id
-      account_id
       content
+      account_id
+      id
     }
     coursework {
       id
-      account_id
       course_name
+      account_id
     }
     contact {
-      id
-      account_id
       email
       phone
+      id
     }
   }
 }
