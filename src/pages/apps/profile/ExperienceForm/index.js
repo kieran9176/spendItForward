@@ -71,10 +71,8 @@ class ExperienceForm extends React.Component {
     const { form } = this.props;
     // can use data-binding to get
     const keys = form.getFieldValue('keys');
-    // const nextKeys = keys.concat(id += 1);
-    const nextKeys = keys.concat(keys[keys.length - 1] + 1)
+    const nextKeys = keys.concat(keys[keys.length - 1] + 1);
 
-    // console.log("nextKeys", nextKeys)
     // can use data-binding to set
     // important! notify form to detect changes
     form.setFieldsValue({
@@ -108,26 +106,20 @@ class ExperienceForm extends React.Component {
 
   handleSubmit = e => {
     e.preventDefault();
-    // const {form, dispatch, profile} = this.props
     const {form, dispatch} = this.props
-
-    // const { form } = this.props
     form.validateFields((err, values) => {
       if (!err) {
         const {keys, companies, titles, dates, companyLinks, IDs, changed } = values;
 
-        console.log("VALIDATE FIELDS DATES", dates)
-
-        const companiesArr = keys.map(key => companies[key])
-        const titleArr = keys.map(key => titles[key])
+        const companiesArr = keys.map(key => companies[key]);
+        const titleArr = keys.map(key => titles[key]);
         const datesArr = keys.map(key => {
           return [moment(dates[key][0]).format('YYYY-MM-DD'), moment(dates[key][1]).format('YYYY-MM-DD')]
         });
-        const companyLinksArr = keys.map(key => companyLinks[key])
-        const idArr = keys.map(key => IDs[key])
-        const changedArr = keys.map(key => changed[key])
 
-        console.log("DATES ARRAY", datesArr)
+        const companyLinksArr = keys.map(key => companyLinks[key]);
+        const idArr = keys.map(key => IDs[key]);
+        const changedArr = keys.map(key => changed[key]);
 
         const experience = this.createPayloads("updateExperience", [titleArr, companiesArr, datesArr, companyLinksArr, idArr, changedArr]);
 
@@ -142,8 +134,6 @@ class ExperienceForm extends React.Component {
     })
   };
 
-  // if your form doesn't have the fields these you set, this error will appear!
-  // if your form doesn't have the fields these you set, this error will appear!
   // if your form doesn't have the fields these you set, this error will appear!
   // https://github.com/ant-design/ant-design/issues/8880
 

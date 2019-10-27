@@ -1,23 +1,31 @@
 import React from 'react'
 import { connect } from 'react-redux'
-import { Tag, Input, Icon, Form } from 'antd';
+import { Tag, Input, Icon, Button } from 'antd';
 import { TweenOneGroup } from 'rc-tween-one';
 
-@Form.create()
 @connect(({ profile }) => ({ profile }))
 class CourseworkForm extends React.Component {
 
-  state = {
-    tags: ['Data Structures & Algorithms', 'Macroeconomics', 'Database Systems'],
-    inputVisible: false,
-    inputValue: '',
-  };
+  constructor(props) {
+    super(props);
+    const { coursework }  = props.profile;
+    const tags = coursework.map(courseworkInstance => courseworkInstance.course_name);
+    this.state = {
+      tags,
+      coursework,
+      inputVisible: false,
+      inputValue: '',
+    };
+  }
 
   handleClose = removedTag => {
-    let { tags } = this.state
+    let { tags, coursework } = this.state
     tags = tags.filter(tag => tag !== removedTag);
-    console.log(tags);
-    this.setState({ tags });
+    coursework = coursework.map(courseworkInstance => {
+      if (courseworkInstance.course_name === removedTag) courseworkInstance.action = "remove";
+      return courseworkInstance
+    });
+    this.setState({ tags, coursework });
   };
 
   showInput = () => {
@@ -30,20 +38,21 @@ class CourseworkForm extends React.Component {
   };
 
   handleInputConfirm = () => {
-    const { inputValue } = this.state;
+    const { inputValue, coursework } = this.state;
     let { tags } = this.state;
     if (inputValue && tags.indexOf(inputValue) === -1) {
       tags = [...tags, inputValue];
+      coursework.push({ course_name: inputValue, id: null, action: "add"});
     }
-    console.log(tags);
     this.setState({
       tags,
+      coursework,
       inputVisible: false,
       inputValue: '',
     });
   };
 
-  forMap = (tag) => {
+  forMap = tag => {
     const tagElem = (
       <Tag
         closable
@@ -63,16 +72,35 @@ class CourseworkForm extends React.Component {
   };
 
   saveInputRef = (input) => {
-    console.log("INPUT", input)
     this.input = input
-  }
+  };
+
+  handleSubmit = e => {
+    e.preventDefault();
+    // const { dispatch } = this.props
+    const { tags, coursework } = this.state;
+    const { dispatch } = this.props;
+
+    dispatch({
+      type: 'profile/EDIT_PROFILE',
+      payload: {
+        mutation: "updateCoursework",
+        data: { coursework }
+      }
+    });
+
+    console.log("COURSEWORK", coursework)
+    console.log("TAGS", tags)
+
+  };
 
   render() {
-    const { tags, inputVisible, inputValue } = this.state;
+    const {tags, inputVisible, inputValue} = this.state;
     const tagChild = tags.map(this.forMap);
+
     return (
       <div>
-        <div style={{ marginBottom: 16 }}>
+        <div style={{marginBottom: 16}}>
           <TweenOneGroup
             enter={{
               scale: 0.8,
@@ -83,31 +111,38 @@ class CourseworkForm extends React.Component {
                 e.target.style = '';
               },
             }}
-            leave={{ opacity: 0, width: 0, scale: 0, duration: 200 }}
+            leave={{opacity: 0, width: 0, scale: 0, duration: 200}}
             appear={false}
           >
             {tagChild}
           </TweenOneGroup>
         </div>
-        {inputVisible && (
-          <Input
-            ref={this.saveInputRef}
-            type="text"
-            size="small"
-            style={{ width: 78 }}
-            value={inputValue}
-            onChange={this.handleInputChange}
-            onBlur={this.handleInputConfirm}
-            onPressEnter={this.handleInputConfirm}
-          />
-        )}
-        {!inputVisible && (
-          <Tag onClick={this.showInput} style={{ background: '#fff', borderStyle: 'dashed' }}>
-            <Icon type="plus" /> New Tag
-          </Tag>
-        )}
+        <div style={{marginBottom: 16}}>
+          {inputVisible && (
+            <Input
+              ref={this.saveInputRef}
+              type="text"
+              size="small"
+              style={{width: 78}}
+              value={inputValue}
+              onChange={this.handleInputChange}
+              onBlur={this.handleInputConfirm}
+              onPressEnter={this.handleInputConfirm}
+            />
+          )}
+          {!inputVisible && (
+            <Tag onClick={this.showInput} style={{background: '#fff', borderStyle: 'dashed'}}>
+              <Icon type="plus" /> New Tag
+            </Tag>
+          )}
+        </div>
+        <div>
+          <Button type="primary" onClick={this.handleSubmit}>
+            Submit
+          </Button>
+        </div>
       </div>
-    );
+    )
   }
 }
 

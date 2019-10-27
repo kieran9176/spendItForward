@@ -142,7 +142,83 @@ class ProfileApp extends React.Component {
                   </div>
                 </div>
               </div>
-              <ExperienceForm />
+              <div>
+                <Helmet title="Profile" />
+                <div className={style.profile}>
+                  <div className={style.profile}>
+                    <Collapse
+                      bordered={false}
+                      defaultActiveKey={['1']}
+                      expandIcon={({isActive}) => <Icon type="caret-right" rotate={isActive ? 90 : 0} />}
+                    >
+                      <Panel header="Experience" key="1" style={customPanelStyle}>
+                        <p>{text.experienceText}</p>
+                        <ExperienceForm />
+                      </Panel>
+                    </Collapse>
+                    <Collapse
+                      bordered={false}
+                      defaultActiveKey={['1']}
+                      expandIcon={({isActive}) => <Icon type="caret-right" rotate={isActive ? 90 : 0} />}
+                    >
+                      <Panel header="Skills" key="2" style={customPanelStyle}>
+                        <p>{text.skillsText}</p>
+                        <SkillsForm />
+                      </Panel>
+                    </Collapse>
+                    <Collapse
+                      bordered={false}
+                      defaultActiveKey={['1']}
+                      expandIcon={({isActive}) => <Icon type="caret-right" rotate={isActive ? 90 : 0} />}
+                    >
+                      <Panel header="Coursework" key="3" style={customPanelStyle}>
+                        <p>{text.courseworkText}</p>
+                        <CourseworkForm />
+                      </Panel>
+                    </Collapse>
+                    <Collapse
+                      bordered={false}
+                      defaultActiveKey={['1']}
+                      expandIcon={({isActive}) => <Icon type="caret-right" rotate={isActive ? 90 : 0} />}
+                    >
+                      <Panel header="Education" key="4" style={customPanelStyle}>
+                        <p>{text.educationText}</p>
+                        <EducationForm />
+                      </Panel>
+                    </Collapse>
+                    <Collapse
+                      bordered={false}
+                      defaultActiveKey={['1']}
+                      expandIcon={({isActive}) => <Icon type="caret-right" rotate={isActive ? 90 : 0} />}
+                    >
+                      <Panel header="Leadership" key="4" style={customPanelStyle}>
+                        <p>{text.leadershipText}</p>
+                        <LeadershipForm />
+                      </Panel>
+                    </Collapse>
+                    <Collapse
+                      bordered={false}
+                      defaultActiveKey={['1']}
+                      expandIcon={({isActive}) => <Icon type="caret-right" rotate={isActive ? 90 : 0} />}
+                    >
+                      <Panel header="Above and Beyond / Brags" key="5" style={customPanelStyle}>
+                        <p>{text.bragsText}</p>
+                        <OtherForm />
+                      </Panel>
+                    </Collapse>
+                    <Collapse
+                      bordered={false}
+                      defaultActiveKey={['1']}
+                      expandIcon={({isActive}) => <Icon type="caret-right" rotate={isActive ? 90 : 0} />}
+                    >
+                      <Panel header="Favorite Articles" key="6" style={customPanelStyle}>
+                        <p>{text.articlesText}</p>
+                        <ArticleForm />
+                      </Panel>
+                    </Collapse>
+                  </div>
+                </div>
+              </div>
               <div className="card">
                 <div className="card-body">
                   <h5 className="mb-3 text-black">

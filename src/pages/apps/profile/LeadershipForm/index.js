@@ -1,38 +1,78 @@
 import React from 'react'
 import { connect } from 'react-redux'
 import {Form, Input, Select, Icon, Button, DatePicker } from 'antd';
-// import moment from 'moment'
+import moment from 'moment'
 import style from '../style.module.scss'
 
 const { RangePicker } = DatePicker;
 const { Option } = Select;
 
-let id = 0;
-
-@Form.create()
 @connect(({ profile }) => ({ profile }))
+@Form.create({
+  onFieldsChange(props, changedFields, allFields) {
+
+    const { form } = props;
+    const { changed } = allFields;
+    const {positions, organizations, organizationLinks, dates} = changedFields;
+
+    [positions, organizations, organizationLinks, dates].forEach(arr => {
+      return arr ? form.setFieldsValue({
+        changed: changed.value.map((status, index) => {
+          return arr[index] ? "true" : "false"
+        })
+      }) : null
+    });
+  }
+})
+
 class LeadershipForm extends React.Component {
 
-  remove = k => {
-    const {form} = this.props;
+  remove = (k, index) => {
+    const { form, dispatch } = this.props;
     // can use data-binding to get
-    const keys = form.getFieldValue('keys');
+    const { keys, positions, organizations, organizationLinks, IDs } = form.getFieldsValue();
+
     // We need at least one passenger
     if (keys.length === 1) {
       return;
     }
 
+    const leadership = this.createPayloads("removeLeadership", [IDs[index]]);
+
+    dispatch({
+      type: 'profile/EDIT_PROFILE',
+      payload: {
+        mutation: "removeLeadership",
+        data: { leadership }
+      }
+    });
+
     // can use data-binding to set
     form.setFieldsValue({
-      keys: keys.filter(key => key !== k),
+      keys: keys.filter( (key) => {
+        return key !== k
+      }),
+      positions: positions.filter( (title) => {
+        return title !== positions[index]
+      }),
+      organizations: organizations.filter( (organization) => {
+        return organization !== organizations[index]
+      }),
+      organizationLinks: organizationLinks.filter( (organizationLink) => {
+        return organizationLink !== organizationLinks[index]
+      }),
+      IDs: IDs.filter( (ID) => {
+        return ID !== IDs[index]
+      }),
     });
   };
 
   add = () => {
-    const {form} = this.props;
+    const { form } = this.props;
     // can use data-binding to get
     const keys = form.getFieldValue('keys');
-    const nextKeys = keys.concat(id += 1);
+    const nextKeys = keys.concat(keys[keys.length - 1] + 1);
+
     // can use data-binding to set
     // important! notify form to detect changes
     form.setFieldsValue({
@@ -40,83 +80,68 @@ class LeadershipForm extends React.Component {
     });
   };
 
-  createPayloads = (array) => {
-    const payloads = []
-    for (let i = 0; i < array[0].length; i += 1) {
-      payloads.push({
-        type: 'profile/EDIT_PROFILE',
-        payload: {
-          mutation: "updateExperience",
-          data: {
-            experience:
-              {
-                id: "d7932c8a-f063-4dca-be48-a4eb3fc5804a",
-                position: array[0][i],
-                company: array[1][i],
-                start_date: "2019-05-10",
-                end_date: "2019-05-15",
-                link: array[3][i]
-              }
-          }
+  createPayloads = (action, array) => {
+    const leadership = [];
+    switch (action) {
+      case "updateLeadership":
+        for (let i = 0; i < array[0].length; i += 1) {
+          leadership.push({
+            position: array[0][i],
+            organization: array[1][i],
+            start_date: array[2][i][0],
+            end_date: array[2][i][1],
+            link: array[3][i],
+            id: array[4][i],
+            changed: array[5][i]
+          })
         }
-      })
+        return leadership;
+      case "removeLeadership":
+        leadership.push({ id: array[0] });
+        return leadership;
+      default:
+        return "Could not update"
     }
-    return payloads
-  }
+  };
 
   handleSubmit = e => {
     e.preventDefault();
-    const { form, dispatch } = this.props
-
-    // const { form } = this.props
+    const {form, dispatch} = this.props
     form.validateFields((err, values) => {
       if (!err) {
-        const { keys, companies, titles, dates, companyLinks } = values;
+        const {keys, organizations, positions, dates, organizationLinks, IDs, changed } = values;
 
-        console.log("VALUES", values)
-
-        const companiesArr = keys.map(key => companies[key])
-        const titleArr = keys.map(key => titles[key])
-        const datesArr = keys.map(key => dates[key])
-        const companyLinksArr = keys.map(key => companyLinks[key])
-
-        const payloads = this.createPayloads([titleArr, companiesArr, datesArr, companyLinksArr])
-
-        Promise.all([payloads.forEach(payload => dispatch(payload))])
-          .then(results => {
-            console.log("RESULTS", results);
+        const organizationsArr = keys.map(key => organizations[key]);
+        const titleArr = keys.map(key => positions[key]);
+        const datesArr = keys.map(key => {
+          return [moment(dates[key][0]).format('YYYY-MM-DD'), moment(dates[key][1]).format('YYYY-MM-DD')]
         });
+
+        const organizationLinksArr = keys.map(key => organizationLinks[key]);
+        const idArr = keys.map(key => IDs[key]);
+        const changedArr = keys.map(key => changed[key]);
+
+        const leadership = this.createPayloads("updateLeadership", [titleArr, organizationsArr, datesArr, organizationLinksArr, idArr, changedArr]);
+
+        dispatch({
+          type: 'profile/EDIT_PROFILE',
+          payload: {
+            mutation: "updateLeadership",
+            data: { leadership }
+          }
+        })
       }
-    });
+    })
   };
 
   // if your form doesn't have the fields these you set, this error will appear!
-  // if your form doesn't have the fields these you set, this error will appear!
-  // if your form doesn't have the fields these you set, this error will appear!
   // https://github.com/ant-design/ant-design/issues/8880
 
-
   render() {
-    const { form } = this.props
-    // const {form, profile } = this.props
-    // const { experience } = profile
+    const { form, profile } = this.props
+    const { leadership } = profile
     const { getFieldDecorator, getFieldValue } = form;
-    // const formItemLayout = {
-    //   labelCol: {
-    //     xs: {span: 24},
-    //     sm: {span: 4},
-    //   },
-    //   wrapperCol: {
-    //     xs: {span: 24},
-    //     sm: {span: 20},
-    //   },
-    // };
-    // const formItemLayoutWithOutLabel = {
-    //   wrapperCol: {
-    //     xs: {span: 24, offset: 0},
-    //     sm: {span: 20, offset: 4},
-    //   },
-    // };
+
     const selectBefore = (
       <Select defaultValue="https://" style={{ width: 90 }}>
         <Option value="https://">https://</Option>
@@ -131,99 +156,112 @@ class LeadershipForm extends React.Component {
         <Option value=".gov">.gov</Option>
       </Select>
     );
-    getFieldDecorator('keys', {initialValue: []});
+
+    getFieldDecorator('keys', { initialValue: leadership.map((expObj, i) => i )});
+    getFieldDecorator('IDs', { initialValue: leadership.map((expObj) => expObj.id )});
+    getFieldDecorator('changed', { initialValue: leadership.map( () => "false" )});
+
     const keys = getFieldValue('keys');
-    const companyFormItem = keys.map((k, index) => {
-      const children = []
-      children.push (
-        <Form.Item
-          label={`Organization ${index + 1}`}
-          required={false}
-          key={k}
-        >
-          {getFieldDecorator(`organizations[${k}]`, {
-            validateTrigger: ['onChange', 'onBlur'],
-            rules: [
-              {
-                required: true,
-                whitespace: true,
-                message: "Please input additional experience or delete this field.",
-              },
-            ],
-          })(<Input placeholder="e.g. EY" style={{width: '60%', marginRight: 8}} />)}
-        </Form.Item>,
-        <Form.Item
-          label={`Organization ${index + 1} Hyperlink`}
-          required={false}
-          key={k+1}
-        >
-          {getFieldDecorator(`organizationLinks[${k}]`, {
-            validateTrigger: ['onChange', 'onBlur'],
-            rules: [
-              {
-                required: true,
-                whitespace: true,
-                message: "Please input additional experience or delete this field.",
-              },
-            ],
-          })(<Input addonBefore={selectBefore} addonAfter={selectAfter} placeholder="consulting.ey" style={{width: '60%', marginRight: 8}} />)}
-        </Form.Item>,
-        <Form.Item
-          label={`Title ${index + 1}`}
-          required={false}
-          key={k+2}
-        >
-          {getFieldDecorator(`titles[${k}]`, {
-            validateTrigger: ['onChange', 'onBlur'],
-            rules: [
-              {
-                required: true,
-                whitespace: true,
-                message: "Please input additional experience or delete this field.",
-              },
-            ],
-          })(<Input placeholder="e.g. Senior Consultant" style={{width: '60%', marginRight: 8}} />)}
-        </Form.Item>,
-        <Form.Item
-          label={`Date ${index + 1}`}
-          required={false}
-          key={k+3}
-        >
-          {getFieldDecorator(`dates[${k}]`, {
-            rules: [
-              {
-                required: true,
-                message: "Please input additional experience or delete this field.",
-              },
-            ],
-          })(<RangePicker
-            dateRender={current => {
-              const style1 = {};
-              if (current.date() === 1) {
-                style1.border = '1px solid #1890ff';
-                style1.borderRadius = '50%';
-              }
-              return (
-                <div className="ant-calendar-date" style={style}>
-                  {current.date()}
-                </div>
-              );
-            }}
-          />)}
-          {keys.length > 1 ? (
-            <Icon
-              className="dynamic-delete-button"
-              type="minus-circle-o"
-              onClick={() => this.remove(k)}
-            />
-          ) : null}
-        </Form.Item>
+
+    const organizationFormItem = keys.map((k, index) => {
+      return (
+        <div key={k}>
+          <Form.Item
+            label={`Organization ${index + 1}`}
+            required={false}
+          >
+            { getFieldDecorator(`organizations[${index}]`, {
+              validateTrigger: ['onChange', 'onBlur'],
+              initialValue: index < leadership.length ? leadership[index].organization : "",
+              rules: [
+                {
+                  required: true,
+                  whitespace: true,
+                  message: "Please input additional leadership or delete this field.",
+                },
+              ],
+            })(<Input placeholder="e.g. EY" style={{width: '60%', marginRight: 8}} />)
+            }
+          </Form.Item>
+          <Form.Item
+            label={`Organization ${index + 1} Hyperlink`}
+            required={false}
+          >
+            { getFieldDecorator(`organizationLinks[${index}]`, {
+              validateTrigger: ['onChange', 'onBlur'],
+              initialValue: index < leadership.length ? leadership[index].link : "",
+              rules: [
+                {
+                  required: true,
+                  whitespace: true,
+                  message: "Please input additional leadership or delete this field.",
+                },
+              ],
+            })(<Input
+              addonBefore={selectBefore}
+              addonAfter={selectAfter}
+              placeholder="consulting.ey"
+              style={{width: '60%', marginRight: 8}}
+            />) }
+          </Form.Item>
+          <Form.Item
+            label={`Title ${index + 1}`}
+            required={false}
+          >
+            {getFieldDecorator(`positions[${index}]`, {
+              validateTrigger: ['onChange', 'onBlur'],
+              initialValue: index < leadership.length ? leadership[index].position : "",
+              rules: [
+                {
+                  required: true,
+                  whitespace: true,
+                  message: "Please input additional leadership or delete this field.",
+                },
+              ],
+            })(<Input placeholder="e.g. Senior Consultant" style={{width: '60%', marginRight: 8}} />)}
+          </Form.Item>
+          <Form.Item
+            label={`Date ${index + 1}`}
+            required={false}
+          >
+            {getFieldDecorator(`dates[${index}]`, {
+              rules: [
+                {
+                  required: true,
+                  message: "Please input additional leadership or delete this field.",
+                },
+              ],
+              initialValue: index < leadership.length ? [ moment(leadership[index].start_date), moment(leadership[index].end_date) ] : []
+              // initialValue: []
+            })(<RangePicker
+              dateRender={current => {
+                const style1 = {};
+                if (current.date() === 1) {
+                  style1.border = '1px solid #1890ff';
+                  style1.borderRadius = '50%';
+                }
+                return (
+                  <div className="ant-calendar-date" style={style}>
+                    {current.date()}
+                  </div>
+                );
+              }}
+            />)}
+            { keys.length > 1 ? (
+              <Icon
+                className="dynamic-delete-button"
+                type="minus-circle-o"
+                onClick={() => this.remove(k, index)}
+              />
+            ) : null}
+          </Form.Item>
+        </div>
       )
-      return children
     });
+
     return (
       <Form onSubmit={this.handleSubmit}>
-        {companyFormItem}
+        { organizationFormItem }
         <Form.Item>
           <Button type="dashed" onClick={this.add} style={{width: '60%'}}>
             <Icon type="plus" /> Add field

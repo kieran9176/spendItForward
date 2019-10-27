@@ -1,6 +1,7 @@
 // import { all, takeEvery, put, call } from 'redux-saga/effects'
 import { all, takeEvery, put } from 'redux-saga/effects'
-import { editProfile, currentAccountProfile } from 'services/profile'
+import { editProfile, currentAccountProfile, notify } from 'services/profile'
+// import { editProfile, notify } from 'services/profile'
 import actions from './actions'
 
 export function* LOAD_CURRENT_PROFILE(sub) {
@@ -9,9 +10,12 @@ export function* LOAD_CURRENT_PROFILE(sub) {
     payload: {
       loading: true,
     },
-  })
+  });
 
   const profileResponse = yield currentAccountProfile(sub);
+
+  // console.log("PROFILE RESPONSE", profileResponse);
+
   const profile = profileResponse.data.getProfile;
 
   // const profile = {
@@ -44,7 +48,14 @@ export function* LOAD_CURRENT_PROFILE(sub) {
   //       "author_position": "Senior 2"
   //     }
   //   ],
-  //     "leadership": [
+  //   "skills": [
+  //     {
+  //       "content": "ReactJS",
+  //       "account_id": "dee652d3-30d5-460d-bea1-4e8df10101d7",
+  //       "id": "11557536-6f43-445a-8b0a-f3bc8aeae78c"
+  //     }
+  //   ],
+  //   "leadership": [
   //     {
   //       "position": "President",
   //       "organization": "Plead the 5th",
@@ -88,7 +99,7 @@ export function* LOAD_CURRENT_PROFILE(sub) {
   // }
 
   if (profile) {
-    const { username, firstName, lastName, articles, experience, references, intro } = profile
+    const { username, firstName, lastName, articles, experience, references, intro, skills, coursework, leadership } = profile
     yield put({
       type: 'profile/SET_STATE',
       payload: {
@@ -96,8 +107,11 @@ export function* LOAD_CURRENT_PROFILE(sub) {
         firstName,
         lastName,
         articles,
+        skills,
         experience,
         references,
+        coursework,
+        leadership,
         intro,
         sub
       },
@@ -113,12 +127,11 @@ export function* LOAD_CURRENT_PROFILE(sub) {
 
 export async function EDIT_PROFILE( { payload }) {
   const { mutation, data } = payload
-  try {
-    return await editProfile(mutation, data)
-  }
-  catch (err) {
-    console.log(err)
-  }
+  const response = editProfile(mutation, data);
+  response.then(values => {
+    if (values === "Could not update profile") notify("failure");
+    else notify(mutation)
+  });
 }
 
 export default function* rootSaga() {

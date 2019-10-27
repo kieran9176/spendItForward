@@ -386,7 +386,8 @@ export const createLeadership = `mutation CreateLeadership($input: CreateLeaders
     id
     account_id
     position
-    date
+    start_date
+    end_date
     organization
     link
   }
@@ -397,7 +398,8 @@ export const updateLeadership = `mutation UpdateLeadership($input: UpdateLeaders
     id
     account_id
     position
-    date
+    start_date
+    end_date
     organization
     link
   }
@@ -406,11 +408,6 @@ export const updateLeadership = `mutation UpdateLeadership($input: UpdateLeaders
 export const deleteLeadership = `mutation DeleteLeadership($input: DeleteLeadershipInput!) {
   deleteLeadership(input: $input) {
     id
-    account_id
-    position
-    date
-    organization
-    link
   }
 }
 `;
@@ -464,8 +461,6 @@ export const deleteIntro = `mutation DeleteIntro($input: DeleteIntroInput!) {
 `;
 export const createSkill = `mutation CreateSkill($input: CreateSkillInput!) {
   createSkill(input: $input) {
-    id
-    account_id
     content
   }
 }
@@ -481,8 +476,6 @@ export const updateSkill = `mutation UpdateSkill($input: UpdateSkillInput!) {
 export const deleteSkill = `mutation DeleteSkill($input: DeleteSkillInput!) {
   deleteSkill(input: $input) {
     id
-    account_id
-    content
   }
 }
 `;
