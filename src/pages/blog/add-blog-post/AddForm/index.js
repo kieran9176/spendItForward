@@ -1,5 +1,7 @@
 import React from 'react'
 import { Editor } from 'react-draft-wysiwyg'
+import { API, graphqlOperation } from 'aws-amplify';
+import * as mutations from 'graphql/mutations'
 import 'react-draft-wysiwyg/dist/react-draft-wysiwyg.css'
 import draftToMarkdown from 'draftjs-to-markdown';
 import draftToHtml from 'draftjs-to-html';
@@ -43,20 +45,30 @@ class AddForm extends React.Component {
   handleSubmit = e => {
     e.preventDefault();
 
-    const { form } = this.props
-    const { editorState } = this.state;
+    const {form} = this.props
+    const {editorState} = this.state;
 
     const rawContentState = convertToRaw(editorState.getCurrentContent())
     const markdown = draftToMarkdown(rawContentState)
     const html = draftToHtml(rawContentState)
 
-    form.validateFields((err, values) => {
+    form.validateFields((err) => {
       if (err) {
         console.log(err)
       } else {
-        console.log(values)
-        console.log("MARKDOWN", markdown)
-        console.log("HTML", html)
+        console.log("SUCCESS")
+        form.setFieldsValue({
+          markdown,
+          html,
+          date_published: "2019-11-15"
+        });
+
+        const payload = form.getFieldsValue();
+
+        if (payload.id) API.graphql(graphqlOperation(mutations.updatePost, {input: payload}))
+        else API.graphql(graphqlOperation(mutations.createPost, {input: payload}))
+        .then(data => console.log("DATA", data))
+
       }
     });
   };
@@ -76,6 +88,7 @@ class AddForm extends React.Component {
   handleUpload = () => {
     const {fileList} = this.state;
     const formData = new FormData();
+    const {form} = this.props;
     fileList.forEach(file => {
       formData.append('files[]', file);
     });
@@ -115,18 +128,26 @@ class AddForm extends React.Component {
           console.log(err.message);
           this.setState({uploading: false})
         } else {
-          console.log("data", data)
+          console.log("data", data);
           this.onSuccess(data, fileList[0]);
           message.success(`${fileList[0].name} file uploaded successfully`);
-          this.setState({uploading: false})
-          console.log("https://d2czw3op36f92o.cloudfront.net/kieranpaul-source/", fileList[0].name)
+          this.setState({uploading: false});
+          form.setFieldsValue({
+            image_url: `https://d2czw3op36f92o.cloudfront.net/kieranpaul-source/${fileList[0].name}`
+          });
         }
       });
-  }
+  };
 
   render() {
     const { form } = this.props
+    const { getFieldDecorator } = form
     const { editorState, uploading, fileList } = this.state;
+
+    getFieldDecorator('id', { initialValue: "" })
+    getFieldDecorator('markdown', { initialValue: ""});
+    getFieldDecorator('html', { initialValue: ""});
+    getFieldDecorator('date_published', { initialValue: ""});
 
     const props = {
       onRemove: file => {
@@ -156,19 +177,24 @@ class AddForm extends React.Component {
           </FormItem>
         </div>
         <div className="form-group">
+          <FormItem label="Caption">
+            {form.getFieldDecorator('caption')(<Input placeholder="Post caption" />)}
+          </FormItem>
+        </div>
+        <div className="form-group">
           <FormItem label="Type">
-            {form.getFieldDecorator('type')(
+            {form.getFieldDecorator('series')(
               <RadioGroup>
-                <Radio value="text">Book</Radio>
-                <Radio value="video">Experience</Radio>
+                <Radio value="books">Book</Radio>
+                <Radio value="experience">Experience</Radio>
               </RadioGroup>,
             )}
           </FormItem>
         </div>
         <div className="form-group">
           <FormItem label="Cover Image">
-            {form.getFieldDecorator('image', {
-              initialValue: ['travel', 'lifestyle'],
+            {form.getFieldDecorator('image_url', {
+              initialValue: "",
             })(
               <div>
                 <Upload {...props}>

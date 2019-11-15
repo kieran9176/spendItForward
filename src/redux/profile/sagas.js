@@ -99,13 +99,13 @@ export function* LOAD_CURRENT_PROFILE(sub) {
   // }
 
   if (profile) {
-    const { username, firstName, lastName, articles, experience, references, intro, skills, coursework, leadership, posts } = profile
+    const { username, articles, experience, references, intro, skills, coursework, leadership, posts } = profile
     yield put({
       type: 'profile/SET_STATE',
       payload: {
         username,
-        firstName,
-        lastName,
+        firstName: profile.first_name,
+        lastName: profile.last_name,
         articles,
         skills,
         experience,

@@ -26,7 +26,7 @@
    }
  ],
  "articlesCategories": ["Travel", "Ideas", "Lifestyle", "Art", "Music", "Cars", "Girls", "Drugs"],
-  "latesArticlesData": [{
+  "latestArticlesData": [{
     "cover": "resources/images/photos/4.jpeg",
     "name": "Web design tutorial",
     "date": "June 11, 2017",

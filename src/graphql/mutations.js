@@ -530,3 +530,31 @@ export const deleteContact = `mutation DeleteContact($input: DeleteContactInput!
   }
 }
 `;
+export const createPost = `mutation CreatePost($input: CreatePostInput!) {
+  createPost(input: $input) {
+    id
+    account_id
+    title
+    caption
+    markdown
+    html
+    image_url
+    date_published
+    series
+  }
+}
+`;
+export const updatePost = `mutation UpdatePost($input: UpdatePostInput!) {
+  updateContact(input: $input) {
+    id
+    account_id
+    title
+    caption
+    markdown
+    html
+    image_url
+    date_published
+    series
+  }
+}
+`;

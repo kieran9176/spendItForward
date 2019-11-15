@@ -1,4 +1,5 @@
 import React from 'react'
+import { connect } from 'react-redux'
 import { Input, Icon, Button, Pagination } from 'antd'
 import { Helmet } from 'react-helmet'
 import styles from './style.module.scss'
@@ -6,15 +7,18 @@ import data from './data.json'
 
 const { Search } = Input
 
+@connect(({ profile }) => ({ profile }))
 class BlogFeed extends React.Component {
   state = {
-    articlesData: data.articlesData,
     articlesCategories: data.articlesCategories,
-    latesArticlesData: data.latesArticlesData,
+    latestArticlesData: data.latestArticlesData,
   }
 
   render() {
-    const { articlesData, articlesCategories, latesArticlesData } = this.state
+    const { articlesCategories, latestArticlesData } = this.state;
+    const { profile } = this.props;
+    const { firstName, lastName, posts } = profile;
+
     return (
       <div>
         <Helmet title="Blog Feed" />
@@ -29,32 +33,32 @@ class BlogFeed extends React.Component {
               <div className="row">
                 <div className="col-lg-8">
                   <main>
-                    {articlesData.map(article => (
-                      <article className={styles.article} key={article.author}>
+                    {posts.map(article => (
+                      <article className={styles.article} key={firstName + lastName}>
                         <div className={styles.information}>
                           <div className={styles.title}>
                             <h1>
-                              <a href="javascript: void(0);">{article.name}</a>
+                              <a href="javascript: void(0);">{article.title}</a>
                             </h1>
                           </div>
                           <ul className={styles.meta}>
                             <li className={styles.metaInf}>
                               <span>
-                                Post By <a href="javascript: void(0);">{article.author}</a>
+                                Post By <a href="javascript: void(0);">{firstName} {lastName}</a>
                               </span>
                             </li>
                             <li className={styles.metaInf}>
-                              <span className={styles.articleDate}>{`On ${article.date}`}</span>
+                              <span className={styles.articleDate}>{`On ${article.date_published}`}</span>
                             </li>
                           </ul>
                         </div>
                         <div className={styles.articleMedia}>
                           <a href="javascript: void(0);" className={styles.link}>
-                            <img src={article.cover} alt={article.name} />
+                            <img src={article.image_url} alt={article.title} />
                           </a>
                         </div>
                         <div className={styles.content}>
-                          <div dangerouslySetInnerHTML={{ __html: article.shortContent }} />
+                          <p dangerouslySetInnerHTML={{ __html: article.caption }} />
                           <div className={styles.articleMore}>
                             <Button type="primary">
                               Read more
@@ -66,11 +70,9 @@ class BlogFeed extends React.Component {
                           <div className="row">
                             <div className="col-8">
                               <div className={styles.hashtags}>
-                                {article.tags.map(tag => (
-                                  <a href="javascript: void(0);" key={tag}>
-                                    {tag}
-                                  </a>
-                                ))}
+                                <a href="javascript: void(0);" key={article.series}>
+                                  {article.series}
+                                </a>
                               </div>
                             </div>
                             <div className="col-4">
@@ -136,7 +138,7 @@ class BlogFeed extends React.Component {
                       <div className={styles.partitionHead}>
                         <span className={styles.partitionName}>Latest post</span>
                       </div>
-                      {latesArticlesData.map(latestArticle => (
+                      {latestArticlesData.map(latestArticle => (
                         <article className={styles.latestPost} key={latestArticle.name}>
                           <div className={styles.latestImg}>
                             <a href="javascript: void(0);">
@@ -172,7 +174,7 @@ class BlogFeed extends React.Component {
                       <div className="input-group">
                         <Input
                           addonBefore={<Icon type="mail" />}
-                          placeholder="Email adress"
+                          placeholder="Email address"
                           size="default"
                         />
                       </div>
