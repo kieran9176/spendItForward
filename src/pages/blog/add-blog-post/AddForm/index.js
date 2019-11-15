@@ -85,8 +85,8 @@ class AddForm extends React.Component {
     });
 
     AWS.config.update({
-      accessKeyId: "AKIAT7FYJVVY5WMCAEIQ",
-      secretAccessKey: "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"
+      accessKeyId: "",
+      secretAccessKey: ""
     });
 
     const S3 = new AWS.S3();
