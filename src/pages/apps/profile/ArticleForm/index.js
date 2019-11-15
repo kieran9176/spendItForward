@@ -1,49 +1,65 @@
 import React from 'react'
 import { connect } from 'react-redux'
-import {Form, Input, Select, Icon, Button, DatePicker } from 'antd';
-import moment from 'moment'
-import style from '../style.module.scss'
+import {Form, Input, Select, Icon, Button } from 'antd';
 
-const { RangePicker } = DatePicker;
 const { Option } = Select;
+const changedGlobal = new Set([]);
 
 @connect(({ profile }) => ({ profile }))
 @Form.create({
-  onFieldsChange(props, changedFields, allFields) {
+  onFieldsChange(props, changedFields) {
+  // onFieldsChange(props) {
 
-    const { form } = props;
-    const { changed } = allFields;
-    const {titles, companies, companyLinks, dates} = changedFields;
+    // const {form} = props;
+    // const {changed} = allFields;
+    const {captions, titles, titleLinks, dates} = changedFields;
 
-    [titles, companies, companyLinks, dates].forEach(arr => {
-      return arr ? form.setFieldsValue({
-        changed: changed.value.map((status, index) => {
-          return arr[index] ? "true" : "false"
-        })
+
+    [captions, titles, titleLinks, dates].forEach(arr => {
+      return arr ? arr.forEach((indexValue, index) => {
+        if (indexValue.touched) changedGlobal.add(index)
       }) : null
     });
+
+    // console.log("form", form)
+    // console.log("ALL FIELDS", allFields)
+    // console.log("CHANGED FIELDS", changedFields)
+
+    // // form.setFieldsValue({
+    // //   changed: [true]
+    // // })
+    //
+  //   changedGlobal.push(changedFields)[...changedGlobal, changedFields]
+  //         form.setFieldsValue({
+  //         changed: ["false", "false", "false", "false"].map((status, index) => {
+  //           return arr[index] ? "true" : "false"
+  //         })
+  //       }) : null
+  //     });
   }
 })
 
-class ExperienceForm extends React.Component {
+class ArticlesForm extends React.Component {
 
   remove = (k, index) => {
     const { form, dispatch } = this.props;
     // can use data-binding to get
-    const { keys, titles, companies, companyLinks, IDs } = form.getFieldsValue();
+    const { keys, captions, titles, links, IDs } = form.getFieldsValue();
 
     // We need at least one passenger
-    if (keys.length === 1) {
-      return;
-    }
+    // if (keys.length === 1) {
+    //   return;
+    // }
 
-    const experience = this.createPayloads("removeExperience", [IDs[index]]);
+    const articles = this.createPayloads("removeArticles", [IDs[index]]);
+
+    console.log("ARTICLES", articles)
 
     dispatch({
       type: 'profile/EDIT_PROFILE',
       payload: {
-        mutation: "removeExperience",
-        data: { experience }
+        mutation: "removeArticles",
+        data: { articles }
       }
     });
 
@@ -52,14 +68,14 @@ class ExperienceForm extends React.Component {
       keys: keys.filter( (key) => {
         return key !== k
       }),
+      captions: captions.filter( (caption) => {
+        return caption !== captions[index]
+      }),
       titles: titles.filter( (title) => {
         return title !== titles[index]
       }),
-      companies: companies.filter( (company) => {
-        return company !== companies[index]
-      }),
-      companyLinks: companyLinks.filter( (companyLink) => {
-        return companyLink !== companyLinks[index]
+      links: links.filter( (titleLink) => {
+        return titleLink !== links[index]
       }),
       IDs: IDs.filter( (ID) => {
         return ID !== IDs[index]
@@ -81,24 +97,22 @@ class ExperienceForm extends React.Component {
   };
 
   createPayloads = (action, array) => {
-    const experience = [];
+    const articles = [];
     switch (action) {
-      case "updateExperience":
+      case "updateArticles":
         for (let i = 0; i < array[0].length; i += 1) {
-          experience.push({
-            position: array[0][i],
-            company: array[1][i],
-            start_date: array[2][i][0],
-            end_date: array[2][i][1],
-            link: array[3][i],
-            id: array[4][i],
-            changed: array[5][i]
+          articles.push({
+            caption: array[0][i],
+            title: array[1][i],
+            url: array[2][i],
+            id: array[3][i],
+            changed: array[4][i]
           })
         }
-        return experience;
-      case "removeExperience":
-        experience.push({ id: array[0] });
-        return experience;
+        return articles;
+      case "removeArticles":
+        articles.push({ id: array[0] });
+        return articles;
       default:
         return "Could not update"
     }
@@ -109,25 +123,29 @@ class ExperienceForm extends React.Component {
     const {form, dispatch} = this.props
     form.validateFields((err, values) => {
       if (!err) {
-        const {keys, companies, titles, dates, companyLinks, IDs, changed } = values;
+        const {keys, titles, captions, links, IDs } = values;
+        const uniqueChanged = Array.from(changedGlobal)
 
-        const companiesArr = keys.map(key => companies[key]);
-        const titleArr = keys.map(key => titles[key]);
-        const datesArr = keys.map(key => {
-          return [moment(dates[key][0]).format('YYYY-MM-DD'), moment(dates[key][1]).format('YYYY-MM-DD')]
+
+        const titlesArr = keys.map(key => titles[key]);
+        const captionArr = keys.map(key => captions[key]);
+
+        const linksArr = keys.map(key => links[key]);
+        const idArr = keys.map(key => IDs[key]);
+        const changedArr = ["false", "false", "false", "false", "false"].map((value, index) => {
+          if (uniqueChanged.includes(index)) return "true";
+          return "false"
         });
 
-        const companyLinksArr = keys.map(key => companyLinks[key]);
-        const idArr = keys.map(key => IDs[key]);
-        const changedArr = keys.map(key => changed[key]);
+        const articles = this.createPayloads("updateArticles", [captionArr, titlesArr, linksArr, idArr, changedArr]);
 
-        const experience = this.createPayloads("updateExperience", [titleArr, companiesArr, datesArr, companyLinksArr, idArr, changedArr]);
+        // console.log("ARTICLES", articles)
 
         dispatch({
           type: 'profile/EDIT_PROFILE',
           payload: {
-            mutation: "updateExperience",
-            data: { experience }
+            mutation: "updateArticles",
+            data: { articles }
           }
         })
       }
@@ -139,7 +157,7 @@ class ExperienceForm extends React.Component {
 
   render() {
     const { form, profile } = this.props
-    const { experience } = profile
+    const { articles } = profile
     const { getFieldDecorator, getFieldValue } = form;
 
     const selectBefore = (
@@ -157,44 +175,60 @@ class ExperienceForm extends React.Component {
       </Select>
     );
 
-    getFieldDecorator('keys', { initialValue: experience.map((expObj, i) => i )});
-    getFieldDecorator('IDs', { initialValue: experience.map((expObj) => expObj.id )});
-    getFieldDecorator('changed', { initialValue: experience.map( () => "false" )});
+    getFieldDecorator('keys', { initialValue: articles.map((articleObj, i) => i )});
+    getFieldDecorator('IDs', { initialValue: articles.map((articleObj) => articleObj.id )});
+    // getFieldDecorator('changed', { initialValue: articles.map( () => "false" )});
 
     const keys = getFieldValue('keys');
 
-    const companyFormItem = keys.map((k, index) => {
+    const titleFormItem = keys.map((k, index) => {
       return (
         <div key={k}>
           <Form.Item
-            label={`Company ${index + 1}`}
+            label={`Title ${index + 1}`}
             required={false}
           >
-            { getFieldDecorator(`companies[${index}]`, {
+            { getFieldDecorator(`titles[${index}]`, {
               validateTrigger: ['onChange', 'onBlur'],
-              initialValue: index < experience.length ? experience[index].company : "",
+              initialValue: index < articles.length ? articles[index].title : "",
               rules: [
                 {
                   required: true,
                   whitespace: true,
-                  message: "Please input additional experience or delete this field.",
+                  message: "Please input additional articles or delete this field.",
                 },
               ],
             })(<Input placeholder="e.g. EY" style={{width: '60%', marginRight: 8}} />)
             }
           </Form.Item>
           <Form.Item
-            label={`Company ${index + 1} Hyperlink`}
+            label={`Caption ${index + 1}`}
             required={false}
           >
-            { getFieldDecorator(`companyLinks[${index}]`, {
+            {getFieldDecorator(`captions[${index}]`, {
               validateTrigger: ['onChange', 'onBlur'],
-              initialValue: index < experience.length ? experience[index].link : "",
+              initialValue: index < articles.length ? articles[index].caption : "",
               rules: [
                 {
                   required: true,
                   whitespace: true,
-                  message: "Please input additional experience or delete this field.",
+                  message: "Please input additional articles or delete this field.",
+                },
+              ],
+            })(<Input placeholder="e.g. Senior Consultant" style={{width: '60%', marginRight: 8}} />)}
+          </Form.Item>
+          <Form.Item
+            label={`Article ${index + 1} URL`}
+            required={false}
+          >
+            { getFieldDecorator(`links[${index}]`, {
+              validateTrigger: ['onChange', 'onBlur'],
+              initialValue: index < articles.length ? articles[index].url : "",
+              rules: [
+                {
+                  required: true,
+                  whitespace: true,
+                  message: "Please input additional articles or delete this field.",
                 },
               ],
             })(<Input
@@ -203,57 +237,13 @@ class ExperienceForm extends React.Component {
               placeholder="consulting.ey"
               style={{width: '60%', marginRight: 8}}
             />) }
-          </Form.Item>
-          <Form.Item
-            label={`Title ${index + 1}`}
-            required={false}
-          >
-            {getFieldDecorator(`titles[${index}]`, {
-              validateTrigger: ['onChange', 'onBlur'],
-              initialValue: index < experience.length ? experience[index].position : "",
-              rules: [
-                {
-                  required: true,
-                  whitespace: true,
-                  message: "Please input additional experience or delete this field.",
-                },
-              ],
-            })(<Input placeholder="e.g. Senior Consultant" style={{width: '60%', marginRight: 8}} />)}
-          </Form.Item>
-          <Form.Item
-            label={`Date ${index + 1}`}
-            required={false}
-          >
-            {getFieldDecorator(`dates[${index}]`, {
-              rules: [
-                {
-                  required: true,
-                  message: "Please input additional experience or delete this field.",
-                },
-              ],
-              initialValue: index < experience.length ? [ moment(experience[index].start_date), moment(experience[index].end_date) ] : []
-              // initialValue: []
-            })(<RangePicker
-              dateRender={current => {
-                const style1 = {};
-                if (current.date() === 1) {
-                  style1.border = '1px solid #1890ff';
-                  style1.borderRadius = '50%';
-                }
-                return (
-                  <div className="ant-calendar-date" style={style}>
-                    {current.date()}
-                  </div>
-                );
-              }}
-            />)}
-            { keys.length > 1 ? (
+            { keys.length > 0 ? (
               <Icon
                 className="dynamic-delete-button"
                 type="minus-circle-o"
                 onClick={() => this.remove(k, index)}
               />
-            ) : null}
+            ) : null }
           </Form.Item>
         </div>
       )
@@ -261,7 +251,7 @@ class ExperienceForm extends React.Component {
 
     return (
       <Form onSubmit={this.handleSubmit}>
-        { companyFormItem }
+        { titleFormItem }
         <Form.Item>
           <Button type="dashed" onClick={this.add} style={{width: '60%'}}>
             <Icon type="plus" /> Add field
@@ -277,4 +267,4 @@ class ExperienceForm extends React.Component {
   }
 }
 
-export default ExperienceForm
+export default ArticlesForm

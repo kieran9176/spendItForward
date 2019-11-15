@@ -20,6 +20,7 @@ export const getProfile = `query GetProfile($account_id: String!) {
       title
       caption
       url
+      id
     	}
     references {
       content
@@ -65,6 +66,16 @@ export const getProfile = `query GetProfile($account_id: String!) {
       email
       phone
       id
+    }
+    posts {
+      id
+      title
+      caption
+      markdown
+      html
+      image_url
+      series
+      date_published
     }
   }
 }

@@ -45,6 +45,18 @@ export function notify (mutation) {
         description: 'You\'ve successfully removed a leadership item.'
       });
       break;
+    case "updateArticle":
+      notification.success({
+        message: 'Updates Saved',
+        description: 'You\'ve successfully updated your articles.'
+      });
+      break;
+    case "removeArticles":
+      notification.success({
+        message: 'Updates Saved',
+        description: 'You\'ve successfully removed an article.'
+      });
+      break;
     default:
       notification.error({
         message: 'Error',
@@ -60,13 +72,13 @@ export async function currentAccountProfile (accountId) {
 }
 
 const filterData = (mutation, data) => {
-  const { experience, skills, coursework, leadership } = data;
+  const { experience, skills, coursework, leadership, articles } = data;
   switch (mutation) {
     case "updateExperience":
       console.log("updateExperience FILTER DATA", data);
       return experience.filter(expObj => expObj.changed !== "false");
     case "removeExperience":
-      console.log("updateExperience FILTER DATA", data);
+      console.log("removeExperience FILTER DATA", data);
       return experience;
     case "updateSkills":
       console.log("filterData skills", skills);
@@ -79,6 +91,12 @@ const filterData = (mutation, data) => {
     case "removeLeadership":
       console.log("removeLeadership FILTER DATA", data);
       return leadership;
+    case "updateArticles":
+      console.log("updateArticles FILTER DATA", data);
+      return articles.filter(articleObj => articleObj.changed !== "false");
+    case "removeArticles":
+      console.log("removeArticle FILTER DATA", data);
+      return articles;
     default:
       return "Could not filter data."
   }
@@ -160,6 +178,32 @@ const createPayloads = (mutation, data) => {
         console.log("createPayloads removeLeadership leadObj", leadObj)
         return { input: { id: leadObj.id } }
       });
+    case "updateArticles":
+      console.log("CREATE PAYLOADS DATA", data);
+      return data.map(articleObj => {
+        return articleObj.id ?
+          {
+            input: {
+              id: articleObj.id,
+              caption: articleObj.caption,
+              title: articleObj.title,
+              url: articleObj.url
+            }
+          }
+          :
+          {
+            input: {
+              caption: articleObj.caption,
+              title: articleObj.title,
+              url: articleObj.url
+            }
+          }
+      });
+    case "removeArticles":
+      return data.map(articleObj => {
+        console.log("createPayloads removeArticle articleObj", articleObj)
+        return { input: { id: articleObj.id } }
+      });
     default:
       return "Could not create payload"
   }
@@ -207,6 +251,17 @@ const performOperations = async (mutation, payloads) => {
       );
     case "removeLeadership":
       return API.graphql(graphqlOperation(mutations.deleteLeadership, payloads[0]));
+    case "updateArticles":
+      return Promise.all(payloads.map(payload => {
+          console.log("PERFORM ARTICLES OPS PAYLOAD", payload)
+          return payload.input.id ?
+            API.graphql(graphqlOperation(mutations.updateArticle, payload))
+            :
+            API.graphql(graphqlOperation(mutations.createArticle, payload))
+        })
+      );
+    case "removeArticles":
+      return API.graphql(graphqlOperation(mutations.deleteArticle, payloads[0]));
     default:
       return "Could not perform operations"
   }
@@ -227,6 +282,10 @@ export async function editProfile(mutation, data) {
     case "updateLeadership":
       return performOperations(mutation, createPayloads(mutation, filterData(mutation, data)));
     case "removeLeadership":
+      return performOperations(mutation, createPayloads(mutation, filterData(mutation, data)));
+    case "updateArticles":
+      return performOperations(mutation, createPayloads(mutation, filterData(mutation, data)));
+    case "removeArticles":
       return performOperations(mutation, createPayloads(mutation, filterData(mutation, data)));
     default:
       return "Could not update profile"

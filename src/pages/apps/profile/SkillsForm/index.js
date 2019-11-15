@@ -22,7 +22,9 @@ class SkillsForm extends React.Component {
     let { tags, skills } = this.state
     tags = tags.filter(tag => tag !== removedTag);
     skills = skills.map(skill => {
-      if (skill.content === removedTag) skill.action = "remove";
+      if (skill.content === removedTag) {
+        skill.action = "remove";
+      }
       return skill
     });
     this.setState({ tags, skills });
