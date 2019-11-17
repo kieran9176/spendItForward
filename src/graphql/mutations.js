@@ -532,8 +532,6 @@ export const deleteContact = `mutation DeleteContact($input: DeleteContactInput!
 `;
 export const createPost = `mutation CreatePost($input: CreatePostInput!) {
   createPost(input: $input) {
-    id
-    account_id
     title
     caption
     markdown
@@ -545,9 +543,8 @@ export const createPost = `mutation CreatePost($input: CreatePostInput!) {
 }
 `;
 export const updatePost = `mutation UpdatePost($input: UpdatePostInput!) {
-  updateContact(input: $input) {
+  updatePost(input: $input) {
     id
-    account_id
     title
     caption
     markdown

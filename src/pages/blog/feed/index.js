@@ -1,12 +1,14 @@
 import React from 'react'
+import { Link, withRouter } from 'react-router-dom'
 import { connect } from 'react-redux'
-import { Input, Icon, Button, Pagination } from 'antd'
+import { Input, Icon, Pagination } from 'antd'
 import { Helmet } from 'react-helmet'
 import styles from './style.module.scss'
 import data from './data.json'
 
 const { Search } = Input
 
+@withRouter
 @connect(({ profile }) => ({ profile }))
 class BlogFeed extends React.Component {
   state = {
@@ -33,8 +35,8 @@ class BlogFeed extends React.Component {
               <div className="row">
                 <div className="col-lg-8">
                   <main>
-                    {posts.map(article => (
-                      <article className={styles.article} key={firstName + lastName}>
+                    {posts.map( (article) => (
+                      <article className={styles.article} key={article.title}>
                         <div className={styles.information}>
                           <div className={styles.title}>
                             <h1>
@@ -60,10 +62,10 @@ class BlogFeed extends React.Component {
                         <div className={styles.content}>
                           <p dangerouslySetInnerHTML={{ __html: article.caption }} />
                           <div className={styles.articleMore}>
-                            <Button type="primary">
-                              Read more
+                            <Link to={`/blog/edit-blog-post/${article.id}`}>
+                              Edit
                               <i className="ml-2 fa fa-angle-right" aria-hidden="true" />
-                            </Button>
+                            </Link>
                           </div>
                         </div>
                         <footer className={styles.footer}>

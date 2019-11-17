@@ -20,30 +20,18 @@ export const getProfile = `query GetProfile($account_id: String!) {
       title
       caption
       url
-      id
-    	}
+    }
     references {
       content
       author_name
       author_company
       author_position
     }
-    experience {
-      id
-      position
-      company
-      link
-      start_date
-      end_date
-    }
     leadership {
       position
       organization
-      start_date
-      end_date
       id
       account_id
-      link
     }
     other {
       id
@@ -56,26 +44,35 @@ export const getProfile = `query GetProfile($account_id: String!) {
     }
     skills {
       content
+      account_id
       id
     }
     coursework {
       id
       course_name
+      account_id
     }
     contact {
       email
       phone
       id
     }
-    posts {
+    site_metadata {
+    	development_url
+      production_url
+      source_s3_bucket_path
+      destination_bucket
+      theme
+    }
+    assets {
+      type
+      url
       id
-      title
-      caption
-      markdown
-      html
-      image_url
-      series
-      date_published
+    }
+    socials {
+      type
+      url
+      id
     }
   }
 }

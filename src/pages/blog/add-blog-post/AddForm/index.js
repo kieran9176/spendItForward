@@ -1,7 +1,9 @@
 import React from 'react'
+import { connect } from 'react-redux'
 import { Editor } from 'react-draft-wysiwyg'
-import { API, graphqlOperation } from 'aws-amplify';
-import * as mutations from 'graphql/mutations'
+import { withRouter } from 'react-router-dom'
+// import { API, graphqlOperation } from 'aws-amplify';
+// import * as mutations from 'graphql/mutations'
 import 'react-draft-wysiwyg/dist/react-draft-wysiwyg.css'
 import draftToMarkdown from 'draftjs-to-markdown';
 import draftToHtml from 'draftjs-to-html';
@@ -18,7 +20,9 @@ const RadioGroup = Radio.Group
 // const rawContentState = convertToRaw(editorState.getCurrentContent());
 // const markup = draftToMarkdown(contentState, hashConfig, customEntityTransform, config);
 
+@withRouter
 @Form.create()
+@connect(({ profile }) => ({ profile }))
 class AddForm extends React.Component {
 
   constructor(props) {
@@ -36,6 +40,23 @@ class AddForm extends React.Component {
     }
   }
 
+  componentDidMount () {
+    const { form } = this.props
+    const{ html } = form.getFieldsValue()
+
+    console.log("HTML", html)
+
+    // html = '<p>Hey this <strong>editor</strong> rocks 😀</p>';
+    const contentBlock = htmlToDraft(html);
+    if (contentBlock) {
+      const contentState = ContentState.createFromBlockArray(contentBlock.contentBlocks);
+      const editorState = EditorState.createWithContent(contentState);
+      this.setState({
+        editorState,
+      })
+    }
+}
+
   onEditorStateChange = editorState => {
     this.setState({
       editorState,
@@ -45,8 +66,8 @@ class AddForm extends React.Component {
   handleSubmit = e => {
     e.preventDefault();
 
-    const {form} = this.props
-    const {editorState} = this.state;
+    const { form, dispatch } = this.props
+    const { editorState } = this.state;
 
     const rawContentState = convertToRaw(editorState.getCurrentContent())
     const markdown = draftToMarkdown(rawContentState)
@@ -61,14 +82,27 @@ class AddForm extends React.Component {
           markdown,
           html,
           date_published: "2019-11-15"
+        })
+
+        const post = form.getFieldsValue()
+
+        console.log("POST", post)
+
+        dispatch({
+          type: 'profile/EDIT_PROFILE',
+          payload: {
+            mutation: "updatePosts",
+            data: { post }
+          }
         });
 
-        const payload = form.getFieldsValue();
+        // const payload = form.getFieldsValue();
 
-        if (payload.id) API.graphql(graphqlOperation(mutations.updatePost, {input: payload}))
-        else API.graphql(graphqlOperation(mutations.createPost, {input: payload}))
-        .then(data => console.log("DATA", data))
-
+        // if (payload.id) API.graphql(graphqlOperation(mutations.updatePost, {input: payload }))
+        // else {
+        //   API.graphql(graphqlOperation(mutations.createPost, {input: payload }))
+        //     .then(data => console.log("DATA", data))
+        // }
       }
     });
   };
@@ -132,22 +166,44 @@ class AddForm extends React.Component {
           this.onSuccess(data, fileList[0]);
           message.success(`${fileList[0].name} file uploaded successfully`);
           this.setState({uploading: false});
+          const encoded = encodeURI(`https://d2czw3op36f92o.cloudfront.net/kieranpaul-source/${fileList[0].name}`)
           form.setFieldsValue({
-            image_url: `https://d2czw3op36f92o.cloudfront.net/kieranpaul-source/${fileList[0].name}`
+            image_url: encoded
           });
         }
       });
   };
 
   render() {
-    const { form } = this.props
+    const { form, match, profile } = this.props
+    const { posts } = profile
     const { getFieldDecorator } = form
-    const { editorState, uploading, fileList } = this.state;
+    const { editorState, uploading, fileList } = this.state
 
-    getFieldDecorator('id', { initialValue: "" })
-    getFieldDecorator('markdown', { initialValue: ""});
-    getFieldDecorator('html', { initialValue: ""});
-    getFieldDecorator('date_published', { initialValue: ""});
+    console.log("ID", match.params.id)
+
+    if (match.params.id) {
+      getFieldDecorator('id', { initialValue: match.params.id })
+      const post = posts.filter(_ => _.id === match.params.id ).pop()
+
+      console.log("POST", post)
+
+      getFieldDecorator('title', { initialValue: post.title })
+      getFieldDecorator('caption', { initialValue: post.caption })
+      getFieldDecorator('markdown', { initialValue: post.markdown })
+      getFieldDecorator('html', { initialValue: post.html })
+      getFieldDecorator('date_published', { initialValue: post.date_published })
+      getFieldDecorator('series', { initialValue: post.series })
+    }
+    else {
+      getFieldDecorator('id', { initialValue: null })
+      getFieldDecorator('title', { initialValue: "" })
+      getFieldDecorator('caption', { initialValue: "" })
+      getFieldDecorator('markdown', { initialValue: "" })
+      getFieldDecorator('html', { initialValue: '<p>Sing us a song, piano man.</p>' })
+      getFieldDecorator('date_published', { initialValue: ""})
+      getFieldDecorator('series', { initialValue: ""})
+    }
 
     const props = {
       onRemove: file => {

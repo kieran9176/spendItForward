@@ -57,6 +57,12 @@ export function notify (mutation) {
         description: 'You\'ve successfully removed an article.'
       });
       break;
+    case "updatePosts":
+      notification.success({
+        message: 'Updates Saved',
+        description: 'You\'ve successfully updated your posts.'
+      });
+      break;
     default:
       notification.error({
         message: 'Error',
@@ -72,7 +78,7 @@ export async function currentAccountProfile (accountId) {
 }
 
 const filterData = (mutation, data) => {
-  const { experience, skills, coursework, leadership, articles } = data;
+  const { experience, skills, coursework, leadership, articles, post } = data;
   switch (mutation) {
     case "updateExperience":
       console.log("updateExperience FILTER DATA", data);
@@ -97,6 +103,8 @@ const filterData = (mutation, data) => {
     case "removeArticles":
       console.log("removeArticle FILTER DATA", data);
       return articles;
+    case "updatePosts":
+      return post;
     default:
       return "Could not filter data."
   }
@@ -204,6 +212,22 @@ const createPayloads = (mutation, data) => {
         console.log("createPayloads removeArticle articleObj", articleObj)
         return { input: { id: articleObj.id } }
       });
+    case "updatePosts":
+      console.log("POSTS CREATE PAYLOAD data", data)
+      return data.id ?
+        { input: data }
+        :
+        {
+          input: {
+            title: data.title,
+            caption: data.caption,
+            image_url: data.image_url,
+            markdown: data.markdown,
+            html: data.html,
+            date_published: data.date_published,
+            series: data.series
+          }
+        }
     default:
       return "Could not create payload"
   }
@@ -262,6 +286,12 @@ const performOperations = async (mutation, payloads) => {
       );
     case "removeArticles":
       return API.graphql(graphqlOperation(mutations.deleteArticle, payloads[0]));
+    case "updatePosts":
+      console.log("PERFORM POSTS OPS PAYLOAD", payloads)
+      return payloads.input.id ?
+        API.graphql(graphqlOperation(mutations.updatePost, payloads))
+        :
+        API.graphql(graphqlOperation(mutations.createPost, payloads));
     default:
       return "Could not perform operations"
   }
@@ -286,6 +316,10 @@ export async function editProfile(mutation, data) {
     case "updateArticles":
       return performOperations(mutation, createPayloads(mutation, filterData(mutation, data)));
     case "removeArticles":
+      return performOperations(mutation, createPayloads(mutation, filterData(mutation, data)));
+    case "createPost":
+      return performOperations(mutation, createPayloads(mutation, filterData(mutation, data)));
+    case "updatePosts":
       return performOperations(mutation, createPayloads(mutation, filterData(mutation, data)));
     default:
       return "Could not update profile"

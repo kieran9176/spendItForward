@@ -21,7 +21,8 @@ class ProfileApp extends React.Component {
   handleClick = async (e) => {
     e.preventDefault();
     const { profile } = this.props
-    const response = await triggerDevelopmentBuild(profile)
+    const { sub } = profile
+    const response = await triggerDevelopmentBuild(sub);
     console.log("handleClick Response", response)
   };
 
