@@ -24,7 +24,7 @@ Amplify.configure(awsmobile)
 
 export async function login(email, password) {
   return Auth.signIn(email, password)
-    .then(() => true)
+    .then(() => true )
     .catch(error => {
       notification.warning({
         message: error.code,

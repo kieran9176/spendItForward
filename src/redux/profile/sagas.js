@@ -14,89 +14,142 @@ export function* LOAD_CURRENT_PROFILE(sub) {
 
   const profileResponse = yield currentAccountProfile(sub);
 
-  // console.log("PROFILE RESPONSE", profileResponse);
+  // const profile = profileResponse.data.getProfile;
+
+  // const profileResponse = {
+  //   "data": {
+  //     "getProfile": {
+  //       "username": "Kieran",
+  //       "first_name": "Kieran",
+  //       "last_name": "Derfus",
+  //       "articles": [
+  //         {
+  //           "title": "Uber / Lyft Off",
+  //           "caption": "2019 was a terrible year for IPOs",
+  //           "url": "https://google.com"
+  //         }
+  //       ],
+  //       "references": [
+  //         {
+  //           "content": "Kieran has been a great addition to the team.",
+  //           "author_name": "Fazir Manthodi",
+  //           "author_company": "EY",
+  //           "author_position": "Managing Director"
+  //         },
+  //         {
+  //           "content": "Kieran has been a great addition to the team.",
+  //           "author_name": "Ragav",
+  //           "author_company": "EY",
+  //           "author_position": "Senior 2"
+  //         }
+  //       ],
+  //       "leadership": [
+  //         {
+  //           "position": "Philanthropy Chairman",
+  //           "organization": "Alpha Sigma Phi",
+  //           "id": "746083a0-94e6-47ed-bbc3-b5b2ed8e3923",
+  //           "account_id": "dee652d3-30d5-460d-bea1-4e8df10101d7"
+  //         },
+  //         {
+  //           "position": "President",
+  //           "organization": "Plead the Fifth",
+  //           "id": "966142e8-1c98-438f-8ae9-ea61d3c835e7",
+  //           "account_id": "dee652d3-30d5-460d-bea1-4e8df10101d7"
+  //         }
+  //       ],
+  //       "other": [
+  //         {
+  //           "id": "dea70429-5ba7-4521-b196-4142960d3ef4",
+  //           "content": "{\"certification\":\"Reactive Microservices\"}"
+  //         },
+  //         {
+  //           "id": "06676554-b773-462a-84e1-1e7a863fbddf",
+  //           "content": "{\"certification\":\"AWS Certified Cloud Practioner\"}"
+  //         }
+  //       ],
+  //       "intro": [
+  //         {
+  //           "content": "This for my sister, that for my maple. It's not going the road I'd known as a child of God ... nor to become stable. (So what if I lose? I'm satisfied)",
+  //           "account_id": "dee652d3-30d5-460d-bea1-4e8df10101d7",
+  //           "id": "91a91833-ba96-44b8-ac4d-130717ef2dea"
+  //         }
+  //       ],
+  //       "skills": [
+  //         {
+  //           "content": "Client Relationship Management",
+  //           "account_id": "dee652d3-30d5-460d-bea1-4e8df10101d7",
+  //           "id": "1e910e47-731e-4482-933b-3cec2193a169"
+  //         },
+  //         {
+  //           "content": "Product Management",
+  //           "account_id": "dee652d3-30d5-460d-bea1-4e8df10101d7",
+  //           "id": "b6126fef-a0e8-49e5-95a5-e835a9df1b50"
+  //         },
+  //         {
+  //           "content": "Investment Sourcing",
+  //           "account_id": "dee652d3-30d5-460d-bea1-4e8df10101d7",
+  //           "id": "6881f9e4-9daf-4fec-b900-99b7fd312341"
+  //         }
+  //       ],
+  //       "coursework": [
+  //         {
+  //           "id": "81226c4c-a499-4bcf-ae7a-87c09d845f04",
+  //           "course_name": "Entrepreneurship",
+  //           "account_id": "dee652d3-30d5-460d-bea1-4e8df10101d7"
+  //         },
+  //         {
+  //           "id": "a750d773-c5a6-496d-9289-cfde38e2a28b",
+  //           "course_name": "Linear Algebra",
+  //           "account_id": "dee652d3-30d5-460d-bea1-4e8df10101d7"
+  //         },
+  //         {
+  //           "id": "f293154b-e569-44ba-a12a-1734e44ca27b",
+  //           "course_name": "Data Structures & Algorithms",
+  //           "account_id": "dee652d3-30d5-460d-bea1-4e8df10101d7"
+  //         },
+  //         {
+  //           "id": "24b51052-ec9b-4703-8570-c342e5bcb7bc",
+  //           "course_name": "Macroeconomics",
+  //           "account_id": "dee652d3-30d5-460d-bea1-4e8df10101d7"
+  //         }
+  //       ],
+  //       "contact": [
+  //         {
+  //           "email": "kieranderfus@gmail.com",
+  //           "phone": "2015721988",
+  //           "id": "b5d283ba-458c-4bab-afeb-9051c2f3655c"
+  //         }
+  //       ],
+  //       "site_metadata": [
+  //         {
+  //           "development_url": "http://development.kieranpaul.com.s3-website.us-east-2.amazonaws.com/",
+  //           "production_url": "https://www.kieranpaul.com",
+  //           "theme": "hugo"
+  //         }
+  //       ],
+  //       "experience": [
+  //         {
+  //           "position": "Technical Co-Founder",
+  //           "company": "Chune Supply",
+  //           "link": "https://chunesupply.com",
+  //           "start_date": "2018-01-01",
+  //           "end_date": "2019-12-31",
+  //           "id": "77e329f6-b2be-4898-97e8-7b0bfa7590d8"
+  //         },
+  //         {
+  //           "position": "TAP Staff",
+  //           "company": "EY",
+  //           "link": "https://consulting.ey.com",
+  //           "start_date": "2018-10-05",
+  //           "end_date": "2019-12-31",
+  //           "id": "cd532d29-90d9-4a70-bcf0-245712d21e59"
+  //         }
+  //       ]
+  //     }
+  //   }
+  // }
 
   const profile = profileResponse.data.getProfile;
-
-  // const profile = {
-  //   "username": "Kieran",
-  //     "first_name": "Kieran",
-  //     "last_name": "Derfus",
-  //     "articles": [
-  //     {
-  //       "title": "The Rising Tide",
-  //       "caption": "Lifts All Boats",
-  //       "url": "https://www.youtube.com/watch?v=1XB1BENAUWo"
-  //     },
-  //     {
-  //       "title": "Just when I thought I was out ...",
-  //       "caption": "They pull me back in.",
-  //       "url": "https://www.youtube.com/watch?v=1XB1BENAUWo"
-  //     }
-  //   ],
-  //     "references": [
-  //     {
-  //       "content": "Kieran has been a great addition to the team.",
-  //       "author_name": "Fazir Manthodi",
-  //       "author_company": "EY",
-  //       "author_position": "Managing Director"
-  //     },
-  //     {
-  //       "content": "Kieran has been a great addition to the team.",
-  //       "author_name": "Ragav",
-  //       "author_company": "EY",
-  //       "author_position": "Senior 2"
-  //     }
-  //   ],
-  //   "skills": [
-  //     {
-  //       "content": "ReactJS",
-  //       "account_id": "dee652d3-30d5-460d-bea1-4e8df10101d7",
-  //       "id": "11557536-6f43-445a-8b0a-f3bc8aeae78c"
-  //     }
-  //   ],
-  //   "leadership": [
-  //     {
-  //       "position": "President",
-  //       "organization": "Plead the 5th",
-  //       "id": "5076334e-40b8-45c7-96f9-7e6952972cc0",
-  //       "account_id": "dee652d3-30d5-460d-bea1-4e8df10101d7"
-  //     }
-  //   ],
-  //     "experience": [
-  //     {
-  //       "position": "Managing Director",
-  //       "company_link": "stifel.com",
-  //       "company": "Stifel",
-  //       "start_date": "2015-01-01",
-  //       "end_date": "2018-01-01",
-  //       "id": "d7932c8a-f063-4dca-be48-a4eb3fc5804a"
-  //     },
-  //     {
-  //       "position": "Intern",
-  //       "company_link": "consulting.ey",
-  //       "company": "EY",
-  //       "start_date": "2015-01-01",
-  //       "end_date": "2018-01-01",
-  //       "id": "73bdf560-401d-4e3b-8dca-1e48dcf160c8"
-  //     }
-  //   ],
-  //     "other": [
-  //     {
-  //       "id": "dea70429-5ba7-4521-b196-4142960d3ef4",
-  //       "content": "{\"certification\":\"Reactive Microservices\"}"
-  //     },
-  //     {
-  //       "id": "06676554-b773-462a-84e1-1e7a863fbddf",
-  //       "content": "{\"certification\":\"AWS Certified Cloud Practioner\"}"
-  //     }
-  //   ],
-  //     "intro": [
-  //     {
-  //       "account_id": "dee652d3-30d5-460d-bea1-4e8df10101d7"
-  //     }
-  //   ]
-  // }
 
   if (profile) {
     const { username, articles, experience, references, intro, skills, coursework, leadership, posts } = profile

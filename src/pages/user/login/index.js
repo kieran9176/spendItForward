@@ -31,15 +31,10 @@ class Login extends Component {
         <Helmet title="Login" />
         <div className={`${styles.title} login-heading`}>
           <h1>
-            <strong>WELCOME TO CLEAN UI REACT - REACT REDUX ADMIN TEMPLATE</strong>
+            <strong>WELCOME TO HATCH - HOME OF THE DIGITAL YOU</strong>
           </h1>
           <p>
-            Pluggable enterprise-level react application framework.
-            <br />
-            An excellent front-end solution for web applications built upon Ant Design and UmiJS.
-            <br />
-            Credentials for testing purposes - <strong>admin@mediatec.org</strong> /{' '}
-            <strong>cleanui</strong>
+            <strong>Let&#39;s get started.</strong>
           </p>
         </div>
         <div className={styles.block}>
@@ -60,7 +55,7 @@ class Login extends Component {
                     </Form.Item>
                     <Form.Item label="Password">
                       {form.getFieldDecorator('password', {
-                        initialValue: 'Motocross9176#',
+                        initialValue: '',
                         rules: [{ required: true, message: 'Please input your password' }],
                       })(<Input size="default" type="password" />)}
                     </Form.Item>

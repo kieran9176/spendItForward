@@ -21,6 +21,14 @@ export const getProfile = `query GetProfile($account_id: String!) {
       caption
       url
     }
+    experience {
+      position
+      company
+      link
+      start_date
+      end_date
+      id
+    }
     references {
       content
       author_name

@@ -82,10 +82,10 @@ const filterData = (mutation, data) => {
   switch (mutation) {
     case "updateExperience":
       console.log("updateExperience FILTER DATA", data);
-      return experience.filter(expObj => expObj.changed !== "false");
+      return experience.filter(expObj => expObj.changed !== false);
     case "removeExperience":
       console.log("removeExperience FILTER DATA", data);
-      return experience;
+      return data;
     case "updateSkills":
       console.log("filterData skills", skills);
       return skills.filter(skillsObj => skillsObj.action);
@@ -138,10 +138,8 @@ const createPayloads = (mutation, data) => {
         }
     });
     case "removeExperience":
-      return data.map(expObj => {
-        console.log("createPayloads removeExperience expObj", expObj)
-        return { input: { id: expObj.id } }
-      });
+        console.log("createPayloads removeExperience data", data);
+        return { input: data };
     case "updateSkills":
       return data
         .map(skillsObj => {
@@ -245,7 +243,7 @@ const performOperations = async (mutation, payloads) => {
         })
       );
     case "removeExperience":
-      return API.graphql(graphqlOperation(mutations.deleteExperience, payloads[0]));
+      return API.graphql(graphqlOperation(mutations.deleteExperience, payloads));
     case "updateSkills":
       console.log("PERFORM SKILLS OPS PAYLOADS", payloads);
       return Promise.all(payloads.map(payload => {

@@ -6,8 +6,8 @@ import styles from './style.module.scss'
 @withRouter
 class LoginLayout extends React.PureComponent {
   state = {
-    backgroundNumber: 1,
-    backgroundEnabled: false,
+    backgroundNumber: 4,
+    backgroundEnabled: true,
   }
 
   changeBackground = () => {
