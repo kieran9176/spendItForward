@@ -82,6 +82,15 @@ export const getProfile = `query GetProfile($account_id: String!) {
       url
       id
     }
+    posts {
+      id
+      title
+      date_published
+      html
+      markdown
+      image_url
+      caption
+    }
   }
 }
 `;

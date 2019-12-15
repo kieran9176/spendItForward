@@ -45,10 +45,6 @@ class ExperienceForm extends React.Component {
       return;
     }
 
-    // const experience = this.createPayloads("removeExperience", IDs[index]);
-
-    // console.log("remove experience", experience)
-
     if (IDs[index]) {
       dispatch({
         type: 'profile/EDIT_PROFILE',
@@ -106,18 +102,18 @@ class ExperienceForm extends React.Component {
       case "updateExperience":
         for (let i = 0; i < values.keys.length; i += 1) {
           experience.push({
-                position: values.titles[i],
-                company: values.companies[i],
-                start_date: moment(values.startDates[i]).format('YYYY-MM'),
-                end_date: !values.checkboxes[i] ? moment(values.endDates[i]).format('YYYY-MM') : "Present",
-                link: values.companyLinks[i],
-                id: values.IDs[i],
-                changed: values.changed[i]
-              })
+            position: values.titles[i],
+            company: values.companies[i],
+            start_date: moment(values.startDates[i]).format('YYYY-MM'),
+            end_date: !values.checkboxes[i] ? moment(values.endDates[i]).format('YYYY-MM') : "Present",
+            link: values.companyLinks[i],
+            id: values.IDs[i],
+            changed: values.changed[i]
+          })
         }
         return experience;
       case "removeExperience":
-        return { id: values };
+        return {id: values};
       default:
         return "Could not update"
     }
@@ -138,14 +134,10 @@ class ExperienceForm extends React.Component {
   handleSubmit = e => {
     e.preventDefault();
     const {form, dispatch} = this.props;
-    // const { form } = this.props;
+
     form.validateFields((err, values) => {
       if (!err) {
-        console.log("VALUES", values)
-
         const experience = this.createPayloads("updateExperience", values);
-
-        console.log("EXPERIENCE", experience)
 
         dispatch({
           type: 'profile/EDIT_PROFILE',
@@ -244,7 +236,7 @@ class ExperienceForm extends React.Component {
                 {
                   required: true,
                   whitespace: true,
-                  message: "Not a valid URL. Sample URL e.g. https://chunesupply.com",
+                  message: "Not a valid URL. Sample URL: https://chunesupply.com",
                   type: "url"
                 },
               ],
@@ -271,6 +263,7 @@ class ExperienceForm extends React.Component {
           </Form.Item>
           <Form.Item
             label={`Start Date ${index + 1}`}
+            required={false}
           >
             {getFieldDecorator(`startDates[${index}]`, {
               rules: [{
@@ -314,7 +307,7 @@ class ExperienceForm extends React.Component {
 
     return (
       <Form onSubmit={this.handleSubmit}>
-        { companyFormItem }
+        {companyFormItem}
         <Form.Item>
           <Button type="dashed" onClick={this.add} style={{width: '60%'}}>
             <Icon type="plus" /> Add field
@@ -325,17 +318,15 @@ class ExperienceForm extends React.Component {
             Save
           </Button>
         </Form.Item>
-        <div>
-          <Modal
-            title="Remove Experience Item?"
-            visible={visible}
-            onOk={this.handleOk}
-            onCancel={this.handleCancel}
-          >
-            <p>Are you sure you want to remove this experience item? It will be deleted from your profile.</p>
-            <p>If yes, click OK. Otherwise you can cancel.</p>
-          </Modal>
-        </div>
+        <Modal
+          title="Remove Experience Item?"
+          visible={visible}
+          onOk={this.handleOk}
+          onCancel={this.handleCancel}
+        >
+          <p>Are you sure you want to remove this experience item? It will be deleted from your profile.</p>
+          <p>If yes, click OK. Otherwise you can cancel.</p>
+        </Modal>
       </Form>
     );
   }
