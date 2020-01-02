@@ -2,18 +2,14 @@ import React from 'react'
 import { connect } from 'react-redux'
 import { Collapse, Icon, Button } from 'antd'
 import { Helmet } from 'react-helmet'
-import ExperienceForm from './ExperienceForm'
-import SkillsForm from './SkillsForm'
-import CourseworkForm from './CourseworkForm'
+// import SkillsForm from './SkillsForm'
 import EducationForm from './EducationForm'
-import LeadershipForm from './LeadershipForm';
-import OtherForm from './OtherForm';
+import WhatWhenWhereForm from './WhatWhereWhenForm'
+import TagsForm from './TagsForm'
+// import OtherForm from './OtherForm';
 import ArticleForm from './ArticleForm';
 import style from './style.module.scss'
 import { triggerDevelopmentBuild } from "../../../services/website"
-
-// const { TabPane } = Tabs
-// const { TextArea } = Input
 
 @connect(({ profile }) => ({ profile }))
 class ProfileApp extends React.Component {
@@ -48,6 +44,21 @@ class ProfileApp extends React.Component {
       overflow: 'hidden',
     };
 
+    const formAttributes = {
+      leadership: {
+        title: "Leadership", createMutation: "createLeadership", deleteMutation: "removeLeadership",
+        labels: ["Company", "Company", "Title"]
+      },
+      experience: {
+        title: "Experience", createMutation: "createExperience", deleteMutation: "removeExperience",
+        labels: ["Organization", "Organization", "Position"]
+      },
+      brags: {
+        title: "Brags / Above and Beyond", createMutation: "createOther", deleteMutation: "removeOther",
+        labels: ["Where", "Where", "What"]
+      }
+    };
+
     return (
       <div>
         <Helmet title="Profile" />
@@ -62,7 +73,7 @@ class ProfileApp extends React.Component {
           >
             <Panel header="Experience" key="1" style={customPanelStyle}>
               <p>{text.experienceText}</p>
-              <ExperienceForm />
+              <WhatWhenWhereForm type="Experience" formAttributes={formAttributes} />
             </Panel>
           </Collapse>
           <Collapse
@@ -72,7 +83,7 @@ class ProfileApp extends React.Component {
           >
             <Panel header="Skills" key="2" style={customPanelStyle}>
               <p>{text.skillsText}</p>
-              <SkillsForm />
+              <TagsForm type="Skills" />
             </Panel>
           </Collapse>
           <Collapse
@@ -82,7 +93,7 @@ class ProfileApp extends React.Component {
           >
             <Panel header="Coursework" key="3" style={customPanelStyle}>
               <p>{text.courseworkText}</p>
-              <CourseworkForm />
+              <TagsForm type="Coursework" />
             </Panel>
           </Collapse>
           <Collapse
@@ -102,7 +113,7 @@ class ProfileApp extends React.Component {
           >
             <Panel header="Leadership" key="4" style={customPanelStyle}>
               <p>{text.leadershipText}</p>
-              <LeadershipForm />
+              <WhatWhenWhereForm type="Leadership" formAttributes={formAttributes} />
             </Panel>
           </Collapse>
           <Collapse
@@ -112,7 +123,7 @@ class ProfileApp extends React.Component {
           >
             <Panel header="Above and Beyond / Brags" key="5" style={customPanelStyle}>
               <p>{text.bragsText}</p>
-              <OtherForm />
+              <WhatWhenWhereForm type="Brags" formAttributes={formAttributes} />
             </Panel>
           </Collapse>
           <Collapse

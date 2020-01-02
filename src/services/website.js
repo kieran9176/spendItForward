@@ -9,11 +9,14 @@ const pbmgmt = axios.create({
 const createPayload = (profile) => {
   const { getProfile } = profile.data;
   const { assets, coursework, leadership, references, skills, experience, articles, intro, socials, posts } = getProfile;
+
+  console.log('getProfile', getProfile)
+
   return JSON.stringify(
     {
       "languageCode": "en-us",
       "baseURL": "http://development.kieranpaul.com.s3-website.us-east-2.amazonaws.com/",
-      "title": "Kieran Derfus",
+      "title": `${ getProfile.first_name } ${ getProfile.last_name }`,
       "params": {
         first_name: getProfile.first_name,
         last_name: getProfile.last_name,
@@ -41,11 +44,13 @@ export async function triggerDevelopmentBuild (sub) {
 
   const profileResponse = currentAccountProfile(sub);
 
-  console.log("TRIGGER DEV BUILD");
+  console.log("TRIGGER DEV BUILD", );
 
   profileResponse.then(profileObj => {
 
     const payload = createPayload(profileObj)
+
+    console.log("Payload", payload)
 
     pbmgmt.post('/edit-then-build', {
       "input": `${payload}`,

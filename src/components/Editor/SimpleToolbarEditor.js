@@ -1,5 +1,6 @@
 /* eslint-disable react/no-multi-comp */
 import React, { Component } from 'react';
+import { connect } from 'react-redux'
 import { API, graphqlOperation } from 'aws-amplify';
 import * as mutations from 'graphql/mutations'
 import { convertToRaw, EditorState, ContentState } from 'draft-js';
@@ -35,6 +36,7 @@ const gridStyle = {
   width: '10%',
 };
 
+@connect(({ profile }) => ({ profile }))
 class SavedStatus extends Component {
 
   constructor(props) {
@@ -55,6 +57,37 @@ class SavedStatus extends Component {
             this.componentDidMount()
           })
       });
+  }
+
+  getPost = () => {
+
+    const { match, profile, titleForm } = this.props
+    const { getFieldDecorator } = titleForm
+    const { posts } = profile
+
+    if (match.params.id) {
+
+      getFieldDecorator('id', { initialValue: match.params.id })
+      const post = posts.filter(_ => _.id === match.params.id ).pop()
+
+      console.log("POST", post)
+
+      getFieldDecorator('title', { initialValue: post.title })
+      getFieldDecorator('caption', { initialValue: post.caption })
+      getFieldDecorator('markdown', { initialValue: post.markdown })
+      getFieldDecorator('html', { initialValue: post.html })
+      getFieldDecorator('date_published', { initialValue: post.date_published })
+      getFieldDecorator('series', { initialValue: post.series })
+    }
+    else {
+      getFieldDecorator('id', {initialValue: null})
+      getFieldDecorator('title', {initialValue: ""})
+      getFieldDecorator('caption', {initialValue: ""})
+      getFieldDecorator('markdown', {initialValue: ""})
+      getFieldDecorator('html', {initialValue: '<p>Sing us a song, piano man.</p>'})
+      getFieldDecorator('date_published', {initialValue: ""})
+      getFieldDecorator('series', {initialValue: ""})
+    }
   }
 
   handleSubmit = () => {
@@ -83,9 +116,10 @@ class SavedStatus extends Component {
     const post = titleForm.getFieldsValue()
     const { id } = post;
     if (id) {
-      console.log("post with an ID", post)
+      console.log("submitted with an ID", post)
       return API.graphql(graphqlOperation(mutations.updatePost, {input: post}))
     }
+    console.log("submitted without an ID", post)
     return API.graphql(graphqlOperation(mutations.createPost, {input: post}));
   };
 
@@ -110,6 +144,7 @@ class SavedStatus extends Component {
   }
 }
 
+@connect(({ profile }) => ({ profile }))
 export default class CustomToolbarEditor extends Component {
 
   constructor(props) {
@@ -138,8 +173,10 @@ export default class CustomToolbarEditor extends Component {
   render() {
 
     const {editorState} = this.state
-    const { titleForm } = this.props
+    const { titleForm, match } = this.props
     const { getFieldDecorator } = titleForm
+
+    console.log("toolbar editor match", match)
 
     getFieldDecorator('id', {initialValue: null})
     getFieldDecorator('title', {initialValue: ""})

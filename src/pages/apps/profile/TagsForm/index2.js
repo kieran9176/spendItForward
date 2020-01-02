@@ -6,15 +6,18 @@ import { Tag, Input, Icon, notification } from 'antd';
 import { TweenOneGroup } from 'rc-tween-one';
 
 @connect(({ profile }) => ({ profile }))
-class CourseworkForm extends React.Component {
+class TagsForm extends React.Component {
 
   constructor(props) {
     super(props);
     const { coursework }  = props.profile;
-    const tags = coursework.map(courseworkInstance => courseworkInstance.course_name);
+    const { context } = props;
+    let tags = [];
+    // if (context === "coursework") tags = coursework.map(courseworkInstance => courseworkInstance.course_name);
+    if (context === "coursework") tags = coursework
     this.state = {
       tags,
-      coursework,
+      // coursework,
       inputVisible: false,
       inputValue: '',
     };
@@ -56,8 +59,8 @@ class CourseworkForm extends React.Component {
   };
 
   showInput = () => {
-    // this.setState({ inputVisible: true }, () => this.input.focus());
-    this.setState({ inputVisible: true });
+    this.setState({ inputVisible: true }, () => this.input.focus());
+    // this.setState({ inputVisible: true });
   };
 
   handleInputChange = e => {
@@ -197,4 +200,4 @@ class CourseworkForm extends React.Component {
   }
 }
 
-export default CourseworkForm
+export default TagsForm

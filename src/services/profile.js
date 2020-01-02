@@ -78,11 +78,15 @@ export async function currentAccountProfile (accountId) {
 }
 
 const filterData = (mutation, data) => {
-  const { experience, skills, coursework, leadership, articles, post } = data;
+  const { payloads, skills, coursework, articles, post } = data;
+
   switch (mutation) {
     case "updateExperience":
       console.log("updateExperience FILTER DATA", data);
-      return experience.filter(expObj => expObj.changed !== false);
+      return payloads.filter(obj => obj.changed !== false);
+    case "updateLeadership":
+      console.log("updateLeadership FILTER DATA", data);
+      return payloads.filter(obj => obj.changed !== false);
     case "removeExperience":
       console.log("removeExperience FILTER DATA", data);
       return data;
@@ -91,12 +95,9 @@ const filterData = (mutation, data) => {
       return skills.filter(skillsObj => skillsObj.action);
     case "updateCoursework":
       return coursework.filter(courseworkObj => courseworkObj.action === "add" || courseworkObj.action === "remove");
-    case "updateLeadership":
-      console.log("updateLeadership FILTER DATA", data);
-      return leadership.filter(leadObj => leadObj.changed !== "false");
     case "removeLeadership":
       console.log("removeLeadership FILTER DATA", data);
-      return leadership;
+      return data;
     case "updateArticles":
       console.log("updateArticles FILTER DATA", data);
       return articles.filter(articleObj => articleObj.changed !== "false");
@@ -155,7 +156,7 @@ const createPayloads = (mutation, data) => {
           return null
         });
     case "updateLeadership":
-      console.log("CREATE PAYLOADS DATA", data);
+      console.log("CREATE LEADERSHIP PAYLOADS DATA", data);
       return data.map(leadObj => {
         return leadObj.id ?
           {
@@ -180,10 +181,8 @@ const createPayloads = (mutation, data) => {
           }
       });
     case "removeLeadership":
-      return data.map(leadObj => {
-        console.log("createPayloads removeLeadership leadObj", leadObj)
-        return { input: { id: leadObj.id } }
-      });
+      console.log("createPayloads removeLeadership leadObj", data)
+      return { input: data };
     case "updateArticles":
       console.log("CREATE PAYLOADS DATA", data);
       return data.map(articleObj => {
@@ -263,6 +262,9 @@ const performOperations = async (mutation, payloads) => {
         })
       );
     case "updateLeadership":
+
+      console.log("perform leadership ops payloads", payloads)
+
       return Promise.all(payloads.map(payload => {
           console.log("PERFORM LEADERSHIP OPS PAYLOAD", payload)
           return payload.input.id ?
@@ -272,7 +274,8 @@ const performOperations = async (mutation, payloads) => {
         })
       );
     case "removeLeadership":
-      return API.graphql(graphqlOperation(mutations.deleteLeadership, payloads[0]));
+      console.log("removeLeadership payloads", payloads)
+      return API.graphql(graphqlOperation(mutations.deleteLeadership, payloads));
     case "updateArticles":
       return Promise.all(payloads.map(payload => {
           console.log("PERFORM ARTICLES OPS PAYLOAD", payload)

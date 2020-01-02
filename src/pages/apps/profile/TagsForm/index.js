@@ -6,26 +6,33 @@ import { Tag, Input, Icon, notification } from 'antd';
 import { TweenOneGroup } from 'rc-tween-one';
 
 @connect(({ profile }) => ({ profile }))
-class CourseworkForm extends React.Component {
+class TagsForm extends React.Component {
 
   constructor(props) {
     super(props);
-    const { coursework }  = props.profile;
-    const tags = coursework.map(courseworkInstance => courseworkInstance.course_name);
+    const { coursework, skills }  = props.profile;
+    const { type } = props;
+    let tags = [];
+
+    if (type === "Coursework") tags = coursework;
+    if (type === "Skills") tags = skills;
+
     this.state = {
       tags,
-      coursework,
       inputVisible: false,
       inputValue: '',
     };
   }
 
   handleClose = removedTag => {
-    let {tags, coursework} = this.state;
+    let { tags } = this.state;
+    const { type } = this.props;
+    let mutation = "";
 
-    console.log(removedTag.id);
+    if (type === "Coursework") mutation = "deleteCoursework";
+    if (type === "Skills") mutation = "deleteSkill";
 
-    API.graphql(graphqlOperation(mutations.deleteCoursework, {
+    API.graphql(graphqlOperation(mutations[mutation], {
         input: {
           id: removedTag.id
         }
@@ -34,16 +41,22 @@ class CourseworkForm extends React.Component {
       .then(response => {
 
         if (response.data) {
-          const {deleteCoursework} = response.data;
+          const { deleteCoursework, deleteSkill } = response.data;
+          let tagValue = "";
 
-          tags = tags.filter(tag => tag !== removedTag.course_name);
-          coursework = coursework.filter(courseworkObj => courseworkObj.course_name !== removedTag.course_name);
+          console.log("deleteSkill", deleteSkill)
 
-          this.setState({tags, coursework});
+          tags = tags.filter(tag => tag !== removedTag);
+          this.setState({ tags });
+
+          if (deleteCoursework) tagValue = deleteCoursework.course_name;
+          if (deleteSkill) tagValue = deleteSkill.content;
+
+          this.setState({ tags });
 
           notification.success({
             message: 'Updates Saved',
-            description: `You've successfully removed "${deleteCoursework.course_name}" from your coursework.`
+            description: `You've successfully removed "${tagValue}" from your ${type}.`
           });
 
         } else {
@@ -56,8 +69,7 @@ class CourseworkForm extends React.Component {
   };
 
   showInput = () => {
-    // this.setState({ inputVisible: true }, () => this.input.focus());
-    this.setState({ inputVisible: true });
+    this.setState({ inputVisible: true }, () => this.input.focus());
   };
 
   handleInputChange = e => {
@@ -66,35 +78,61 @@ class CourseworkForm extends React.Component {
 
   handleInputConfirm = () => {
     const {inputValue} = this.state;
-    let {tags, coursework} = this.state;
+    let { tags } = this.state;
+    const { type } = this.props;
+    let mutation = "";
+    let payload = {};
 
-    if (inputValue && tags.indexOf(inputValue) === -1) {
-      tags = [...tags, inputValue];
+    if (type === "Coursework") {
+      mutation = "createCoursework";
+      payload = {
+        input: {
+          course_name: inputValue
+        }
+      }
+    }
+    if (type === "Skills") {
+      mutation = "createSkill";
+      payload = {
+        input: {
+          content: inputValue
+        }
+      }
+    }
 
-      API.graphql(graphqlOperation(mutations.createCoursework, {
-          input: {
-            course_name: inputValue
-          }
-        })
-      )
+    if (inputValue) {
+
+      API.graphql(graphqlOperation(mutations[mutation], payload))
         .then(response => {
 
           if (response.data) {
-            const {createCoursework} = response.data;
-            const {id} = createCoursework;
+            const { createCoursework, createSkill } = response.data;
+            let tagValue = "";
 
-            coursework = [...coursework, {course_name: createCoursework.course_name, id}];
+            if (createCoursework) {
+              const { id } = createCoursework;
+              tagValue = createCoursework.course_name;
+              tags = [...tags, { course_name: tagValue, id}];
+            }
+
+            if (createSkill) {
+              const { id } = createSkill;
+
+              console.log("createSkill", createSkill);
+
+              tagValue = createSkill.content;
+              tags = [...tags, { content: tagValue, id}];
+            }
 
             this.setState({
               tags,
-              coursework,
               inputVisible: false,
               inputValue: '',
             });
 
             notification.success({
               message: 'Updates Saved',
-              description: `You've successfully added "${createCoursework.course_name}" to your coursework.`
+              description: `You've successfully added "${tagValue}" to your ${type}.`
             });
 
           } else {
@@ -107,20 +145,26 @@ class CourseworkForm extends React.Component {
     }
   };
 
-  forMap = courseworkObj => {
+  forMap = tagObj => {
+    const { type } = this.props;
+    let tagValue = "";
+
+    if (type === "Coursework") tagValue = tagObj.course_name;
+    if (type === "Skills") tagValue = tagObj.content;
+
     const tagElem = (
       <Tag
         closable
         onClose={e => {
           e.preventDefault();
-          this.handleClose(courseworkObj);
+          this.handleClose(tagObj);
         }}
       >
-        {courseworkObj.course_name}
+        { tagValue }
       </Tag>
     );
     return (
-      <span key={courseworkObj.course_name} style={{ display: 'inline-block' }}>
+      <span key={tagValue} style={{ display: 'inline-block' }}>
         {tagElem}
       </span>
     );
@@ -130,29 +174,9 @@ class CourseworkForm extends React.Component {
     this.input = input
   };
 
-  handleSubmit = e => {
-    e.preventDefault();
-    // const { dispatch } = this.props
-    const { tags, coursework } = this.state;
-    const { dispatch } = this.props;
-
-    dispatch({
-      type: 'profile/EDIT_PROFILE',
-      payload: {
-        mutation: "updateCoursework",
-        data: { coursework }
-      }
-    });
-
-    console.log("COURSEWORK", coursework)
-    console.log("TAGS", tags)
-
-  };
-
   render() {
-    const {coursework, inputVisible, inputValue} = this.state;
-    // const tagChild = tags.map(this.forMap);
-    const tagChild = coursework.map(this.forMap);
+    const { tags, inputVisible, inputValue } = this.state;
+    const tagChild = tags.map(this.forMap);
 
     return (
       <div>
@@ -197,4 +221,4 @@ class CourseworkForm extends React.Component {
   }
 }
 
-export default CourseworkForm
+export default TagsForm

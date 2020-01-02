@@ -461,6 +461,7 @@ export const deleteIntro = `mutation DeleteIntro($input: DeleteIntroInput!) {
 `;
 export const createSkill = `mutation CreateSkill($input: CreateSkillInput!) {
   createSkill(input: $input) {
+    id
     content
   }
 }
@@ -476,13 +477,13 @@ export const updateSkill = `mutation UpdateSkill($input: UpdateSkillInput!) {
 export const deleteSkill = `mutation DeleteSkill($input: DeleteSkillInput!) {
   deleteSkill(input: $input) {
     id
+    content
   }
 }
 `;
 export const createCoursework = `mutation CreateCoursework($input: CreateCourseworkInput!) {
   createCoursework(input: $input) {
     id
-    account_id
     course_name
   }
 }

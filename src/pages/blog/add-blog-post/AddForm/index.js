@@ -46,7 +46,7 @@ class AddForm extends React.Component {
     const {
       intl: {formatMessage}
     } = this.props
-    const {form} = this.props
+    const { form, match } = this.props
     const { showSearch, searchText } = this.state
 
     return (
@@ -95,7 +95,7 @@ class AddForm extends React.Component {
                 </Col>
               </Row>
               <div className={styles.bodyInput}>
-                <SimpleStaticToolbarEditor titleForm={form} />
+                <SimpleStaticToolbarEditor titleForm={form} match={match} />
               </div>
             </div>
           </div>

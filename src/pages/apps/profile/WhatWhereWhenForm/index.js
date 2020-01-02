@@ -26,7 +26,7 @@ const { MonthPicker } = DatePicker;
   }
 })
 
-class ExperienceForm extends React.Component {
+class WhatWhereWhenForm extends React.Component {
 
   state = {
     visible: false,
@@ -34,11 +34,23 @@ class ExperienceForm extends React.Component {
     index: null
   };
 
+  getPayloads(type, values) {
+    if (type === "Experience") {
+      return this.createPayloads("updateExperience", values)
+    }
+    if (type === "Leadership") {
+      return this.createPayloads("updateLeadership", values)
+    }
+    return null
+  }
+
   remove = () => {
-    const { form, dispatch } = this.props;
+    const { form, dispatch, type, formAttributes } = this.props;
     const { k, index } = this.state;
     // can use data-binding to get
-    const { keys, titles, companies, companyLinks, IDs, startDates, endDates } = form.getFieldsValue();
+    // const { keys, titles, companies, companyLinks, IDs, startDates, endDates } = form.getFieldsValue();
+    const { keys, positions, organizations, links, IDs, startDates, endDates } = form.getFieldsValue();
+    const { deleteMutation } = this.getFormAttributes(type, formAttributes);
 
     // We need at least one passenger
     if (keys.length === 1) {
@@ -49,7 +61,7 @@ class ExperienceForm extends React.Component {
       dispatch({
         type: 'profile/EDIT_PROFILE',
         payload: {
-          mutation: "removeExperience",
+          mutation: deleteMutation,
           data: { id: IDs[index] }
         }
       });
@@ -60,14 +72,14 @@ class ExperienceForm extends React.Component {
       keys: keys.filter( (key) => {
         return key !== k
       }),
-      titles: titles.filter( (title) => {
-        return title !== titles[index]
+      positions: positions.filter( (position) => {
+        return position !== positions[index]
       }),
-      companies: companies.filter( (company) => {
-        return company !== companies[index]
+      organizations: organizations.filter( (organization) => {
+        return organization !== organizations[index]
       }),
-      companyLinks: companyLinks.filter( (companyLink) => {
-        return companyLink !== companyLinks[index]
+      links: links.filter( (link) => {
+        return link !== links[index]
       }),
       IDs: IDs.filter( (ID) => {
         return ID !== IDs[index]
@@ -97,23 +109,37 @@ class ExperienceForm extends React.Component {
   };
 
   createPayloads = (action, values) => {
-    const experience = [];
+    const payloads = [];
+
+    console.log("values", values)
+
     switch (action) {
       case "updateExperience":
         for (let i = 0; i < values.keys.length; i += 1) {
-          experience.push({
-            position: values.titles[i],
-            company: values.companies[i],
+          payloads.push({
+            position: values.positions[i],
+            company: values.organizations[i],
             start_date: moment(values.startDates[i]).format('YYYY-MM'),
             end_date: !values.checkboxes[i] ? moment(values.endDates[i]).format('YYYY-MM') : "Present",
-            link: values.companyLinks[i],
+            link: values.links[i],
             id: values.IDs[i],
             changed: values.changed[i]
           })
         }
-        return experience;
-      case "removeExperience":
-        return {id: values};
+        return { mutation: "updateExperience", data: { payloads } };
+      case "updateLeadership":
+        for (let i = 0; i < values.keys.length; i += 1) {
+          payloads.push({
+            position: values.positions[i],
+            organization: values.organizations[i],
+            start_date: moment(values.startDates[i]).format('YYYY-MM'),
+            end_date: !values.checkboxes[i] ? moment(values.endDates[i]).format('YYYY-MM') : "Present",
+            link: values.links[i],
+            id: values.IDs[i],
+            changed: values.changed[i]
+          })
+        }
+        return { mutation: "updateLeadership", data: { payloads } };
       default:
         return "Could not update"
     }
@@ -133,18 +159,17 @@ class ExperienceForm extends React.Component {
 
   handleSubmit = e => {
     e.preventDefault();
-    const {form, dispatch} = this.props;
+    const {form, dispatch, type } = this.props;
 
     form.validateFields((err, values) => {
       if (!err) {
-        const experience = this.createPayloads("updateExperience", values);
+        const payload = this.getPayloads(type, values)
+
+        console.log("payload", payload)
 
         dispatch({
           type: 'profile/EDIT_PROFILE',
-          payload: {
-            mutation: "updateExperience",
-            data: { experience }
-          }
+          payload
         });
 
         // reset changed to false for every field
@@ -154,6 +179,7 @@ class ExperienceForm extends React.Component {
         }
         form.setFieldsValue({ changed })
       }
+      else console.log("error", err)
     })
   };
 
@@ -179,19 +205,58 @@ class ExperienceForm extends React.Component {
     });
   };
 
+  getFormAttributes = (type, formAttributes) => {
+    switch (type) {
+      case "Leadership":
+        return formAttributes.leadership;
+      case "Experience":
+        return formAttributes.experience;
+      case "Brags":
+        return formAttributes.brags;
+      default:
+        return null
+    }
+  };
+
+  getInitialValues = (type) => {
+    const { profile } = this.props;
+    const { leadership, experience } = profile;
+    const initialValues = [];
+
+    if (type === "Leadership") {
+      return leadership
+    }
+    if (type === "Experience") {
+      for (let i = 0; i < experience.length; i += 1) {
+        initialValues.push({
+          position: experience[i].position,
+          organization: experience[i].company,
+          link: experience[i].link,
+          start_date: experience[i].start_date,
+          end_date: experience[i].end_date,
+          id: experience[i].id
+        })
+      }
+      return initialValues
+    }
+    return initialValues
+  };
+
   // if your form doesn't have the fields these you set, this error will appear!
   // https://github.com/ant-design/ant-design/issues/8880
 
   render() {
-    const { form, profile } = this.props;
-    const { experience } = profile;
+    const { form, formAttributes, type } = this.props;
     const { getFieldDecorator, getFieldsValue } = form;
     const { visible } = this.state;
 
-    getFieldDecorator('keys', { initialValue: experience.map((expObj, i) => i )});
-    getFieldDecorator('IDs', { initialValue: experience.map((expObj) => expObj.id )});
-    getFieldDecorator('changed', { initialValue: experience.map(() => false )});
-    getFieldDecorator('checkboxes', { initialValue: experience.map ((expObj) => expObj.end_date === "Present")});
+    const { labels } = this.getFormAttributes(type, formAttributes);
+    const initialValues = this.getInitialValues(type);
+
+    getFieldDecorator('keys', { initialValue: initialValues.map((expObj, i) => i )});
+    getFieldDecorator('IDs', { initialValue: initialValues.map((expObj) => expObj.id )});
+    getFieldDecorator('changed', { initialValue: initialValues.map(() => false )});
+    getFieldDecorator('checkboxes', { initialValue: initialValues.map ((expObj) => expObj.end_date === "Present")});
 
     const { keys, checkboxes } = getFieldsValue();
 
@@ -199,7 +264,7 @@ class ExperienceForm extends React.Component {
       return (
         <div key={k}>
           <h5>
-            <strong style={{marginRight: 8}}>Experience {index + 1} </strong>
+            <strong style={{marginRight: 8}}>{type} {index + 1} </strong>
             {keys.length > 1 ? (
               <Icon
                 className="dynamic-delete-button"
@@ -209,12 +274,12 @@ class ExperienceForm extends React.Component {
             ) : null}
           </h5>
           <Form.Item
-            label={`Company ${index + 1}`}
+            label={`${labels[0]} ${index + 1}`}
             required={false}
           >
-            {getFieldDecorator(`companies[${index}]`, {
+            {getFieldDecorator(`organizations[${index}]`, {
               validateTrigger: ['onChange', 'onBlur'],
-              initialValue: index < experience.length ? experience[index].company : "",
+              initialValue: index < initialValues.length ? initialValues[index].organization : "",
               rules: [
                 {
                   required: true,
@@ -226,12 +291,12 @@ class ExperienceForm extends React.Component {
             }
           </Form.Item>
           <Form.Item
-            label={`Company ${index + 1} Hyperlink`}
+            label={`${labels[1]} ${index + 1} Hyperlink`}
             required={false}
           >
-            {getFieldDecorator(`companyLinks[${index}]`, {
+            {getFieldDecorator(`links[${index}]`, {
               validateTrigger: ['onChange', 'onBlur'],
-              initialValue: index < experience.length ? experience[index].link : "",
+              initialValue: index < initialValues.length ? initialValues[index].link : "",
               rules: [
                 {
                   required: true,
@@ -246,12 +311,12 @@ class ExperienceForm extends React.Component {
             />)}
           </Form.Item>
           <Form.Item
-            label={`Title ${index + 1}`}
+            label={`${labels[2]} ${index + 1}`}
             required={false}
           >
-            {getFieldDecorator(`titles[${index}]`, {
+            {getFieldDecorator(`positions[${index}]`, {
               validateTrigger: ['onChange', 'onBlur'],
-              initialValue: index < experience.length ? experience[index].position : "",
+              initialValue: index < initialValues.length ? initialValues[index].position : "",
               rules: [
                 {
                   required: true,
@@ -271,7 +336,7 @@ class ExperienceForm extends React.Component {
                 required: true,
                 message: 'Please select start date.',
               }],
-              initialValue: index < experience.length ? moment(experience[index].start_date) : null
+              initialValue: index < initialValues.length ? moment(initialValues[index].start_date) : null
             })(
               <MonthPicker />
             )}
@@ -294,7 +359,7 @@ class ExperienceForm extends React.Component {
                 required: true,
                 message: "Please select end date.",
               }],
-              initialValue: index < experience.length && experience[index].end_date !== "Present" ? moment(experience[index].end_date) : null
+              initialValue: index < initialValues.length && initialValues[index].end_date !== "Present" ? moment(initialValues[index].end_date) : null
             })(
               <MonthPicker
                 disabled={checkboxes[index]}
@@ -319,12 +384,12 @@ class ExperienceForm extends React.Component {
           </Button>
         </Form.Item>
         <Modal
-          title="Remove Experience Item?"
+          title="Remove Entry?"
           visible={visible}
           onOk={this.handleOk}
           onCancel={this.handleCancel}
         >
-          <p>Are you sure you want to remove this experience item? It will be deleted from your profile.</p>
+          <p>Are you sure you want to remove this item? It will be deleted from your profile.</p>
           <p>If yes, click OK. Otherwise you can cancel.</p>
         </Modal>
       </Form>
@@ -332,4 +397,4 @@ class ExperienceForm extends React.Component {
   }
 }
 
-export default ExperienceForm
+export default WhatWhereWhenForm

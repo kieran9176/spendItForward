@@ -1,8 +1,6 @@
 import React from 'react'
 import { connect } from 'react-redux'
-import { API, graphqlOperation } from 'aws-amplify';
-import * as mutations from 'graphql/mutations'
-import { Tag, Input, Icon, notification } from 'antd';
+import { Tag, Input, Icon, Button } from 'antd';
 import { TweenOneGroup } from 'rc-tween-one';
 
 @connect(({ profile }) => ({ profile }))
@@ -21,38 +19,13 @@ class CourseworkForm extends React.Component {
   }
 
   handleClose = removedTag => {
-    let {tags, coursework} = this.state;
-
-    console.log(removedTag.id);
-
-    API.graphql(graphqlOperation(mutations.deleteCoursework, {
-        input: {
-          id: removedTag.id
-        }
-      })
-    )
-      .then(response => {
-
-        if (response.data) {
-          const {deleteCoursework} = response.data;
-
-          tags = tags.filter(tag => tag !== removedTag.course_name);
-          coursework = coursework.filter(courseworkObj => courseworkObj.course_name !== removedTag.course_name);
-
-          this.setState({tags, coursework});
-
-          notification.success({
-            message: 'Updates Saved',
-            description: `You've successfully removed "${deleteCoursework.course_name}" from your coursework.`
-          });
-
-        } else {
-          notification.error({
-            message: 'Error',
-            description: 'Our team of highly trained monkeys has been dispatched to deal with the situation.',
-          });
-        }
-      });
+    let { tags, coursework } = this.state
+    tags = tags.filter(tag => tag !== removedTag);
+    coursework = coursework.map(courseworkInstance => {
+      if (courseworkInstance.course_name === removedTag) courseworkInstance.action = "remove";
+      return courseworkInstance
+    });
+    this.setState({ tags, coursework });
   };
 
   showInput = () => {
@@ -65,62 +38,34 @@ class CourseworkForm extends React.Component {
   };
 
   handleInputConfirm = () => {
-    const {inputValue} = this.state;
-    let {tags, coursework} = this.state;
-
+    const { inputValue, coursework } = this.state;
+    let { tags } = this.state;
     if (inputValue && tags.indexOf(inputValue) === -1) {
       tags = [...tags, inputValue];
-
-      API.graphql(graphqlOperation(mutations.createCoursework, {
-          input: {
-            course_name: inputValue
-          }
-        })
-      )
-        .then(response => {
-
-          if (response.data) {
-            const {createCoursework} = response.data;
-            const {id} = createCoursework;
-
-            coursework = [...coursework, {course_name: createCoursework.course_name, id}];
-
-            this.setState({
-              tags,
-              coursework,
-              inputVisible: false,
-              inputValue: '',
-            });
-
-            notification.success({
-              message: 'Updates Saved',
-              description: `You've successfully added "${createCoursework.course_name}" to your coursework.`
-            });
-
-          } else {
-            notification.error({
-              message: 'Error',
-              description: 'Our team of highly trained monkeys has been dispatched to deal with the situation.',
-            });
-          }
-        });
+      coursework.push({ course_name: inputValue, id: null, action: "add"});
     }
+    this.setState({
+      tags,
+      coursework,
+      inputVisible: false,
+      inputValue: '',
+    });
   };
 
-  forMap = courseworkObj => {
+  forMap = tag => {
     const tagElem = (
       <Tag
         closable
         onClose={e => {
           e.preventDefault();
-          this.handleClose(courseworkObj);
+          this.handleClose(tag);
         }}
       >
-        {courseworkObj.course_name}
+        {tag}
       </Tag>
     );
     return (
-      <span key={courseworkObj.course_name} style={{ display: 'inline-block' }}>
+      <span key={tag} style={{ display: 'inline-block' }}>
         {tagElem}
       </span>
     );
@@ -150,9 +95,8 @@ class CourseworkForm extends React.Component {
   };
 
   render() {
-    const {coursework, inputVisible, inputValue} = this.state;
-    // const tagChild = tags.map(this.forMap);
-    const tagChild = coursework.map(this.forMap);
+    const {tags, inputVisible, inputValue} = this.state;
+    const tagChild = tags.map(this.forMap);
 
     return (
       <div>
@@ -191,6 +135,11 @@ class CourseworkForm extends React.Component {
               <Icon type="plus" /> New Tag
             </Tag>
           )}
+        </div>
+        <div>
+          <Button type="primary" onClick={this.handleSubmit}>
+            Submit
+          </Button>
         </div>
       </div>
     )

@@ -38,8 +38,10 @@ export const getProfile = `query GetProfile($account_id: String!) {
     leadership {
       position
       organization
+      link
       id
-      account_id
+      start_date
+      end_date
     }
     other {
       id
@@ -52,13 +54,11 @@ export const getProfile = `query GetProfile($account_id: String!) {
     }
     skills {
       content
-      account_id
       id
     }
     coursework {
       id
       course_name
-      account_id
     }
     contact {
       email
