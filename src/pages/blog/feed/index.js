@@ -36,7 +36,7 @@ class BlogFeed extends React.Component {
                 <div className="col-lg-8">
                   <main>
                     {posts.map( (article) => (
-                      <article className={styles.article} key={article.title}>
+                      <article className={styles.article} key={Math.random()}>
                         <div className={styles.information}>
                           <div className={styles.title}>
                             <h1>
@@ -56,7 +56,7 @@ class BlogFeed extends React.Component {
                         </div>
                         <div className={styles.articleMedia}>
                           <a href="javascript: void(0);" className={styles.link}>
-                            <img src={article.image_url} alt={article.title} />
+                            <img src={article.image_url ? article.image_url : 'https://d2czw3op36f92o.cloudfront.net/kieranpaul-source/16722614_10206532771118488_3464355287299241309_o.jpg'} alt={article.title} />
                           </a>
                         </div>
                         <div className={styles.content}>

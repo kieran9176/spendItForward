@@ -89,7 +89,6 @@ export const getProfile = `query GetProfile($account_id: String!) {
       html
       markdown
       image_url
-      caption
     }
   }
 }

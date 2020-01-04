@@ -534,12 +534,12 @@ export const deleteContact = `mutation DeleteContact($input: DeleteContactInput!
 export const createPost = `mutation CreatePost($input: CreatePostInput!) {
   createPost(input: $input) {
     title
-    caption
     markdown
     html
     image_url
     date_published
     series
+    id
   }
 }
 `;
@@ -547,7 +547,6 @@ export const updatePost = `mutation UpdatePost($input: UpdatePostInput!) {
   updatePost(input: $input) {
     id
     title
-    caption
     markdown
     html
     image_url

@@ -81,9 +81,34 @@ export async function EDIT_PROFILE( { payload }) {
   });
 }
 
+export async function CREATE_POST( { payload }) {
+  // const { mutation, data } = payload
+
+  console.log("create post payload", payload)
+  // const response = editProfile(mutation, data);
+  // response.then(values => {
+  //   if (values === "Could not update profile") notify("failure");
+  //   else notify(mutation)
+  // });
+}
+
+export async function EDIT_POST( { payload }) {
+  // const { mutation, data } = payload
+
+  console.log("create post payload", payload)
+
+  // const response = editProfile(mutation, data);
+  // response.then(values => {
+  //   if (values === "Could not update profile") notify("failure");
+  //   else notify(mutation)
+  // });
+}
+
 export default function* rootSaga() {
   yield all([
     takeEvery(actions.EDIT_PROFILE, EDIT_PROFILE),
+    takeEvery(actions.CREATE_POST, CREATE_POST),
+    takeEvery(actions.EDIT_POST, EDIT_POST),
     takeEvery(actions.LOAD_CURRENT_PROFILE, LOAD_CURRENT_PROFILE),
   ])
 }

@@ -3,8 +3,8 @@ import { connect } from 'react-redux'
 import { Link, withRouter } from 'react-router-dom'
 import { injectIntl } from 'react-intl'
 import { Form, Input, Icon, Row, Col } from 'antd'
+import Avatar from 'components/ImageUpload/Avatar'
 import SimpleStaticToolbarEditor from "../../../../components/Editor/SimpleToolbarEditor"
-// import AWS from "aws-sdk";
 import styles from './style.module.scss'
 
 const FormItem = Form.Item
@@ -17,7 +17,7 @@ class AddForm extends React.Component {
 
   state = {
     showSearch: true,
-    searchText: '',
+    // searchText: '',
   };
 
   showLiveSearch = () => {
@@ -33,7 +33,7 @@ class AddForm extends React.Component {
     this.searchInput.blur()
     this.setState({
       showSearch: false,
-      searchText: '',
+      // searchText: '',
     })
   };
 
@@ -41,13 +41,38 @@ class AddForm extends React.Component {
     this.searchInput = node
   };
 
+  getPost = () => {
+    const {match, profile, form} = this.props;
+    const { posts } = profile;
+    let post = {};
+
+    if (match.params.id) {
+
+      post = posts.filter(_ => _.id === match.params.id).pop();
+
+      const {id} = post;
+
+      form.getFieldDecorator('id', {
+        initialValue: id
+      });
+      return post
+    }
+
+    form.getFieldDecorator('id', {
+      initialValue: null
+    });
+    return null
+  };
+
   render() {
 
     const {
       intl: {formatMessage}
-    } = this.props
-    const { form, match } = this.props
-    const { showSearch, searchText } = this.state
+    } = this.props;
+    const { form } = this.props;
+    const { showSearch } = this.state;
+
+    const post = this.getPost();
 
     return (
       <div className="d-inline-block mr-4">
@@ -75,12 +100,15 @@ class AddForm extends React.Component {
               <div className={styles.logoContainer}>
                 <img className={styles.logo} src="resources/images/logo.png" alt="" />
               </div>
+              <div className={styles.logoContainer}>
+                <Avatar form={form} post={post} />
+              </div>
               <Row>
                 <Col span={18}>
                   <Form onSubmit={this.handleSubmit}>
                     <FormItem>
                       {form.getFieldDecorator('title', {
-                        initialValue: searchText
+                        defaultValue: post ? post.title : "Insert Title ... "
                       })(
                         <input
                           type="title"
@@ -95,7 +123,7 @@ class AddForm extends React.Component {
                 </Col>
               </Row>
               <div className={styles.bodyInput}>
-                <SimpleStaticToolbarEditor titleForm={form} match={match} />
+                <SimpleStaticToolbarEditor form={form} post={post} />
               </div>
             </div>
           </div>

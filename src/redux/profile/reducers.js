@@ -65,6 +65,15 @@ export default function userReducer(state = initialState, action) {
     case actions.EDIT_PROFILE:
       console.log("STATE", state, "ACTION.PAYLOAD.DATA", action.payload.data)
       return { ...state, ...action.payload.data }
+    case actions.CREATE_POST:
+      state.posts.push(action.payload.data.post);
+      return state
+    case actions.EDIT_POST:
+      state.posts = state.posts.map(post => {
+          if (post.id === action.payload.data.post.id) return action.payload.data.post;
+          return post
+        });
+      return state;
     default:
       return state
   }

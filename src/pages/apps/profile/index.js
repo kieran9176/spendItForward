@@ -88,7 +88,7 @@ class ProfileApp extends React.Component {
           </Collapse>
           <Collapse
             bordered={false}
-            defaultActiveKey={['1']}
+            defaultActiveKey={['3']}
             expandIcon={({isActive}) => <Icon type="caret-right" rotate={isActive ? 90 : 0} />}
           >
             <Panel header="Coursework" key="3" style={customPanelStyle}>

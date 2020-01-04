@@ -63,6 +63,12 @@ export function notify (mutation) {
         description: 'You\'ve successfully updated your posts.'
       });
       break;
+    case "createPost":
+      notification.success({
+        message: 'Updates Saved',
+        description: 'You\'ve successfully created a post.'
+      });
+      break;
     default:
       notification.error({
         message: 'Error',
@@ -319,7 +325,7 @@ export async function editProfile(mutation, data) {
     case "removeArticles":
       return performOperations(mutation, createPayloads(mutation, filterData(mutation, data)));
     case "createPost":
-      return performOperations(mutation, createPayloads(mutation, filterData(mutation, data)));
+      return "post created";
     case "updatePosts":
       return performOperations(mutation, createPayloads(mutation, filterData(mutation, data)));
     default:

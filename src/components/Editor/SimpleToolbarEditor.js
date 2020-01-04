@@ -1,11 +1,11 @@
 /* eslint-disable react/no-multi-comp */
-import React, { Component } from 'react';
+import React from 'react';
 import { connect } from 'react-redux'
+import { Redirect } from 'react-router'
 import { API, graphqlOperation } from 'aws-amplify';
 import * as mutations from 'graphql/mutations'
 import { convertToRaw, EditorState, ContentState } from 'draft-js';
 import htmlToDraft from 'html-to-draftjs';
-// import Editor, { createEditorStateWithText } from 'draft-js-plugins-editor';
 import draftToMarkdown from 'draftjs-to-markdown';
 import draftToHtml from 'draftjs-to-html';
 import Editor from 'draft-js-plugins-editor';
@@ -37,106 +37,113 @@ const gridStyle = {
 };
 
 @connect(({ profile }) => ({ profile }))
-class SavedStatus extends Component {
+class SavedStatus extends React.Component {
 
   constructor(props) {
     super(props)
-    this.state = { saving: false }
-  }
-
-  componentDidMount () {
-    console.log("called componentDidMount")
-    this.handleSubmit()
-      .then(apiResponse => {
-        console.log("handle submit response", apiResponse);
-        this.setState({ saving: false })
-        this.waitAFewSeconds()
-          .then(waitingOverResponse => {
-            console.log(waitingOverResponse)
-            this.setState({ saving: true })
-            this.componentDidMount()
-          })
-      });
-  }
-
-  getPost = () => {
-
-    const { match, profile, titleForm } = this.props
-    const { getFieldDecorator } = titleForm
-    const { posts } = profile
-
-    if (match.params.id) {
-
-      getFieldDecorator('id', { initialValue: match.params.id })
-      const post = posts.filter(_ => _.id === match.params.id ).pop()
-
-      console.log("POST", post)
-
-      getFieldDecorator('title', { initialValue: post.title })
-      getFieldDecorator('caption', { initialValue: post.caption })
-      getFieldDecorator('markdown', { initialValue: post.markdown })
-      getFieldDecorator('html', { initialValue: post.html })
-      getFieldDecorator('date_published', { initialValue: post.date_published })
-      getFieldDecorator('series', { initialValue: post.series })
+    this.state = {
+      saving: false,
+      redirect: false,
+      postID: null
     }
-    else {
-      getFieldDecorator('id', {initialValue: null})
-      getFieldDecorator('title', {initialValue: ""})
-      getFieldDecorator('caption', {initialValue: ""})
-      getFieldDecorator('markdown', {initialValue: ""})
-      getFieldDecorator('html', {initialValue: '<p>Sing us a song, piano man.</p>'})
-      getFieldDecorator('date_published', {initialValue: ""})
-      getFieldDecorator('series', {initialValue: ""})
+  }
+
+  async componentDidMount() {
+    const { form, dispatch } = this.props;
+
+    try {
+
+      setInterval(async () => {
+        const res = await this.handleSubmit();
+
+        this.setState({
+          saving: false
+        });
+
+        if (res.data.createPost) {
+          const postID = res.data.createPost.id;
+          form.setFieldsValue({ id: postID });
+          const post = form.getFieldsValue();
+
+          dispatch({
+            type: 'profile/CREATE_POST',
+            payload: {
+              mutation: "createPost",
+              data: { post }
+            }
+          });
+
+          this.setState({
+            redirect: true,
+            postID
+          })
+        }
+
+        else {
+          form.setFieldsValue({id: res.data.updatePost.id});
+          const post = form.getFieldsValue();
+
+          dispatch({
+            type: 'profile/EDIT_POST',
+            payload: {
+              mutation: "updatePost",
+              data: { post }
+            }
+          });
+        }
+      }, 30000);
+
+    } catch(e) {
+      console.log(e);
     }
   }
 
   handleSubmit = () => {
 
-    const { titleForm, editorState } = this.props
+    const { form, editorState } = this.props;
+    const { id } = form.getFieldsValue();
 
-    const rawContentState = convertToRaw(editorState.getCurrentContent())
-    const markdown = draftToMarkdown(rawContentState)
-    const html = draftToHtml(rawContentState)
+    const rawContentState = convertToRaw(editorState.getCurrentContent());
+    const markdown = draftToMarkdown(rawContentState);
+    const html = draftToHtml(rawContentState);
 
-    titleForm.validateFields ((err) => {
+    form.validateFields ((err) => {
       if (err) {
         console.log(err)
       }
-      titleForm.setFieldsValue({
-        id: "4105afc5-9f34-43f2-81fc-87f09b1a6d58",
-        title: "All Quiet on the Western Front",
-        caption: "How you like me now?",
+
+      form.setFieldsValue({
         markdown,
         html,
-        date_published: "2019-11-15",
-        series: "books"
       });
     });
 
-    const post = titleForm.getFieldsValue()
-    const { id } = post;
+    const post = form.getFieldsValue();
+
     if (id) {
-      console.log("submitted with an ID", post)
-      return API.graphql(graphqlOperation(mutations.updatePost, {input: post}))
+      return API.graphql(graphqlOperation(mutations.updatePost, { input: post }))
     }
-    console.log("submitted without an ID", post)
-    return API.graphql(graphqlOperation(mutations.createPost, {input: post}));
-  };
-
-  waitAFewSeconds = () => {
-
-    return new Promise(resolve => {
-      setTimeout(() => {
-        resolve('waited 30 seconds');
-      }, 30000);
-    });
+    return API.graphql(graphqlOperation(mutations.createPost, {
+        input: {
+          title: post.title,
+          html: post.html,
+          markdown: post.markdown,
+          image_url: post.image_url,
+          series: post.series,
+          date_published: post.date_published
+        }
+      })
+    );
   };
 
   render() {
-    const { saving } = this.state;
+    const { saving, redirect, postID } = this.state;
 
     const antIcon = <Icon type="loading" style={{ fontSize: 24 }} spin />;
 
+    if (redirect) {
+      return <Redirect to={`/blog/edit-blog-post/${postID}`} />
+    }
     if (saving) {
       return (<Spin indicator={antIcon} />)
     }
@@ -145,12 +152,21 @@ class SavedStatus extends Component {
 }
 
 @connect(({ profile }) => ({ profile }))
-export default class CustomToolbarEditor extends Component {
+export default class CustomToolbarEditor extends React.Component {
 
   constructor(props) {
     super(props);
-    const html = '<p>Ever since I heard the howling wind ...</p>';
+
+    const { post } = props;
+    let html = '<p>What&apos;s your story, morning glory?</p>';
+
+    if (post) {
+      const existingHTML = post.html;
+      html = existingHTML;
+    }
+
     const contentBlock = htmlToDraft(html);
+
     if (contentBlock) {
       const contentState = ContentState.createFromBlockArray(contentBlock.contentBlocks);
       const editorState = EditorState.createWithContent(contentState);
@@ -172,19 +188,16 @@ export default class CustomToolbarEditor extends Component {
 
   render() {
 
-    const {editorState} = this.state
-    const { titleForm, match } = this.props
-    const { getFieldDecorator } = titleForm
+    const { editorState } = this.state;
+    const { form, post } = this.props;
 
-    console.log("toolbar editor match", match)
+    form.getFieldDecorator('html', {
+      initialValue: post ? post.html : <p>What&apos;s your story?</p>
+    });
 
-    getFieldDecorator('id', {initialValue: null})
-    getFieldDecorator('title', {initialValue: ""})
-    getFieldDecorator('caption', {initialValue: ""})
-    getFieldDecorator('markdown', {initialValue: ""})
-    getFieldDecorator('html', {initialValue: '<p>Sing us a song, piano man.</p>'})
-    getFieldDecorator('date_published', {initialValue: ""})
-    getFieldDecorator('series', {initialValue: ""})
+    form.getFieldDecorator('markdown', {
+      initialValue: post ? post.markdown : "What's your story?"
+    });
 
     return (
       <div>
@@ -200,7 +213,7 @@ export default class CustomToolbarEditor extends Component {
                 }}
               />
             </Col>
-            <SavedStatus editorState={editorState} titleForm={titleForm} />
+            <SavedStatus form={form} editorState={editorState} post={post} />
           </Row>
           <Row type="flex" justify="space-between" align="bottom">
             <Col>
