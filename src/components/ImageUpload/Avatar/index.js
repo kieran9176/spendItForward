@@ -61,8 +61,7 @@ class Avatar extends React.Component {
     });
 
     AWS.config.update({
-      accessKeyId: "AKIAT7FYJVVY6XLIXCOR",
-      secretAccessKey: "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"
+
     });
 
     const S3 = new AWS.S3();
