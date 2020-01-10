@@ -16,7 +16,7 @@ export function* LOAD_CURRENT_PROFILE(sub) {
   console.log("profileResponse", profileResponse);
 
   if (profile) {
-    const {username, articles, experience, references, intro, skills, coursework, leadership, posts} = profile
+    const { username, articles, experience, references, intro, skills, coursework, leadership, posts, education } = profile
     yield put({
       type: 'profile/SET_STATE',
       payload: {
@@ -31,8 +31,53 @@ export function* LOAD_CURRENT_PROFILE(sub) {
         leadership,
         intro,
         posts,
-        sub
-      },
+        education,
+        siteMetadata: [
+          {
+            id: "152ab450-df2e-440c-bdcb-a0af51e2d707",
+            account_id: sub,
+            development_url: "http://development.kieranpaul.com.s3-website.us-east-2.amazonaws.com/",
+            production_url: "http://development.kieranpaul.com.s3-website.us-east-2.amazonaws.com/",
+            destination_bucket: "development.kieranpaul.com",
+            source_s3_bucket_path: "kieranpaul-source",
+            theme: "Noah",
+            themeID: "152ab450-df2e-440c-bdcb-a0af51e2d708"
+          }
+        ],
+        sub,
+        themeOptions: [
+          {
+            id: "152ab450-df2e-440c-bdcb-a0af51e2d708",
+            productStatus: "new",
+            productImg: "https://d2czw3op36f92o.cloudfront.net/kieranpaul-source/Screen Shot 2020-01-05 at 12.14.27 PM.png",
+            productName: "Noah",
+            productPrice: "Free",
+            productOldPrice: "$500",
+            productNote: "Included with Subscription",
+            productDemo: "http://development.kieranpaul.com.s3-website.us-east-2.amazonaws.com/"
+          },
+          {
+            id: "152ab450-df2e-440c-bdcb-a0af51e2d709",
+            productStatus: "new",
+            productImg: "https://d2czw3op36f92o.cloudfront.net/kieranpaul-source/Screen Shot 2020-01-05 at 12.14.27 PM.png",
+            productName: "Erik",
+            productPrice: "Free",
+            productOldPrice: "$500",
+            productNote: "Included with Subscription",
+            productDemo: "http://development.kieranpaul.com.s3-website.us-east-2.amazonaws.com/"
+          },
+          {
+            id: "152ab450-df2e-440c-bdcb-a0af51e2d710",
+            productStatus: "new",
+            productImg: "https://d2czw3op36f92o.cloudfront.net/kieranpaul-source/Screen Shot 2020-01-05 at 12.14.27 PM.png",
+            productName: "Greg",
+            productPrice: "Free",
+            productOldPrice: "$500",
+            productNote: "Included with Subscription",
+            productDemo: "http://development.kieranpaul.com.s3-website.us-east-2.amazonaws.com/"
+          }
+        ]
+      }
     });
 
     yield put({
@@ -59,6 +104,8 @@ export function* LOAD_CURRENT_PROFILE(sub) {
         leadership: '',
         intro: '',
         posts: '',
+        siteMetadata: '',
+        themeOptions: '',
         sub: ''
       }
     });
@@ -92,7 +139,7 @@ export async function CREATE_POST( { payload }) {
   // });
 }
 
-export async function EDIT_POST( { payload }) {
+export async function EDIT_POST({ payload }) {
   // const { mutation, data } = payload
 
   console.log("create post payload", payload)
@@ -104,11 +151,62 @@ export async function EDIT_POST( { payload }) {
   // });
 }
 
+export async function SELECT_THEME({ payload }) {
+
+  console.log("select theme", payload)
+
+  return payload
+
+}
+
+export async function EDIT_EDUCATION({ payload }) {
+  const response = editProfile("editEducation", payload);
+  response.then(values => {
+    if (values === "Could not update profile") notify("failure");
+    else notify("editEducation")
+  });
+  return payload
+}
+
+export async function DELETE_EDUCATION(payload) {
+  const response = editProfile("deleteEducation", payload);
+  response.then(values => {
+    if (values === "Could not update profile") notify("failure");
+    else notify("deleteEducation")
+  });
+  return payload
+}
+
+export async function EDIT_ARTICLES({ payload }) {
+  console.log("EDIT_ARTICLES SAGA", payload);
+  const response = editProfile("editArticles", payload);
+  response.then(values => {
+    if (values === "Could not update profile") notify("failure");
+    else notify("editArticles")
+  });
+  return payload
+}
+
+export async function DELETE_ARTICLES(payload) {
+  console.log("DELETE_ARTICLES SAGA", payload);
+  const response = editProfile("deleteArticle", payload);
+  response.then(values => {
+    if (values === "Could not update profile") notify("failure");
+    else notify("deleteArticle")
+  });
+  return payload
+}
+
 export default function* rootSaga() {
   yield all([
     takeEvery(actions.EDIT_PROFILE, EDIT_PROFILE),
     takeEvery(actions.CREATE_POST, CREATE_POST),
     takeEvery(actions.EDIT_POST, EDIT_POST),
+    takeEvery(actions.SELECT_THEME, SELECT_THEME),
+    takeEvery(actions.EDIT_EDUCATION, EDIT_EDUCATION),
+    takeEvery(actions.DELETE_EDUCATION, DELETE_EDUCATION),
+    takeEvery(actions.EDIT_ARTICLES, EDIT_ARTICLES),
+    takeEvery(actions.DELETE_ARTICLES, DELETE_ARTICLES),
     takeEvery(actions.LOAD_CURRENT_PROFILE, LOAD_CURRENT_PROFILE),
   ])
 }

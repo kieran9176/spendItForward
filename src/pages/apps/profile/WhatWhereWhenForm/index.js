@@ -294,7 +294,7 @@ class WhatWhereWhenForm extends React.Component {
             label={`${labels[1]} ${index + 1} Hyperlink`}
             required={false}
           >
-            {getFieldDecorator(`links[${index}]`, {
+            { getFieldDecorator(`links[${index}]`, {
               validateTrigger: ['onChange', 'onBlur'],
               initialValue: index < initialValues.length ? initialValues[index].link : "",
               rules: [

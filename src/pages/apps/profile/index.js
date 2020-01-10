@@ -2,11 +2,9 @@ import React from 'react'
 import { connect } from 'react-redux'
 import { Collapse, Icon, Button } from 'antd'
 import { Helmet } from 'react-helmet'
-// import SkillsForm from './SkillsForm'
 import EducationForm from './EducationForm'
 import WhatWhenWhereForm from './WhatWhereWhenForm'
 import TagsForm from './TagsForm'
-// import OtherForm from './OtherForm';
 import ArticleForm from './ArticleForm';
 import style from './style.module.scss'
 import { triggerDevelopmentBuild } from "../../../services/website"
@@ -103,7 +101,7 @@ class ProfileApp extends React.Component {
           >
             <Panel header="Education" key="4" style={customPanelStyle}>
               <p>{text.educationText}</p>
-              <EducationForm />
+              <EducationForm type="Education" />
             </Panel>
           </Collapse>
           <Collapse
@@ -133,7 +131,7 @@ class ProfileApp extends React.Component {
           >
             <Panel header="Favorite Articles" key="6" style={customPanelStyle}>
               <p>{text.articlesText}</p>
-              <ArticleForm />
+              <ArticleForm type="Articles" />
             </Panel>
           </Collapse>
         </div>

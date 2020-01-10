@@ -50,7 +50,7 @@ class AddForm extends React.Component {
 
       post = posts.filter(_ => _.id === match.params.id).pop();
 
-      const {id} = post;
+      const { id } = post;
 
       form.getFieldDecorator('id', {
         initialValue: id

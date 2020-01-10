@@ -54,6 +54,10 @@ class SavedStatus extends React.Component {
     try {
 
       setInterval(async () => {
+        this.setState({
+          saving: true
+        });
+
         const res = await this.handleSubmit();
 
         this.setState({

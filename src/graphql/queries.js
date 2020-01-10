@@ -20,6 +20,7 @@ export const getProfile = `query GetProfile($account_id: String!) {
       title
       caption
       url
+      id
     }
     experience {
       position
@@ -89,6 +90,16 @@ export const getProfile = `query GetProfile($account_id: String!) {
       html
       markdown
       image_url
+    }
+    education {
+      id
+      degreeType
+      degreeSubtype
+      majorOne
+      majorTwo
+      minorOne
+      minorTwo
+      graduationDate
     }
   }
 }

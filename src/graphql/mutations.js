@@ -555,3 +555,37 @@ export const updatePost = `mutation UpdatePost($input: UpdatePostInput!) {
   }
 }
 `;
+export const createEducation = `mutation CreateEducation($input: CreateEducationInput!) {
+  createEducation(input: $input) {
+    degreeType
+    degreeSubtype
+    majorOne
+    majorTwo
+    minorOne
+    minorTwo
+    concentration
+    graduationDate
+  }
+}
+`;
+export const updateEducation = `mutation UpdateEducation($input: UpdateEducationInput!) {
+  updateEducation(input: $input) {
+    id
+    degreeType
+    degreeSubtype
+    majorOne
+    majorTwo
+    minorOne
+    minorTwo
+    concentration
+    graduationDate
+  }
+}
+`;
+export const deleteEducation = `mutation DeleteEducation($input: DeleteEducationInput!) {
+  deleteEducation(input: $input) {
+    id
+  }
+}
+`;
+

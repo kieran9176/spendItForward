@@ -61,7 +61,8 @@ class Avatar extends React.Component {
     });
 
     AWS.config.update({
-      
+      accessKeyId: "AKIAT7FYJVVY6XLIXCOR",
+      secretAccessKey: "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"
     });
 
     const S3 = new AWS.S3();
@@ -79,7 +80,6 @@ class Avatar extends React.Component {
       .on("httpUploadProgress", (progress) => {
         const progressPercentage = Math.round((progress.loaded / progress.total) * 100);
         this.setState({progress: progressPercentage});
-        console.log((progress.loaded / progress.total) * 100);
       })
       .send((err) => {
           if (err) {
@@ -97,8 +97,6 @@ class Avatar extends React.Component {
             loading: false,
             progress: false
           });
-
-          console.log("fileObj.name", fileObj.name)
 
           const resURL = `https://d2czw3op36f92o.cloudfront.net/kieranpaul-source/${encoded}`;
 

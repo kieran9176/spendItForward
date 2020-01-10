@@ -69,6 +69,30 @@ export function notify (mutation) {
         description: 'You\'ve successfully created a post.'
       });
       break;
+    case "editEducation":
+      notification.success({
+        message: 'Updates Saved',
+        description: 'You\'ve successfully updated your education.'
+      });
+      break;
+    case "editArticles":
+      notification.success({
+        message: 'Updates Saved',
+        description: 'You\'ve successfully updated your articles.'
+      });
+      break;
+    case "deleteArticle":
+      notification.success({
+        message: 'Updates Saved',
+        description: 'You\'ve successfully removed an article.'
+      });
+      break;
+    case "deleteEducation":
+      notification.success({
+        message: 'Updates Saved',
+        description: 'You\'ve successfully removed an education item.'
+      });
+      break;
     default:
       notification.error({
         message: 'Error',
@@ -83,8 +107,18 @@ export async function currentAccountProfile (accountId) {
   return API.graphql(graphqlOperation(queries.getProfile, { account_id: accountId }))
 }
 
+const pop = (obj) => {
+  if (!delete obj.id) {
+    throw new Error();
+  }
+  if (!delete obj.changed) {
+    throw new Error();
+  }
+  return obj;
+};
+
 const filterData = (mutation, data) => {
-  const { payloads, skills, coursework, articles, post } = data;
+  const { payloads, skills, coursework, post } = data;
 
   switch (mutation) {
     case "updateExperience":
@@ -104,12 +138,12 @@ const filterData = (mutation, data) => {
     case "removeLeadership":
       console.log("removeLeadership FILTER DATA", data);
       return data;
-    case "updateArticles":
+    case "editArticles":
       console.log("updateArticles FILTER DATA", data);
-      return articles.filter(articleObj => articleObj.changed !== "false");
+      return data.filter(articleObj => articleObj.changed !== false);
     case "removeArticles":
       console.log("removeArticle FILTER DATA", data);
-      return articles;
+      return data;
     case "updatePosts":
       return post;
     default:
@@ -282,25 +316,40 @@ const performOperations = async (mutation, payloads) => {
     case "removeLeadership":
       console.log("removeLeadership payloads", payloads)
       return API.graphql(graphqlOperation(mutations.deleteLeadership, payloads));
-    case "updateArticles":
+    case "editArticles":
       return Promise.all(payloads.map(payload => {
-          console.log("PERFORM ARTICLES OPS PAYLOAD", payload)
-          return payload.input.id ?
-            API.graphql(graphqlOperation(mutations.updateArticle, payload))
-            :
-            API.graphql(graphqlOperation(mutations.createArticle, payload))
+          if (payload.id) {
+            console.log("editArticle", payload)
+            return API.graphql(graphqlOperation(mutations.updateArticle, { input: payload }))
+          }
+          payload = pop(payload);
+          console.log("createArticle", payload);
+          return API.graphql(graphqlOperation(mutations.createArticle, { input: payload }))
         })
       );
-    case "removeArticles":
-      return API.graphql(graphqlOperation(mutations.deleteArticle, payloads[0]));
+    case "deleteArticle":
+      return API.graphql(graphqlOperation(mutations.deleteArticle, { input: payloads.data }));
     case "updatePosts":
       console.log("PERFORM POSTS OPS PAYLOAD", payloads)
       return payloads.input.id ?
         API.graphql(graphqlOperation(mutations.updatePost, payloads))
         :
         API.graphql(graphqlOperation(mutations.createPost, payloads));
+    case "editEducation":
+      console.log("editEducation", payloads);
+      return Promise.all(payloads.map(payload => {
+          if (payload.id) {
+            return API.graphql(graphqlOperation(mutations.updateEducation, {input: payload }));
+          }
+          payload = pop(payload);
+          console.log("createEducation", payload);
+          return API.graphql(graphqlOperation(mutations.createEducation, { input: payload }))
+        })
+      );
+    case "deleteEducation":
+      return API.graphql(graphqlOperation(mutations.deleteEducation, { input: payloads.data }));
     default:
-      return "Could not perform operations"
+      return "Could not update profile"
   }
 };
 
@@ -320,14 +369,18 @@ export async function editProfile(mutation, data) {
       return performOperations(mutation, createPayloads(mutation, filterData(mutation, data)));
     case "removeLeadership":
       return performOperations(mutation, createPayloads(mutation, filterData(mutation, data)));
-    case "updateArticles":
-      return performOperations(mutation, createPayloads(mutation, filterData(mutation, data)));
-    case "removeArticles":
-      return performOperations(mutation, createPayloads(mutation, filterData(mutation, data)));
+    case "editArticles":
+      return performOperations(mutation, filterData(mutation, data));
+    case "deleteArticle":
+      return performOperations(mutation, data);
     case "createPost":
       return "post created";
     case "updatePosts":
       return performOperations(mutation, createPayloads(mutation, filterData(mutation, data)));
+    case "editEducation":
+      return performOperations(mutation, data);
+    case "deleteEducation":
+      return performOperations(mutation, data);
     default:
       return "Could not update profile"
   }
