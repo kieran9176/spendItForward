@@ -142,7 +142,7 @@ class ArticlesForm extends React.Component {
     switch (type) {
       case "Articles":
         return {
-          title: "Article", createMutation: "createArticle", deleteMutation: "removeArticle",
+          title: "Article", createMutation: "createArticle", deleteMutation: "removeArticle", dispatchType: 'profile/EDIT_ARTICLES',
           labels: ["Title", "Caption", "Link"]
         };
       default:

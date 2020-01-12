@@ -101,6 +101,14 @@ export const getProfile = `query GetProfile($account_id: String!) {
       minorTwo
       graduationDate
     }
+    brags {
+    id
+    what
+    where
+    url
+    start_date
+    end_date
+    }
   }
 }
 `;

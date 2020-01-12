@@ -81,10 +81,22 @@ export function notify (mutation) {
         description: 'You\'ve successfully updated your articles.'
       });
       break;
+    case "editBrags":
+      notification.success({
+        message: 'Updates Saved',
+        description: 'You\'ve successfully updated your brags.'
+      });
+      break;
     case "deleteArticle":
       notification.success({
         message: 'Updates Saved',
         description: 'You\'ve successfully removed an article.'
+      });
+      break;
+    case "deleteBrag":
+      notification.success({
+        message: 'Updates Saved',
+        description: 'You\'ve successfully removed a brag.'
       });
       break;
     case "deleteEducation":
@@ -144,9 +156,18 @@ const filterData = (mutation, data) => {
     case "removeArticles":
       console.log("removeArticle FILTER DATA", data);
       return data;
+    case "editBrags":
+      console.log("editBrags FILTER DATA", data);
+      return data.filter(bragObj => bragObj.changed !== false);
+    case "removeBrag":
+      console.log("removeBrag FILTER DATA", data);
+      return data;
     case "updatePosts":
       return post;
     default:
+      notification.error({
+        message: "Could not filter data."
+      });
       return "Could not filter data."
   }
 };
@@ -271,6 +292,7 @@ const createPayloads = (mutation, data) => {
 };
 
 const performOperations = async (mutation, payloads) => {
+
   switch (mutation) {
     case "updateExperience":
       return Promise.all(payloads.map(payload => {
@@ -329,6 +351,20 @@ const performOperations = async (mutation, payloads) => {
       );
     case "deleteArticle":
       return API.graphql(graphqlOperation(mutations.deleteArticle, { input: payloads.data }));
+    case "editBrags":
+      console.log("performOperations: edit brags payloads", payloads)
+      return Promise.all(payloads.map(payload => {
+          if (payload.id) {
+            console.log("editBrag", payload);
+            return API.graphql(graphqlOperation(mutations.updateBrag, { input: payload }))
+          }
+          payload = pop(payload);
+          console.log("createBrag", payload);
+          return API.graphql(graphqlOperation(mutations.createBrag, { input: payload }))
+        })
+      );
+    case "deleteBrag":
+      return API.graphql(graphqlOperation(mutations.deleteBrag, { input: payloads.data }));
     case "updatePosts":
       console.log("PERFORM POSTS OPS PAYLOAD", payloads)
       return payloads.input.id ?
@@ -380,6 +416,10 @@ export async function editProfile(mutation, data) {
     case "editEducation":
       return performOperations(mutation, data);
     case "deleteEducation":
+      return performOperations(mutation, data);
+    case "editBrags":
+      return performOperations(mutation, filterData(mutation, data));
+    case "deleteBrag":
       return performOperations(mutation, data);
     default:
       return "Could not update profile"

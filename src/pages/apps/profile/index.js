@@ -52,8 +52,8 @@ class ProfileApp extends React.Component {
         labels: ["Organization", "Organization", "Position"]
       },
       brags: {
-        title: "Brags / Above and Beyond", createMutation: "createOther", deleteMutation: "removeOther",
-        labels: ["Where", "Where", "What"]
+        title: "Brags / Above and Beyond", createMutation: "createBrag", deleteMutation: "removeBrag",
+        labels: ["Where", "Link", "What"]
       }
     };
 

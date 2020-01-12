@@ -97,6 +97,12 @@ export default function userReducer(state = initialState, action) {
     case actions.DELETE_ARTICLES:
       state.articles = state.articles.filter(article => article.id !== action.data.id);
       return state;
+    case actions.EDIT_BRAGS:
+      state.brags = action.payload;
+      return state;
+    case actions.DELETE_BRAGS:
+      state.brags = state.brags.filter(article => article.id !== action.data.id);
+      return state;
     default:
       return state
   }

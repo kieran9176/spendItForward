@@ -1,6 +1,6 @@
 import React from 'react'
 import { connect } from 'react-redux'
-import {Form, Input, Icon, Button, DatePicker, Checkbox, Modal } from 'antd';
+import {Form, Input, Icon, Button, DatePicker, Checkbox, Modal, notification } from 'antd';
 import moment from 'moment'
 // import style from '../style.module.scss'
 
@@ -34,36 +34,33 @@ class WhatWhereWhenForm extends React.Component {
     index: null
   };
 
-  getPayloads(type, values) {
-    if (type === "Experience") {
-      return this.createPayloads("updateExperience", values)
-    }
-    if (type === "Leadership") {
-      return this.createPayloads("updateLeadership", values)
-    }
-    return null
-  }
-
   remove = () => {
-    const { form, dispatch, type, formAttributes } = this.props;
+    const { form, dispatch } = this.props;
     const { k, index } = this.state;
     // can use data-binding to get
     // const { keys, titles, companies, companyLinks, IDs, startDates, endDates } = form.getFieldsValue();
     const { keys, positions, organizations, links, IDs, startDates, endDates } = form.getFieldsValue();
-    const { deleteMutation } = this.getFormAttributes(type, formAttributes);
+    // const { deleteMutation } = this.getFormAttributes(type, formAttributes);
 
     // We need at least one passenger
     if (keys.length === 1) {
       return;
     }
 
+    // if (IDs[index]) {
+    //   dispatch({
+    //     type: 'profile/EDIT_PROFILE',
+    //     payload: {
+    //       mutation: deleteMutation,
+    //       data: { id: IDs[index] }
+    //     }
+    //   });
+    // }
+
     if (IDs[index]) {
       dispatch({
-        type: 'profile/EDIT_PROFILE',
-        payload: {
-          mutation: deleteMutation,
-          data: { id: IDs[index] }
-        }
+        type: 'profile/DELETE_BRAGS',
+        data: { id: IDs[index] }
       });
     }
 
@@ -108,13 +105,13 @@ class WhatWhereWhenForm extends React.Component {
     });
   };
 
-  createPayloads = (action, values) => {
+  createPayloads = (type, values) => {
     const payloads = [];
 
     console.log("values", values)
 
-    switch (action) {
-      case "updateExperience":
+    switch (type) {
+      case "Experience":
         for (let i = 0; i < values.keys.length; i += 1) {
           payloads.push({
             position: values.positions[i],
@@ -127,7 +124,7 @@ class WhatWhereWhenForm extends React.Component {
           })
         }
         return { mutation: "updateExperience", data: { payloads } };
-      case "updateLeadership":
+      case "Leadership":
         for (let i = 0; i < values.keys.length; i += 1) {
           payloads.push({
             position: values.positions[i],
@@ -140,7 +137,37 @@ class WhatWhereWhenForm extends React.Component {
           })
         }
         return { mutation: "updateLeadership", data: { payloads } };
+      case "Brags":
+        console.log("createPayloads type Brags", values);
+        for (let i = 0; i < values.keys.length; i += 1) {
+          payloads.push({
+            what: values.positions[i] || null,
+            where: values.organizations[i] || null,
+            url: values.links[i] || null,
+            start_date: moment(values.startDates[i]).format('YYYY-MM'),
+            end_date: !values.checkboxes[i] ? moment(values.endDates[i]).format('YYYY-MM') : "Present",
+            id: values.IDs[i] || null,
+            changed: values.changed[i]
+          })
+        }
+        return payloads;
+      case "Articles":
+        console.log("values", values);
+        for (let i = 0; i < values.keys.length; i += 1) {
+          payloads.push({
+            caption: values.captions[i] || null,
+            title: values.titles[i] || null,
+            url: values.links[i] || null,
+            id: values.IDs[i] || null,
+            changed: values.changed[i]
+          })
+        }
+        return payloads;
       default:
+        notification.error({
+          message: "Could Not Create Payloads",
+          description: "Yikes."
+        });
         return "Could not update"
     }
   };
@@ -159,16 +186,19 @@ class WhatWhereWhenForm extends React.Component {
 
   handleSubmit = e => {
     e.preventDefault();
-    const {form, dispatch, type } = this.props;
+    const { form, dispatch, type } = this.props;
 
     form.validateFields((err, values) => {
       if (!err) {
-        const payload = this.getPayloads(type, values)
+
+        console.log("handleSubmit values", values)
+
+        const payload = this.createPayloads(type, values)
 
         console.log("payload", payload)
 
         dispatch({
-          type: 'profile/EDIT_PROFILE',
+          type: 'profile/EDIT_BRAGS',
           payload
         });
 
@@ -205,14 +235,35 @@ class WhatWhereWhenForm extends React.Component {
     });
   };
 
-  getFormAttributes = (type, formAttributes) => {
+  getFormAttributes = (type) => {
     switch (type) {
       case "Leadership":
-        return formAttributes.leadership;
+        return {
+          title: "Leadership", createMutation: "createLeadership", deleteMutation: "removeLeadership",
+          labels: ["Company", "Company", "Title"]
+        };
       case "Experience":
-        return formAttributes.experience;
+        return {
+          title: "Experience", createMutation: "createExperience", deleteMutation: "removeExperience",
+          labels: ["Organization", "Organization", "Position"]
+        };
       case "Brags":
-        return formAttributes.brags;
+        return {
+          title: "Above and Beyond / Brags",
+          createMutation: "createBrag",
+          deleteMutation: "removeBrag",
+          dispatchEdit: 'profile/EDIT_BRAGS',
+          dispatchDelete: 'profile/DELETE_BRAGS',
+          labels: ["What", "Link", "Where"]
+        };
+      case "Articles":
+        return {
+          title: "Article",
+          createMutation: "createArticle",
+          deleteMutation: "removeArticle",
+          dispatchTypeEdit: 'profile/EDIT_ARTICLES',
+          labels: ["Title", "Caption", "Link"]
+        };
       default:
         return null
     }
@@ -220,8 +271,10 @@ class WhatWhereWhenForm extends React.Component {
 
   getInitialValues = (type) => {
     const { profile } = this.props;
-    const { leadership, experience } = profile;
+    const { leadership, experience, brags } = profile;
     const initialValues = [];
+
+    console.log("getInitialValues Type", type)
 
     if (type === "Leadership") {
       return leadership
@@ -229,12 +282,25 @@ class WhatWhereWhenForm extends React.Component {
     if (type === "Experience") {
       for (let i = 0; i < experience.length; i += 1) {
         initialValues.push({
-          position: experience[i].position,
-          organization: experience[i].company,
-          link: experience[i].link,
-          start_date: experience[i].start_date,
-          end_date: experience[i].end_date,
-          id: experience[i].id
+          position: experience[i].position || "",
+          organization: experience[i].company || "",
+          link: experience[i].link || "",
+          start_date: experience[i].start_date || "",
+          end_date: experience[i].end_date || "",
+          id: experience[i].id || ""
+        })
+      }
+      return initialValues
+    }
+    if (type === "Brags") {
+      for (let i = 0; i < brags.length; i += 1) {
+        initialValues.push({
+          position: brags[i].what || "",
+          organization: brags[i].where || "",
+          link: brags[i].url || "",
+          start_date: brags[i].start_date || "",
+          end_date: brags[i].end_date || "",
+          id: brags[i].id || ""
         })
       }
       return initialValues
@@ -336,7 +402,7 @@ class WhatWhereWhenForm extends React.Component {
                 required: true,
                 message: 'Please select start date.',
               }],
-              initialValue: index < initialValues.length ? moment(initialValues[index].start_date) : null
+              initialValue: index < initialValues.length ? moment(initialValues[index].start_date) : ""
             })(
               <MonthPicker />
             )}
@@ -359,7 +425,7 @@ class WhatWhereWhenForm extends React.Component {
                 required: true,
                 message: "Please select end date.",
               }],
-              initialValue: index < initialValues.length && initialValues[index].end_date !== "Present" ? moment(initialValues[index].end_date) : null
+              initialValue: index < initialValues.length && initialValues[index].end_date !== "Present" ? moment(initialValues[index].end_date) : ""
             })(
               <MonthPicker
                 disabled={checkboxes[index]}

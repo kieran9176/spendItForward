@@ -16,7 +16,7 @@ export function* LOAD_CURRENT_PROFILE(sub) {
   console.log("profileResponse", profileResponse);
 
   if (profile) {
-    const { username, articles, experience, references, intro, skills, coursework, leadership, posts, education } = profile
+    const { username, articles, experience, references, intro, skills, coursework, leadership, posts, education, brags } = profile;
     yield put({
       type: 'profile/SET_STATE',
       payload: {
@@ -32,6 +32,7 @@ export function* LOAD_CURRENT_PROFILE(sub) {
         intro,
         posts,
         education,
+        brags,
         siteMetadata: [
           {
             id: "152ab450-df2e-440c-bdcb-a0af51e2d707",
@@ -197,6 +198,26 @@ export async function DELETE_ARTICLES(payload) {
   return payload
 }
 
+export async function EDIT_BRAGS({ payload }) {
+  console.log("EDIT_BRAGS SAGA", payload);
+  const response = editProfile("editBrags", payload);
+  response.then(values => {
+    if (values === "Could not update profile") notify("failure");
+    else notify("editBrags")
+  });
+  return payload
+}
+
+export async function DELETE_BRAGS(payload) {
+  console.log("DELETE_BRAGS SAGA", payload);
+  const response = editProfile("deleteBrag", payload);
+  response.then(values => {
+    if (values === "Could not update profile") notify("failure");
+    else notify("deleteBrag")
+  });
+  return payload
+}
+
 export default function* rootSaga() {
   yield all([
     takeEvery(actions.EDIT_PROFILE, EDIT_PROFILE),
@@ -207,6 +228,8 @@ export default function* rootSaga() {
     takeEvery(actions.DELETE_EDUCATION, DELETE_EDUCATION),
     takeEvery(actions.EDIT_ARTICLES, EDIT_ARTICLES),
     takeEvery(actions.DELETE_ARTICLES, DELETE_ARTICLES),
+    takeEvery(actions.EDIT_BRAGS, EDIT_BRAGS),
+    takeEvery(actions.DELETE_BRAGS, DELETE_BRAGS),
     takeEvery(actions.LOAD_CURRENT_PROFILE, LOAD_CURRENT_PROFILE),
   ])
 }

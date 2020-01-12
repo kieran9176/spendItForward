@@ -588,4 +588,32 @@ export const deleteEducation = `mutation DeleteEducation($input: DeleteEducation
   }
 }
 `;
+export const createBrag = `mutation CreateBrags($input: CreateBragsInput!) {
+  createBrags(input: $input) {
+    what
+    where
+    url
+    start_date
+    end_date
+  }
+}
+`;
+export const updateBrag = `mutation UpdateBrags($input: UpdateBragsInput!) {
+  updateBrags(input: $input) {
+    id
+    what
+    where
+    url
+    start_date
+    end_date
+  }
+}
+`;
+export const deleteBrag = `mutation DeleteBrags($input: DeleteBragsInput!) {
+  deleteBrags(input: $input) {
+    id
+  }
+}
+`;
+
 
