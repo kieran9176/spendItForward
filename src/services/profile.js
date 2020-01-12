@@ -3,114 +3,17 @@ import { notification } from 'antd'
 import * as mutations from 'graphql/mutations'
 import * as queries from 'graphql/queries'
 
-export async function helloWorld() {
-  return "Hello World"
-}
-
-export function notify (mutation) {
-  switch (mutation) {
-    case "updateExperience":
-      notification.success({
-        message: 'Updates Saved',
-        description: 'You\'ve successfully updated your experience.'
-      });
-    break;
-    case "removeExperience":
-      notification.success({
-        message: 'Updates Saved',
-        description: 'You\'ve successfully removed an experience item.'
-      });
-      break;
-    case "updateSkills":
-      notification.success({
-        message: 'Updates Saved',
-        description: 'You\'ve successfully updated your skills.'
-      });
-      break;
-    case "updateCoursework":
-      notification.success({
-        message: 'Updates Saved',
-        description: 'You\'ve successfully updated your coursework.'
-      });
-      break;
-    case "updateLeadership":
-      notification.success({
-        message: 'Updates Saved',
-        description: 'You\'ve successfully updated your leadership.'
-      });
-      break;
-    case "removeLeadership":
-      notification.success({
-        message: 'Updates Saved',
-        description: 'You\'ve successfully removed a leadership item.'
-      });
-      break;
-    case "updateArticle":
-      notification.success({
-        message: 'Updates Saved',
-        description: 'You\'ve successfully updated your articles.'
-      });
-      break;
-    case "removeArticles":
-      notification.success({
-        message: 'Updates Saved',
-        description: 'You\'ve successfully removed an article.'
-      });
-      break;
-    case "updatePosts":
-      notification.success({
-        message: 'Updates Saved',
-        description: 'You\'ve successfully updated your posts.'
-      });
-      break;
-    case "createPost":
-      notification.success({
-        message: 'Updates Saved',
-        description: 'You\'ve successfully created a post.'
-      });
-      break;
-    case "editEducation":
-      notification.success({
-        message: 'Updates Saved',
-        description: 'You\'ve successfully updated your education.'
-      });
-      break;
-    case "editArticles":
-      notification.success({
-        message: 'Updates Saved',
-        description: 'You\'ve successfully updated your articles.'
-      });
-      break;
-    case "editBrags":
-      notification.success({
-        message: 'Updates Saved',
-        description: 'You\'ve successfully updated your brags.'
-      });
-      break;
-    case "deleteArticle":
-      notification.success({
-        message: 'Updates Saved',
-        description: 'You\'ve successfully removed an article.'
-      });
-      break;
-    case "deleteBrag":
-      notification.success({
-        message: 'Updates Saved',
-        description: 'You\'ve successfully removed a brag.'
-      });
-      break;
-    case "deleteEducation":
-      notification.success({
-        message: 'Updates Saved',
-        description: 'You\'ve successfully removed an education item.'
-      });
-      break;
-    default:
-      notification.error({
-        message: 'Error',
-        description: 'Our team of highly trained monkeys has been dispatched to deal with the situation.',
-      });
-      break;
+export function notify (status, type) {
+  if (status === "success") {
+    notification.success({
+      message: 'Updates Saved',
+      description: `You\'ve successfully updated your ${type}.`
+    });
+  } else {
+    notification.error({
+      message: 'Error',
+      description: 'Our team of highly trained monkeys has been dispatched to deal with the situation.',
+    });
   }
 }
 
@@ -120,8 +23,10 @@ export async function currentAccountProfile (accountId) {
 }
 
 const pop = (obj) => {
-  if (!delete obj.id) {
-    throw new Error();
+  if (!obj.id) {
+    if (!delete obj.id) {
+      throw new Error();
+    }
   }
   if (!delete obj.changed) {
     throw new Error();
@@ -130,38 +35,26 @@ const pop = (obj) => {
 };
 
 const filterData = (mutation, data) => {
-  const { payloads, skills, coursework, post } = data;
+  const { skills, coursework, post } = data;
 
   switch (mutation) {
-    case "updateExperience":
+    case "editExperience":
       console.log("updateExperience FILTER DATA", data);
-      return payloads.filter(obj => obj.changed !== false);
-    case "updateLeadership":
+      return data.filter(obj => obj.changed !== false);
+    case "editLeadership":
       console.log("updateLeadership FILTER DATA", data);
-      return payloads.filter(obj => obj.changed !== false);
-    case "removeExperience":
-      console.log("removeExperience FILTER DATA", data);
-      return data;
+      return data.filter(obj => obj.changed !== false);
     case "updateSkills":
       console.log("filterData skills", skills);
       return skills.filter(skillsObj => skillsObj.action);
     case "updateCoursework":
       return coursework.filter(courseworkObj => courseworkObj.action === "add" || courseworkObj.action === "remove");
-    case "removeLeadership":
-      console.log("removeLeadership FILTER DATA", data);
-      return data;
     case "editArticles":
       console.log("updateArticles FILTER DATA", data);
       return data.filter(articleObj => articleObj.changed !== false);
-    case "removeArticles":
-      console.log("removeArticle FILTER DATA", data);
-      return data;
     case "editBrags":
       console.log("editBrags FILTER DATA", data);
       return data.filter(bragObj => bragObj.changed !== false);
-    case "removeBrag":
-      console.log("removeBrag FILTER DATA", data);
-      return data;
     case "updatePosts":
       return post;
     default:
@@ -174,106 +67,24 @@ const filterData = (mutation, data) => {
 
 const createPayloads = (mutation, data) => {
   switch (mutation) {
-    case "updateExperience":
-      console.log("CREATE PAYLOADS DATA", data);
-      return data.map(expObj => {
-        return expObj.id ?
-        {
-          input: {
-            id: expObj.id,
-            position: expObj.position,
-            company: expObj.company,
-            start_date: expObj.start_date,
-            end_date: expObj.end_date,
-            link: expObj.link
-          }
-        }
-        :
-        {
-          input: {
-            position: expObj.position,
-            company: expObj.company,
-            start_date: expObj.start_date,
-            end_date: expObj.end_date,
-            link: expObj.link
-          }
-        }
-    });
-    case "removeExperience":
-        console.log("createPayloads removeExperience data", data);
-        return { input: data };
     case "updateSkills":
       return data
         .map(skillsObj => {
-          if (skillsObj.action === "add") return { input: { content: skillsObj.content }};
-          if (skillsObj.action === "remove" && skillsObj.id) return { input: { id: skillsObj.id }};
+          if (skillsObj.action === "add") return {input: {content: skillsObj.content}};
+          if (skillsObj.action === "remove" && skillsObj.id) return {input: {id: skillsObj.id}};
           return null
-      });
+        });
     case "updateCoursework":
       return data
         .map(courseworkObj => {
-          if (courseworkObj.action === "add") return { input: { course_name: courseworkObj.course_name }};
-          if (courseworkObj.action === "remove" && courseworkObj.id) return { input: { id: courseworkObj.id }};
+          if (courseworkObj.action === "add") return {input: {course_name: courseworkObj.course_name}};
+          if (courseworkObj.action === "remove" && courseworkObj.id) return {input: {id: courseworkObj.id}};
           return null
         });
-    case "updateLeadership":
-      console.log("CREATE LEADERSHIP PAYLOADS DATA", data);
-      return data.map(leadObj => {
-        return leadObj.id ?
-          {
-            input: {
-              id: leadObj.id,
-              position: leadObj.position,
-              organization: leadObj.organization,
-              start_date: leadObj.start_date,
-              end_date: leadObj.end_date,
-              link: leadObj.link
-            }
-          }
-          :
-          {
-            input: {
-              position: leadObj.position,
-              organization: leadObj.organization,
-              start_date: leadObj.start_date,
-              end_date: leadObj.end_date,
-              link: leadObj.link
-            }
-          }
-      });
-    case "removeLeadership":
-      console.log("createPayloads removeLeadership leadObj", data)
-      return { input: data };
-    case "updateArticles":
-      console.log("CREATE PAYLOADS DATA", data);
-      return data.map(articleObj => {
-        return articleObj.id ?
-          {
-            input: {
-              id: articleObj.id,
-              caption: articleObj.caption,
-              title: articleObj.title,
-              url: articleObj.url
-            }
-          }
-          :
-          {
-            input: {
-              caption: articleObj.caption,
-              title: articleObj.title,
-              url: articleObj.url
-            }
-          }
-      });
-    case "removeArticles":
-      return data.map(articleObj => {
-        console.log("createPayloads removeArticle articleObj", articleObj)
-        return { input: { id: articleObj.id } }
-      });
     case "updatePosts":
       console.log("POSTS CREATE PAYLOAD data", data)
       return data.id ?
-        { input: data }
+        {input: data}
         :
         {
           input: {
@@ -285,26 +96,28 @@ const createPayloads = (mutation, data) => {
             date_published: data.date_published,
             series: data.series
           }
-        }
+        };
     default:
       return "Could not create payload"
   }
 };
 
 const performOperations = async (mutation, payloads) => {
-
   switch (mutation) {
-    case "updateExperience":
+    case "editExperience":
       return Promise.all(payloads.map(payload => {
-          console.log("PERFORM EXPERIENCE OPS PAYLOAD", payload)
-          return payload.input.id ?
-            API.graphql(graphqlOperation(mutations.updateExperience, payload))
-            :
-            API.graphql(graphqlOperation(mutations.createExperience, payload))
+          if (payload.id) {
+            payload = pop(payload);
+            console.log("performOperations editExperience", payload);
+            return API.graphql(graphqlOperation(mutations.updateExperience, { input: payload }))
+          }
+          payload = pop(payload);
+          console.log("performOperations createExperience", payload);
+          return API.graphql(graphqlOperation(mutations.createExperience, { input: payload }))
         })
       );
-    case "removeExperience":
-      return API.graphql(graphqlOperation(mutations.deleteExperience, payloads));
+    case "deleteExperience":
+      return API.graphql(graphqlOperation(mutations.deleteExperience, { input: payloads.data }));
     case "updateSkills":
       console.log("PERFORM SKILLS OPS PAYLOADS", payloads);
       return Promise.all(payloads.map(payload => {
@@ -323,62 +136,57 @@ const performOperations = async (mutation, payloads) => {
             API.graphql(graphqlOperation(mutations.createCoursework, payload))
         })
       );
-    case "updateLeadership":
-
+    case "editLeadership":
       console.log("perform leadership ops payloads", payloads)
-
       return Promise.all(payloads.map(payload => {
-          console.log("PERFORM LEADERSHIP OPS PAYLOAD", payload)
-          return payload.input.id ?
-            API.graphql(graphqlOperation(mutations.updateLeadership, payload))
-            :
-            API.graphql(graphqlOperation(mutations.createLeadership, payload))
+          if (payload.id) {
+            payload = pop(payload);
+            console.log("editLeadership", payload);
+            return API.graphql(graphqlOperation(mutations.updateLeadership, {input: payload}))
+          }
+          payload = pop(payload);
+          console.log("createLeadership", payload);
+          return API.graphql(graphqlOperation(mutations.createLeadership, {input: payload}))
         })
       );
-    case "removeLeadership":
+    case "deleteLeadership":
       console.log("removeLeadership payloads", payloads)
-      return API.graphql(graphqlOperation(mutations.deleteLeadership, payloads));
+      return API.graphql(graphqlOperation(mutations.deleteLeadership, { input: payloads.data }));
     case "editArticles":
       return Promise.all(payloads.map(payload => {
           if (payload.id) {
-            console.log("editArticle", payload)
             return API.graphql(graphqlOperation(mutations.updateArticle, { input: payload }))
           }
           payload = pop(payload);
-          console.log("createArticle", payload);
           return API.graphql(graphqlOperation(mutations.createArticle, { input: payload }))
         })
       );
     case "deleteArticle":
       return API.graphql(graphqlOperation(mutations.deleteArticle, { input: payloads.data }));
     case "editBrags":
-      console.log("performOperations: edit brags payloads", payloads)
+      console.log("performOperations: edit brags payloads", payloads);
       return Promise.all(payloads.map(payload => {
           if (payload.id) {
-            console.log("editBrag", payload);
+            payload = pop(payload);
             return API.graphql(graphqlOperation(mutations.updateBrag, { input: payload }))
           }
           payload = pop(payload);
-          console.log("createBrag", payload);
           return API.graphql(graphqlOperation(mutations.createBrag, { input: payload }))
         })
       );
     case "deleteBrag":
       return API.graphql(graphqlOperation(mutations.deleteBrag, { input: payloads.data }));
     case "updatePosts":
-      console.log("PERFORM POSTS OPS PAYLOAD", payloads)
       return payloads.input.id ?
         API.graphql(graphqlOperation(mutations.updatePost, payloads))
         :
         API.graphql(graphqlOperation(mutations.createPost, payloads));
     case "editEducation":
-      console.log("editEducation", payloads);
       return Promise.all(payloads.map(payload => {
           if (payload.id) {
             return API.graphql(graphqlOperation(mutations.updateEducation, {input: payload }));
           }
           payload = pop(payload);
-          console.log("createEducation", payload);
           return API.graphql(graphqlOperation(mutations.createEducation, { input: payload }))
         })
       );
@@ -392,19 +200,24 @@ const performOperations = async (mutation, payloads) => {
 export async function editProfile(mutation, data) {
   switch (mutation) {
     case "updateIntro":
-      return API.graphql(graphqlOperation(mutations.updateIntro, { input: { id: data.intro[0].id, content: data.intro[0].content }}))
-    case "updateExperience":
-      return performOperations(mutation, createPayloads(mutation, filterData(mutation, data)));
-    case "removeExperience":
-      return performOperations(mutation, createPayloads(mutation, filterData(mutation, data)));
+      return API.graphql(graphqlOperation(mutations.updateIntro, {
+        input: {
+          id: data.intro[0].id,
+          content: data.intro[0].content
+        }
+      }));
+    case "editExperience":
+      return performOperations(mutation, filterData(mutation, data));
+    case "deleteExperience":
+      return performOperations(mutation, data);
     case "updateSkills":
       return performOperations(mutation, createPayloads(mutation, filterData(mutation, data)));
     case "updateCoursework":
       return performOperations(mutation, createPayloads(mutation, filterData(mutation, data)));
-    case "updateLeadership":
-      return performOperations(mutation, createPayloads(mutation, filterData(mutation, data)));
-    case "removeLeadership":
-      return performOperations(mutation, createPayloads(mutation, filterData(mutation, data)));
+    case "editLeadership":
+      return performOperations(mutation, filterData(mutation, data));
+    case "deleteLeadership":
+      return performOperations(mutation, data);
     case "editArticles":
       return performOperations(mutation, filterData(mutation, data));
     case "deleteArticle":

@@ -42,21 +42,6 @@ class ProfileApp extends React.Component {
       overflow: 'hidden',
     };
 
-    const formAttributes = {
-      leadership: {
-        title: "Leadership", createMutation: "createLeadership", deleteMutation: "removeLeadership",
-        labels: ["Company", "Company", "Title"]
-      },
-      experience: {
-        title: "Experience", createMutation: "createExperience", deleteMutation: "removeExperience",
-        labels: ["Organization", "Organization", "Position"]
-      },
-      brags: {
-        title: "Brags / Above and Beyond", createMutation: "createBrag", deleteMutation: "removeBrag",
-        labels: ["Where", "Link", "What"]
-      }
-    };
-
     return (
       <div>
         <Helmet title="Profile" />
@@ -71,7 +56,7 @@ class ProfileApp extends React.Component {
           >
             <Panel header="Experience" key="1" style={customPanelStyle}>
               <p>{text.experienceText}</p>
-              <WhatWhenWhereForm type="Experience" formAttributes={formAttributes} />
+              <WhatWhenWhereForm type="Experience" />
             </Panel>
           </Collapse>
           <Collapse
@@ -111,7 +96,7 @@ class ProfileApp extends React.Component {
           >
             <Panel header="Leadership" key="4" style={customPanelStyle}>
               <p>{text.leadershipText}</p>
-              <WhatWhenWhereForm type="Leadership" formAttributes={formAttributes} />
+              <WhatWhenWhereForm type="Leadership" />
             </Panel>
           </Collapse>
           <Collapse
@@ -121,7 +106,7 @@ class ProfileApp extends React.Component {
           >
             <Panel header="Above and Beyond / Brags" key="5" style={customPanelStyle}>
               <p>{text.bragsText}</p>
-              <WhatWhenWhereForm type="Brags" formAttributes={formAttributes} />
+              <WhatWhenWhereForm type="Brags" />
             </Panel>
           </Collapse>
           <Collapse

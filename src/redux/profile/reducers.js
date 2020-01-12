@@ -97,6 +97,18 @@ export default function userReducer(state = initialState, action) {
     case actions.DELETE_ARTICLES:
       state.articles = state.articles.filter(article => article.id !== action.data.id);
       return state;
+    case actions.EDIT_EXPERIENCE:
+      state.experience = action.payload;
+      return state;
+    case actions.DELETE_EXPERIENCE:
+      state.experience = state.experience.filter(exp => exp.id !== action.data.id);
+      return state;
+    case actions.EDIT_LEADERSHIP:
+      state.leadership = action.payload;
+      return state;
+    case actions.DELETE_LEADERSHIP:
+      state.leadership = state.leadership.filter(leadership => leadership.id !== action.data.id);
+      return state;
     case actions.EDIT_BRAGS:
       state.brags = action.payload;
       return state;

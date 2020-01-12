@@ -164,7 +164,7 @@ export async function EDIT_EDUCATION({ payload }) {
   const response = editProfile("editEducation", payload);
   response.then(values => {
     if (values === "Could not update profile") notify("failure");
-    else notify("editEducation")
+    else notify("success", "education")
   });
   return payload
 }
@@ -173,7 +173,7 @@ export async function DELETE_EDUCATION(payload) {
   const response = editProfile("deleteEducation", payload);
   response.then(values => {
     if (values === "Could not update profile") notify("failure");
-    else notify("deleteEducation")
+    else notify("success", "education")
   });
   return payload
 }
@@ -183,7 +183,7 @@ export async function EDIT_ARTICLES({ payload }) {
   const response = editProfile("editArticles", payload);
   response.then(values => {
     if (values === "Could not update profile") notify("failure");
-    else notify("editArticles")
+    else notify("success", "articles")
   });
   return payload
 }
@@ -193,7 +193,47 @@ export async function DELETE_ARTICLES(payload) {
   const response = editProfile("deleteArticle", payload);
   response.then(values => {
     if (values === "Could not update profile") notify("failure");
-    else notify("deleteArticle")
+    else notify("success", "articles")
+  });
+  return payload
+}
+
+export async function EDIT_EXPERIENCE({ payload }) {
+  console.log("EDIT_EXPERIENCE SAGA", payload);
+  const response = editProfile("editExperience", payload);
+  response.then(values => {
+    if (values === "Could not update profile") notify("failure");
+    else notify("success", "experience")
+  });
+  return payload
+}
+
+export async function DELETE_EXPERIENCE(payload) {
+  console.log("DELETE_EXPERIENCE SAGA", payload);
+  const response = editProfile("deleteExperience", payload);
+  response.then(values => {
+    if (values === "Could not update profile") notify("failure");
+    else notify("success", "experience")
+  });
+  return payload
+}
+
+export async function EDIT_LEADERSHIP({ payload }) {
+  console.log("EDIT_LEADERSHIP SAGA", payload);
+  const response = editProfile("editLeadership", payload);
+  response.then(values => {
+    if (values === "Could not update profile") notify("failure");
+    else notify("success", "leadership")
+  });
+  return payload
+}
+
+export async function DELETE_LEADERSHIP(payload) {
+  console.log("DELETE_LEADERSHIP SAGA", payload);
+  const response = editProfile("deleteLeadership", payload);
+  response.then(values => {
+    if (values === "Could not update profile") notify("failure");
+    else notify("success", "leadership")
   });
   return payload
 }
@@ -203,7 +243,7 @@ export async function EDIT_BRAGS({ payload }) {
   const response = editProfile("editBrags", payload);
   response.then(values => {
     if (values === "Could not update profile") notify("failure");
-    else notify("editBrags")
+    else notify("success", "brags")
   });
   return payload
 }
@@ -213,7 +253,7 @@ export async function DELETE_BRAGS(payload) {
   const response = editProfile("deleteBrag", payload);
   response.then(values => {
     if (values === "Could not update profile") notify("failure");
-    else notify("deleteBrag")
+    else notify("success", "brags")
   });
   return payload
 }
@@ -228,6 +268,10 @@ export default function* rootSaga() {
     takeEvery(actions.DELETE_EDUCATION, DELETE_EDUCATION),
     takeEvery(actions.EDIT_ARTICLES, EDIT_ARTICLES),
     takeEvery(actions.DELETE_ARTICLES, DELETE_ARTICLES),
+    takeEvery(actions.EDIT_EXPERIENCE, EDIT_EXPERIENCE),
+    takeEvery(actions.DELETE_EXPERIENCE, DELETE_EXPERIENCE),
+    takeEvery(actions.EDIT_LEADERSHIP, EDIT_LEADERSHIP),
+    takeEvery(actions.DELETE_LEADERSHIP, DELETE_LEADERSHIP),
     takeEvery(actions.EDIT_BRAGS, EDIT_BRAGS),
     takeEvery(actions.DELETE_BRAGS, DELETE_BRAGS),
     takeEvery(actions.LOAD_CURRENT_PROFILE, LOAD_CURRENT_PROFILE),

@@ -31,35 +31,34 @@ class WhatWhereWhenForm extends React.Component {
   state = {
     visible: false,
     k: null,
-    index: null
+    index: null,
+    // title: null,
+    // createMutation: null,
+    // deleteMutation: null,
+    dispatchEdit: null,
+    dispatchDelete: null,
+    labels: []
   };
+
+  componentDidMount() {
+    const {type} = this.props;
+    this.setFormState(type)
+  }
 
   remove = () => {
     const { form, dispatch } = this.props;
-    const { k, index } = this.state;
+    const { k, index, dispatchDelete } = this.state;
     // can use data-binding to get
-    // const { keys, titles, companies, companyLinks, IDs, startDates, endDates } = form.getFieldsValue();
     const { keys, positions, organizations, links, IDs, startDates, endDates } = form.getFieldsValue();
-    // const { deleteMutation } = this.getFormAttributes(type, formAttributes);
 
     // We need at least one passenger
     if (keys.length === 1) {
       return;
     }
 
-    // if (IDs[index]) {
-    //   dispatch({
-    //     type: 'profile/EDIT_PROFILE',
-    //     payload: {
-    //       mutation: deleteMutation,
-    //       data: { id: IDs[index] }
-    //     }
-    //   });
-    // }
-
     if (IDs[index]) {
       dispatch({
-        type: 'profile/DELETE_BRAGS',
+        type: dispatchDelete,
         data: { id: IDs[index] }
       });
     }
@@ -108,35 +107,33 @@ class WhatWhereWhenForm extends React.Component {
   createPayloads = (type, values) => {
     const payloads = [];
 
-    console.log("values", values)
-
     switch (type) {
       case "Experience":
         for (let i = 0; i < values.keys.length; i += 1) {
           payloads.push({
-            position: values.positions[i],
-            company: values.organizations[i],
-            start_date: moment(values.startDates[i]).format('YYYY-MM'),
-            end_date: !values.checkboxes[i] ? moment(values.endDates[i]).format('YYYY-MM') : "Present",
-            link: values.links[i],
-            id: values.IDs[i],
+            position: values.positions[i] || null,
+            company: values.organizations[i] || null,
+            start_date: moment(values.startDates[i]).format('YYYY-MM') || null,
+            end_date: !values.checkboxes[i] ? moment(values.endDates[i]).format('YYYY-MM') : "Present" || null,
+            link: values.links[i] || null,
+            id: values.IDs[i] || null,
             changed: values.changed[i]
           })
         }
-        return { mutation: "updateExperience", data: { payloads } };
+        return payloads;
       case "Leadership":
         for (let i = 0; i < values.keys.length; i += 1) {
           payloads.push({
-            position: values.positions[i],
-            organization: values.organizations[i],
-            start_date: moment(values.startDates[i]).format('YYYY-MM'),
+            position: values.positions[i] || null,
+            organization: values.organizations[i] || null,
+            start_date: moment(values.startDates[i]).format('YYYY-MM') || null,
             end_date: !values.checkboxes[i] ? moment(values.endDates[i]).format('YYYY-MM') : "Present",
-            link: values.links[i],
-            id: values.IDs[i],
+            link: values.links[i] || null,
+            id: values.IDs[i] || null,
             changed: values.changed[i]
           })
         }
-        return { mutation: "updateLeadership", data: { payloads } };
+        return payloads;
       case "Brags":
         console.log("createPayloads type Brags", values);
         for (let i = 0; i < values.keys.length; i += 1) {
@@ -187,6 +184,7 @@ class WhatWhereWhenForm extends React.Component {
   handleSubmit = e => {
     e.preventDefault();
     const { form, dispatch, type } = this.props;
+    const { dispatchEdit } = this.state;
 
     form.validateFields((err, values) => {
       if (!err) {
@@ -195,10 +193,8 @@ class WhatWhereWhenForm extends React.Component {
 
         const payload = this.createPayloads(type, values)
 
-        console.log("payload", payload)
-
         dispatch({
-          type: 'profile/EDIT_BRAGS',
+          type: dispatchEdit,
           payload
         });
 
@@ -235,35 +231,29 @@ class WhatWhereWhenForm extends React.Component {
     });
   };
 
-  getFormAttributes = (type) => {
+  setFormState = (type) => {
     switch (type) {
       case "Leadership":
-        return {
-          title: "Leadership", createMutation: "createLeadership", deleteMutation: "removeLeadership",
-          labels: ["Company", "Company", "Title"]
-        };
+        this.setState({
+          dispatchEdit: 'profile/EDIT_LEADERSHIP',
+          dispatchDelete: 'profile/DELETE_LEADERSHIP',
+          labels: ["Organization", "Organization", "Position"],
+        });
+        return "Leadership Success";
       case "Experience":
-        return {
-          title: "Experience", createMutation: "createExperience", deleteMutation: "removeExperience",
-          labels: ["Organization", "Organization", "Position"]
-        };
+        this.setState({
+          dispatchEdit: 'profile/EDIT_EXPERIENCE',
+          dispatchDelete: 'profile/DELETE_EXPERIENCE',
+          labels: ["Company", "Company", "Title"]
+        });
+        return "Experience Success";
       case "Brags":
-        return {
-          title: "Above and Beyond / Brags",
-          createMutation: "createBrag",
-          deleteMutation: "removeBrag",
+        this.setState({
           dispatchEdit: 'profile/EDIT_BRAGS',
           dispatchDelete: 'profile/DELETE_BRAGS',
           labels: ["What", "Link", "Where"]
-        };
-      case "Articles":
-        return {
-          title: "Article",
-          createMutation: "createArticle",
-          deleteMutation: "removeArticle",
-          dispatchTypeEdit: 'profile/EDIT_ARTICLES',
-          labels: ["Title", "Caption", "Link"]
-        };
+        });
+        return "Brags Success";
       default:
         return null
     }
@@ -282,12 +272,12 @@ class WhatWhereWhenForm extends React.Component {
     if (type === "Experience") {
       for (let i = 0; i < experience.length; i += 1) {
         initialValues.push({
-          position: experience[i].position || "",
-          organization: experience[i].company || "",
-          link: experience[i].link || "",
-          start_date: experience[i].start_date || "",
-          end_date: experience[i].end_date || "",
-          id: experience[i].id || ""
+          position: experience[i].position || null,
+          organization: experience[i].company || null,
+          link: experience[i].link || null,
+          start_date: experience[i].start_date || null,
+          end_date: experience[i].end_date || null,
+          id: experience[i].id || null
         })
       }
       return initialValues
@@ -295,12 +285,12 @@ class WhatWhereWhenForm extends React.Component {
     if (type === "Brags") {
       for (let i = 0; i < brags.length; i += 1) {
         initialValues.push({
-          position: brags[i].what || "",
-          organization: brags[i].where || "",
-          link: brags[i].url || "",
-          start_date: brags[i].start_date || "",
-          end_date: brags[i].end_date || "",
-          id: brags[i].id || ""
+          position: brags[i].what || null,
+          organization: brags[i].where || null,
+          link: brags[i].url || null,
+          start_date: brags[i].start_date || null,
+          end_date: brags[i].end_date || null,
+          id: brags[i].id || null
         })
       }
       return initialValues
@@ -312,11 +302,10 @@ class WhatWhereWhenForm extends React.Component {
   // https://github.com/ant-design/ant-design/issues/8880
 
   render() {
-    const { form, formAttributes, type } = this.props;
+    const { form, type } = this.props;
     const { getFieldDecorator, getFieldsValue } = form;
-    const { visible } = this.state;
 
-    const { labels } = this.getFormAttributes(type, formAttributes);
+    const { visible, labels } = this.state;
     const initialValues = this.getInitialValues(type);
 
     getFieldDecorator('keys', { initialValue: initialValues.map((expObj, i) => i )});
@@ -402,7 +391,7 @@ class WhatWhereWhenForm extends React.Component {
                 required: true,
                 message: 'Please select start date.',
               }],
-              initialValue: index < initialValues.length ? moment(initialValues[index].start_date) : ""
+              initialValue: index < initialValues.length ? moment(initialValues[index].start_date) : null
             })(
               <MonthPicker />
             )}
@@ -425,7 +414,7 @@ class WhatWhereWhenForm extends React.Component {
                 required: true,
                 message: "Please select end date.",
               }],
-              initialValue: index < initialValues.length && initialValues[index].end_date !== "Present" ? moment(initialValues[index].end_date) : ""
+              initialValue: index < initialValues.length && initialValues[index].end_date !== "Present" ? moment(initialValues[index].end_date) : null
             })(
               <MonthPicker
                 disabled={checkboxes[index]}
