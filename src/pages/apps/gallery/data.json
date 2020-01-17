@@ -1,63 +1,14 @@
 {
-  "images": [{
-    "path": "resources/images/photos/1.jpeg",
-    "editable": false
-  }, {
-    "path": "resources/images/photos/2.jpeg",
-    "editable": true
-  }, {
-    "path": "resources/images/photos/3.jpeg",
-    "editable": false
-  }, {
-    "path": "resources/images/photos/1.jpeg",
-    "editable": false
-  }, {
-    "path": "resources/images/photos/5.jpeg",
-    "editable": true
-  }, {
-    "path": "resources/images/photos/1.jpeg",
-    "editable": false
-  }, {
-    "path": "resources/images/photos/2.jpeg",
-    "editable": true
-  }, {
-    "path": "resources/images/photos/3.jpeg",
-    "editable": false
-  }, {
-    "path": "resources/images/photos/4.jpeg",
-    "editable": false
-  }, {
-    "path": "resources/images/photos/5.jpeg",
-    "editable": true
-  }, {
-    "path": "resources/images/photos/1.jpeg",
-    "editable": false
-  }, {
-    "path": "resources/images/photos/5.jpeg",
-    "editable": true
-  }, {
-    "path": "resources/images/photos/3.jpeg",
-    "editable": false
-  }, {
-    "path": "resources/images/photos/4.jpeg",
-    "editable": false
-  }, {
-    "path": "resources/images/photos/5.jpeg",
-    "editable": true
-  }, {
-    "path": "resources/images/photos/1.jpeg",
-    "editable": false
-  }, {
-    "path": "resources/images/photos/2.jpeg",
-    "editable": true
-  }, {
-    "path": "resources/images/photos/3.jpeg",
-    "editable": false
-  }, {
-    "path": "resources/images/photos/2.jpeg",
-    "editable": false
-  }, {
-    "path": "resources/images/photos/5.jpeg",
-    "editable": true
-  }]
+  "images": [
+    {
+      "path": "https://d2czw3op36f92o.cloudfront.net/kieranpaul-source/42104900_10217531358101859_6475260220648980480_o.jpg",
+      "editable": true,
+      "type": "Primary"
+    },
+    {
+      "path": "https://d2czw3op36f92o.cloudfront.net/kieranpaul-source/26239946_10208836972562084_38590451627255280_n.jpg",
+      "editable": true,
+      "type": "Secondary"
+    }
+  ]
 }

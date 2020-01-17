@@ -1,77 +1,62 @@
 import React from 'react'
-import { Upload, message, Button, Icon } from 'antd'
+import { Icon, Collapse } from 'antd'
 import { Helmet } from 'react-helmet'
+import {connect} from 'react-redux'
+import Avatar from 'components/ImageUpload/Avatar'
 import styles from './style.module.scss'
-import data from './data.json'
+// import data from './data.json'
 
-const props = {
-  name: 'file',
-  action: '//jsonplaceholder.typicode.com/posts/',
-  headers: {
-    authorization: 'authorization-text',
-  },
-  onChange(info) {
-    if (info.file.status === 'done') {
-      message.success(`${info.file.name} file uploaded successfully`)
-    } else if (info.file.status === 'error') {
-      message.error(`${info.file.name} file upload failed.`)
-    }
-  },
-}
+// const props = {
+//   name: 'file',
+//   action: '//jsonplaceholder.typicode.com/posts/',
+//   headers: {
+//     authorization: 'authorization-text',
+//   },
+//   onChange(info) {
+//     if (info.file.status === 'done') {
+//       message.success(`${info.file.name} file uploaded successfully`)
+//     } else if (info.file.status === 'error') {
+//       message.error(`${info.file.name} file upload failed.`)
+//     }
+//   },
+// }
 
+@connect(({profile}) => ({profile}))
 class GalleryList extends React.Component {
-  state = {
-    imgData: [],
-  }
-
-  componentWillMount() {
-    this.setState({
-      imgData: data.images,
-    })
-  }
 
   render() {
-    const { imgData } = this.state
+    const { Panel } = Collapse;
+
+    const customPanelStyle = {
+      background: '#ffffff',
+      borderRadius: 4,
+      marginBottom: 24,
+      border: 0,
+      overflow: 'hidden',
+    };
+
     return (
       <div>
-        <Helmet title="Gallery" />
-        <div className="card">
-          <div className="card-header clearfix">
-            <div className="pull-right">
-              <Upload {...props}>
-                <Button type="primary">
-                  <Icon type="upload" /> Click to Upload
-                </Button>
-              </Upload>
-            </div>
-            <div className="utils__title">
-              <strong>Photo Gallery</strong>
-            </div>
-          </div>
-          <div className="card-body">
-            <div className={styles.gallery}>
-              {imgData.map(image => (
-                <div
-                  className={`${styles.item} ${image.editable === true ? styles.withControls : ''}`}
-                  style={{ backgroundImage: `url(${image.path})` }}
-                  key={Math.random()}
-                >
-                  {image.editable === true && (
-                    <div className={styles.itemControls}>
-                      <Button.Group size="default">
-                        <Button>
-                          <Icon type="edit" />
-                        </Button>
-                        <Button>
-                          <Icon type="delete" />
-                        </Button>
-                      </Button.Group>
-                    </div>
-                  )}
-                </div>
-              ))}
-            </div>
-          </div>
+        <Helmet title="Images" />
+        <div className={styles.profile}>
+          <Collapse
+            bordered={false}
+            defaultActiveKey={['2']}
+            expandIcon={({isActive}) => <Icon type="caret-right" rotate={isActive ? 90 : 0} />}
+          >
+            <Panel header="Primary" key="1" style={customPanelStyle}>
+              <Avatar type="Primary" />
+            </Panel>
+          </Collapse>
+          <Collapse
+            bordered={false}
+            defaultActiveKey={['2']}
+            expandIcon={({isActive}) => <Icon type="caret-right" rotate={isActive ? 90 : 0} />}
+          >
+            <Panel header="Secondary" key="1" style={customPanelStyle}>
+              <Avatar type="Secondary" />
+            </Panel>
+          </Collapse>
         </div>
       </div>
     )

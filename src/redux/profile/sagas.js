@@ -16,7 +16,7 @@ export function* LOAD_CURRENT_PROFILE(sub) {
   console.log("profileResponse", profileResponse);
 
   if (profile) {
-    const { username, articles, experience, references, intro, skills, coursework, leadership, posts, education, brags } = profile;
+    const {username, articles, experience, references, intro, skills, coursework, leadership, posts, education, brags, assets} = profile;
     yield put({
       type: 'profile/SET_STATE',
       payload: {
@@ -33,6 +33,7 @@ export function* LOAD_CURRENT_PROFILE(sub) {
         posts,
         education,
         brags,
+        assets,
         siteMetadata: [
           {
             id: "152ab450-df2e-440c-bdcb-a0af51e2d707",
@@ -152,6 +153,29 @@ export async function EDIT_POST({ payload }) {
   // });
 }
 
+export async function EDIT_PRIMARY({ payload }) {
+
+  console.log("edit primary payload", payload)
+
+  const response = editProfile("editAsset", payload);
+  response.then(values => {
+    if (values === "Could not update profile") notify("failure");
+    else notify("success", "assets")
+  });
+}
+
+export async function EDIT_SECONDARY({ payload }) {
+  // const { mutation, data } = payload
+
+  console.log("edit secondary payload", payload);
+
+  const response = editProfile("editAsset", payload);
+  response.then(values => {
+    if (values === "Could not update profile") notify("failure");
+    else notify("success", "assets")
+  });
+}
+
 export async function SELECT_THEME({ payload }) {
 
   console.log("select theme", payload)
@@ -263,6 +287,8 @@ export default function* rootSaga() {
     takeEvery(actions.EDIT_PROFILE, EDIT_PROFILE),
     takeEvery(actions.CREATE_POST, CREATE_POST),
     takeEvery(actions.EDIT_POST, EDIT_POST),
+    takeEvery(actions.EDIT_PRIMARY, EDIT_PRIMARY),
+    takeEvery(actions.EDIT_SECONDARY, EDIT_SECONDARY),
     takeEvery(actions.SELECT_THEME, SELECT_THEME),
     takeEvery(actions.EDIT_EDUCATION, EDIT_EDUCATION),
     takeEvery(actions.DELETE_EDUCATION, DELETE_EDUCATION),

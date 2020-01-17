@@ -35,6 +35,12 @@ export async function getLeftMenuData() {
       ],
     },
     {
+      title: 'Assets',
+      key: 'assets',
+      url: '/apps/gallery',
+      icon: 'icmn icmn-image',
+    },
+    {
       divider: true,
     },
    ]
@@ -71,6 +77,12 @@ export async function getTopMenuData() {
           pro: true
         }
       ],
+    },
+    {
+      title: 'Assets',
+      key: 'assets',
+      url: '/apps/gallery',
+      icon: 'icmn icmn-image',
     }
   ]
 }

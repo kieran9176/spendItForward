@@ -136,8 +136,13 @@ const performOperations = async (mutation, payloads) => {
             API.graphql(graphqlOperation(mutations.createCoursework, payload))
         })
       );
+    case "editAsset":
+      console.log("editPrimary payload", payloads);
+      return API.graphql(graphqlOperation(mutations.updateAsset, { input: payloads }));
+    case "editSecondary":
+      console.log("editSecondary payload", payloads);
+      return API.graphql(graphqlOperation(mutations.updateAsset, { input: payloads }));
     case "editLeadership":
-      console.log("perform leadership ops payloads", payloads)
       return Promise.all(payloads.map(payload => {
           if (payload.id) {
             payload = pop(payload);
@@ -214,6 +219,8 @@ export async function editProfile(mutation, data) {
       return performOperations(mutation, createPayloads(mutation, filterData(mutation, data)));
     case "updateCoursework":
       return performOperations(mutation, createPayloads(mutation, filterData(mutation, data)));
+    case "editAsset":
+      return performOperations(mutation, data);
     case "editLeadership":
       return performOperations(mutation, filterData(mutation, data));
     case "deleteLeadership":

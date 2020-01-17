@@ -615,5 +615,23 @@ export const deleteBrag = `mutation DeleteBrags($input: DeleteBragsInput!) {
   }
 }
 `;
+export const createAsset = `mutation CreateAsset($input: CreateAssetInput!) {
+  createAsset(input: $input) {
+    id
+    metadata
+    url
+    type
+  }
+}
+`;
+export const updateAsset = `mutation UpdateAsset($input: UpdateAssetInput!) {
+  updateAsset(input: $input) {
+    id
+    metadata
+    url
+    type
+  }
+}
+`;
 
 

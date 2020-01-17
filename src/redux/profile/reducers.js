@@ -78,6 +78,26 @@ export default function userReducer(state = initialState, action) {
         return post
       });
       return state;
+    case actions.EDIT_PRIMARY:
+      state.assets = state.assets.map(asset => {
+        if (asset.type === "primary") {
+          asset.id = action.payload.id;
+          asset.url = action.payload.url;
+          return asset;
+        }
+        return asset
+      });
+      return state;
+    case actions.EDIT_SECONDARY:
+      state.assets = state.assets.map(asset => {
+        if (asset.type === "secondary") {
+          asset.id = action.payload.id;
+          asset.url = action.payload.url;
+          return asset;
+        }
+        return asset
+      });
+      return state;
     case actions.SELECT_THEME:
       state.siteMetadata = state.siteMetadata.map(metadata => {
         metadata.themeID = action.payload.data.themeID;
