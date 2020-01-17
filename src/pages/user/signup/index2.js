@@ -15,12 +15,12 @@ class Signup extends Component {
       if (!error) {
         console.log("VALUES:", values)
         dispatch({
-          type: 'user/SIGNUP',
+          type: 'user/LOGIN',
           payload: values,
         })
       }
     })
-  };
+  }
 
   render() {
     const {

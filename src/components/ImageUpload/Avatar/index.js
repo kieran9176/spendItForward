@@ -138,10 +138,6 @@ class Avatar extends React.Component {
 
           const resURL = `https://d2czw3op36f92o.cloudfront.net/kieranpaul-source/${encoded}`;
 
-          // form.setFieldsValue({
-          //   image_url: resURL
-          // });
-
           // getBase64(fileObj, imageUrl =>
           //   this.setState({
           //     imageUrl
