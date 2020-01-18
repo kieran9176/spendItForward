@@ -60,6 +60,11 @@ class Avatar extends React.Component {
           dispatchEdit: 'profile/EDIT_SECONDARY',
         });
         return "Secondary Success";
+      case "postImage":
+        this.setState({
+          dispatchEdit: 'profile/EDIT_POST_LOCALLY'
+        });
+        return "postImage Success";
       default:
         return null
     }
@@ -67,12 +72,17 @@ class Avatar extends React.Component {
 
   getInitialValues = (type) => {
     const { profile } = this.props;
-    const { assets } = profile;
+    const { assets, posts, currentPost } = profile;
+    const { id } = currentPost;
     if (type === "Primary") {
       return assets.filter(asset => asset.type === "primary")[0];
     }
     if (type === "Secondary") {
       return assets.filter(asset => asset.type === "secondary")[0];
+    }
+    if (type === "postImage") {
+      const post = posts.filter(postObj => postObj.id === id)[0];
+      return { id, url: post.image_url };
     }
     return null
   };

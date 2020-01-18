@@ -1,7 +1,6 @@
 /* eslint-disable react/no-multi-comp */
 import React from 'react';
 import { connect } from 'react-redux'
-import { Redirect } from 'react-router'
 import { convertToRaw, EditorState, ContentState } from 'draft-js';
 import htmlToDraft from 'html-to-draftjs';
 import draftToMarkdown from 'draftjs-to-markdown';
@@ -42,124 +41,67 @@ class SavedStatus extends React.Component {
     super(props);
     this.state = {
       saving: false,
-      redirect: false,
-      postID: null,
     }
   }
 
   async componentDidMount() {
 
-    const { editor } = this.props;
-    this.setState(editor);
+    try {
 
-    // try {
-    //
-    //   setInterval(async () => {
-    //     this.setState({
-    //       saving: true
-    //     });
-    //
-    //     this.handleSubmit();
-    //
-    //     this.setState({
-    //       saving: false
-    //     });
+      setInterval(async () => {
+        this.setState({
+          saving: true
+        });
 
-        // if (res.data.createPost) {
-        //   const postID = res.data.createPost.id;
-        //   form.setFieldsValue({ id: postID });
-        //   const post = form.getFieldsValue();
-        //
-        //   dispatch({
-        //     type: 'profile/CREATE_POST',
-        //     payload: {
-        //       mutation: "createPost",
-        //       data: { post }
-        //     }
-        //   });
-        //
-        //   this.setState({
-        //     redirect: true,
-        //     postID
-        //   })
-        // }
+        await this.handleSubmit();
 
-        // const { editorState, html, markdown, id } = this.state;
+        this.setState({
+          saving: false
+        });
 
-        // if (html) {
-          // console.log(html);
-          // console.log(editorState);
-          // console.log(markdown);
-          // console.log(id);
-        // }
+      }, 30000);
 
-        // else {
-          // console.log(html);
-          // console.log(editorState);
-          // console.log(markdown);
-          // console.log(id);
-
-          // form.setFieldsValue({id: res.data.updatePost.id});
-          // const post = form.getFieldsValue();
-          //
-          // dispatch({
-          //   type: 'profile/EDIT_POST',
-          //   payload: {
-          //     mutation: "updatePost",
-          //     data: { post }
-          //   }
-          // });
-        // }
-      // }, 60000);
-    //
-    // } catch(e) {
-    //   console.log(e);
-    // }
+    } catch(e) {
+      console.log(e);
+    }
   }
 
   handleSubmit = () => {
 
+    const { profile, dispatch } = this.props;
+    const { posts, currentPost } = profile;
+    const { id, status } = currentPost;
+    const post = posts.filter(postObj => postObj.id === id)[0];
 
-    // const { editorState } = this.state;
-    // const { id } = form.getFieldsValue();
-
-    // const rawContentState = convertToRaw(editorState.getCurrentContent());
-    // const markdown = draftToMarkdown(rawContentState);
-    // const html = draftToHtml(rawContentState);
-
-    // this.setState({
-    //   editorState,
-    //   markdown,
-    //   html,
-    // })
-
-    // const post = form.getFieldsValue();
-
-    // if (id) {
-    //   return API.graphql(graphqlOperation(mutations.updatePost, { input: post }))
-    // }
-    // return API.graphql(graphqlOperation(mutations.createPost, {
-    //     input: {
-    //       title: post.title,
-    //       html: post.html,
-    //       markdown: post.markdown,
-    //       image_url: post.image_url,
-    //       series: post.series,
-    //       date_published: post.date_published
-    //     }
-    //   })
-    // );
+    if (status === "true") {
+      dispatch({
+        type: 'profile/SAVE_POST',
+        payload: {
+          mutation: 'createPost',
+          post
+        }
+      });
+      dispatch({
+        type: 'profile/CURRENT_POST',
+        payload: { status: false, id }
+      })
+    } else {
+      dispatch({
+        type: 'profile/SAVE_POST',
+        payload: {
+          mutation: 'updatePost',
+          post
+        }
+      })
+    }
   };
 
   render() {
-    const { saving, redirect, postID } = this.state;
+    const { saving } = this.state;
     // const { match } = this.props;
 
     const antIcon = <Icon type="loading" style={{ fontSize: 24 }} spin />;
 
-    if (redirect) {
-      return <Redirect to={`/blog/edit-blog-post/${postID}`} />
-    }
     if (saving) {
       return (<Spin indicator={antIcon} />)
     }
@@ -172,40 +114,37 @@ export default class CustomToolbarEditor extends React.Component {
 
   constructor(props) {
     super(props);
-    const contentBlock = htmlToDraft('<p>What&apos;s your story, morning glory?</p>');
+    const contentBlock = htmlToDraft('<p>Let&apos;s hear it.</p>');
     if (contentBlock) {
       const contentState = ContentState.createFromBlockArray(contentBlock.contentBlocks);
       const editorState = EditorState.createWithContent(contentState);
       this.state = {
         editorState,
-        changeCount: 0
       }
     }
   }
 
   componentDidMount () {
-    const { match } = this.props;
-    this.setFormState(match)
+    this.setFormState()
   }
 
-  setFormState = (match) => {
+  setFormState = () => {
     const { profile } = this.props;
-    const { posts } = profile;
-    const { params } = match;
-    const { id } = params;
+    const { posts, currentPost } = profile;
+    const { id } = currentPost;
     let post = {};
 
     if (id) {
       [post] = posts.filter(postObj => postObj.id === id);
-      console.log("setFormState post", post);
 
-      const { html, markdown, url } = post;
+      const { html, markdown, url, title } = post;
       const contentBlock = htmlToDraft(html);
       if (contentBlock) {
         const contentState = ContentState.createFromBlockArray(contentBlock.contentBlocks);
         const editorState = EditorState.createWithContent(contentState);
         this.setState({
           editorState,
+          title,
           html,
           markdown,
           id,
@@ -225,50 +164,34 @@ export default class CustomToolbarEditor extends React.Component {
     return { html, markdown }
   };
 
-  decideToDispatch = () => {
-    const { changeCount } = this.state;
-    // const { dispatch } = this.props;
-
-    if (changeCount > 10) {
-
-      const { editorState } = this.state;
-      const { html, markdown } = this.convertToReadable(editorState);
-
-      this.setState({
-        html,
-        markdown,
-        changeCount: 0
-      });
-
-      console.log("DISPATCH THE FOLLOWING", this.state)
-
-      // dispatch({
-      //   type: 'profile/EDIT_POST_LOCALLY',
-      //   payload: this.state
-      // });
-
+  decideToDispatch = (state) => {
+    const { dispatch } = this.props;
+    if (state.html) {
+      dispatch({
+        type: 'profile/EDIT_POST_LOCALLY',
+        payload: state
+      })
     }
   };
 
   onChange = (changeType, e) => {
-    const { changeCount } = this.state;
-    // const { dispatch } = this.props;
 
     if (changeType === "title") {
       e.preventDefault();
-      this.decideToDispatch();
       this.setState({
         title: e.target.value,
-        changeCount: changeCount + 1
       });
+      this.decideToDispatch(this.state);
     }
 
     if (changeType === "editor") {
-      this.decideToDispatch();
+      const {html, markdown} = this.convertToReadable(e);
       this.setState({
         editorState: e,
-        changeCount: changeCount + 1
+        html,
+        markdown,
       });
+      this.decideToDispatch(this.state);
     }
   };
 
@@ -278,17 +201,18 @@ export default class CustomToolbarEditor extends React.Component {
 
   render() {
 
-    const { editorState } = this.state;
+    const { editorState, id, title } = this.state;
 
     return (
       <div>
-        <Avatar />
+        <Avatar type="postImage" id={id} />
         <input
           type="title"
           className={styles.searchInput}
           id="titleInput"
           placeholder="Title"
           ref={this.handleNode}
+          defaultValue={title}
           onChange={e => this.onChange("title", e)}
         />
         <div role="button" className={editorStyles.editor} onClick={this.focus} tabIndex={0} onKeyDown={this.focus}>

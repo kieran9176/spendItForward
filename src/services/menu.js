@@ -1,3 +1,7 @@
+import uuidv4 from 'uuid/v4'
+
+const id = uuidv4();
+
 export async function getLeftMenuData() {
   return [
     {
@@ -29,8 +33,8 @@ export async function getLeftMenuData() {
         {
           title: 'Add Post',
           key: 'blogAddPost',
-          url: '/blog/add-blog-post',
-          pro: false
+          url: `/blog/edit-blog-post/true/${id}`,
+          pro: true
         }
       ],
     },
@@ -73,7 +77,7 @@ export async function getTopMenuData() {
         {
           title: 'Add Post',
           key: 'blogAddPost',
-          url: '/blog/add-blog-post',
+          url: `/blog/edit-blog-post/true/${id}`,
           pro: true
         }
       ],

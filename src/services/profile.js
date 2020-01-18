@@ -197,6 +197,10 @@ const performOperations = async (mutation, payloads) => {
       );
     case "deleteEducation":
       return API.graphql(graphqlOperation(mutations.deleteEducation, { input: payloads.data }));
+    case "createPost":
+      return API.graphql(graphqlOperation(mutations.createPost, { input: payloads }));
+    case "updatePost":
+      return API.graphql(graphqlOperation(mutations.updatePost, { input: payloads }));
     default:
       return "Could not update profile"
   }
@@ -230,9 +234,9 @@ export async function editProfile(mutation, data) {
     case "deleteArticle":
       return performOperations(mutation, data);
     case "createPost":
-      return "post created";
-    case "updatePosts":
-      return performOperations(mutation, createPayloads(mutation, filterData(mutation, data)));
+      return performOperations(mutation, data);
+    case "updatePost":
+      return performOperations(mutation, data);
     case "editEducation":
       return performOperations(mutation, data);
     case "deleteEducation":

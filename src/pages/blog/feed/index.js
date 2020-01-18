@@ -62,7 +62,7 @@ class BlogFeed extends React.Component {
                         <div className={styles.content}>
                           <p dangerouslySetInnerHTML={{ __html: article.caption }} />
                           <div className={styles.articleMore}>
-                            <Link to={`/blog/edit-blog-post/${article.id}`}>
+                            <Link to={`/blog/edit-blog-post/false/${article.id}`}>
                               Edit
                               <i className="ml-2 fa fa-angle-right" aria-hidden="true" />
                             </Link>

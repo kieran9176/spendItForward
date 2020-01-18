@@ -226,13 +226,13 @@ const routes = [
     component: loadable(() => import('pages/blog/post')),
     exact: true,
   },
+  // {
+  //   path: '/blog/add-blog-post',
+  //   component: loadable(() => import('pages/blog/add-blog-post')),
+  //   exact: true,
+  // },
   {
-    path: '/blog/add-blog-post',
-    component: loadable(() => import('pages/blog/add-blog-post')),
-    exact: true,
-  },
-  {
-    path: `/blog/edit-blog-post/:id`,
+    path: `/blog/edit-blog-post/:status/:id`,
     component: loadable(() => import('pages/blog/add-blog-post')),
     exact: true,
   },

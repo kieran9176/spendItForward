@@ -3,7 +3,6 @@ import { connect } from 'react-redux'
 import { Link, withRouter } from 'react-router-dom'
 import { injectIntl } from 'react-intl'
 import { Form, Input, Icon } from 'antd'
-// import Avatar from 'components/ImageUpload/Avatar'
 import SimpleStaticToolbarEditor from "../../../../components/Editor/SimpleToolbarEditor"
 import styles from './style.module.scss'
 
@@ -30,29 +29,6 @@ class AddForm extends React.Component {
     })
   };
 
-  // getPost = () => {
-  //   const {match, profile, form} = this.props;
-  //   const { posts } = profile;
-  //   let post = {};
-  //
-  //   if (match.params.id) {
-  //
-  //     post = posts.filter(_ => _.id === match.params.id).pop();
-  //
-  //     const { id } = post;
-  //
-  //     form.getFieldDecorator('id', {
-  //       initialValue: id
-  //     });
-  //     return post
-  //   }
-  //
-  //   form.getFieldDecorator('id', {
-  //     initialValue: null
-  //   });
-  //   return null
-  // };
-
   render() {
 
     const {
@@ -60,11 +36,30 @@ class AddForm extends React.Component {
     } = this.props;
 
     const { showSearch } = this.state;
-    const { form, match } = this.props;
+    const { form, match, dispatch } = this.props;
+    const { params } = match;
+    const { id, status } = params;
 
-    // const post = this.getPost();
+    console.log("addForm match", match);
 
-    console.log("addForm index match", match);
+    if (status === "true") {
+      dispatch({
+        type: 'profile/CREATE_POST',
+        post: {
+          id,
+          html: '<p>Let&apos;s hear it.</p>',
+          markdown: "Let's hear it.",
+          url: '',
+          title: 'Insert title ...',
+          series: ''
+        }
+      });
+    }
+
+    dispatch({
+      type: 'profile/CURRENT_POST',
+      payload: { status, id }
+    });
 
     return (
       <div className="d-inline-block mr-4">
