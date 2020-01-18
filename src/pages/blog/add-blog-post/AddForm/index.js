@@ -2,12 +2,10 @@ import React from 'react'
 import { connect } from 'react-redux'
 import { Link, withRouter } from 'react-router-dom'
 import { injectIntl } from 'react-intl'
-import { Form, Input, Icon, Row, Col } from 'antd'
-import Avatar from 'components/ImageUpload/Avatar'
+import { Form, Input, Icon } from 'antd'
+// import Avatar from 'components/ImageUpload/Avatar'
 import SimpleStaticToolbarEditor from "../../../../components/Editor/SimpleToolbarEditor"
 import styles from './style.module.scss'
-
-const FormItem = Form.Item
 
 @withRouter
 @Form.create()
@@ -21,58 +19,52 @@ class AddForm extends React.Component {
   };
 
   showLiveSearch = () => {
-    setTimeout(() => {
-      this.searchInput.focus()
-    }, 100)
     this.setState({
       showSearch: true,
     })
   };
 
   hideLiveSearch = () => {
-    this.searchInput.blur()
     this.setState({
       showSearch: false,
-      // searchText: '',
     })
   };
 
-  handleNode = node => {
-    this.searchInput = node
-  };
-
-  getPost = () => {
-    const {match, profile, form} = this.props;
-    const { posts } = profile;
-    let post = {};
-
-    if (match.params.id) {
-
-      post = posts.filter(_ => _.id === match.params.id).pop();
-
-      const { id } = post;
-
-      form.getFieldDecorator('id', {
-        initialValue: id
-      });
-      return post
-    }
-
-    form.getFieldDecorator('id', {
-      initialValue: null
-    });
-    return null
-  };
+  // getPost = () => {
+  //   const {match, profile, form} = this.props;
+  //   const { posts } = profile;
+  //   let post = {};
+  //
+  //   if (match.params.id) {
+  //
+  //     post = posts.filter(_ => _.id === match.params.id).pop();
+  //
+  //     const { id } = post;
+  //
+  //     form.getFieldDecorator('id', {
+  //       initialValue: id
+  //     });
+  //     return post
+  //   }
+  //
+  //   form.getFieldDecorator('id', {
+  //     initialValue: null
+  //   });
+  //   return null
+  // };
 
   render() {
 
     const {
       intl: {formatMessage}
     } = this.props;
-    const { form } = this.props;
-    const { showSearch } = this.state;
 
-    const post = this.getPost();
+    const { showSearch } = this.state;
+    const { form, match } = this.props;
+
+    // const post = this.getPost();
+
+    console.log("addForm index match", match);
 
     return (
       <div className="d-inline-block mr-4">
@@ -100,30 +92,8 @@ class AddForm extends React.Component {
               <div className={styles.logoContainer}>
                 <img className={styles.logo} src="resources/images/logo.png" alt="" />
               </div>
-              <div className={styles.logoContainer}>
-                <Avatar form={form} post={post} />
-              </div>
-              <Row>
-                <Col span={18}>
-                  <Form onSubmit={this.handleSubmit}>
-                    <FormItem>
-                      {form.getFieldDecorator('title', {
-                        defaultValue: post ? post.title : "Insert Title ... "
-                      })(
-                        <input
-                          type="title"
-                          className={styles.searchInput}
-                          id="titleInput"
-                          placeholder="Title"
-                          ref={this.handleNode}
-                        />
-                      )}
-                    </FormItem>
-                  </Form>
-                </Col>
-              </Row>
               <div className={styles.bodyInput}>
-                <SimpleStaticToolbarEditor form={form} post={post} />
+                <SimpleStaticToolbarEditor form={form} match={match} />
               </div>
             </div>
           </div>

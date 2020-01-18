@@ -72,9 +72,16 @@ export default function userReducer(state = initialState, action) {
     case actions.CREATE_POST:
       state.posts.push(action.payload.data.post);
       return state;
+    case actions.EDIT_POST_LOCALLY:
+      console.log("EDIT_POST_LOCALLY REDUCER ACTION:", action.payload.post);
+      state.posts = state.posts.map(post => {
+        if (post.id === action.payload.post.id) return action.payload.post;
+        return post
+      });
+      return state;
     case actions.EDIT_POST:
       state.posts = state.posts.map(post => {
-        if (post.id === action.payload.data.post.id) return action.payload.data.post;
+        if (post.id === action.payload.id) return action.payload;
         return post
       });
       return state;

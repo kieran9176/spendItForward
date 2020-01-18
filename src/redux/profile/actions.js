@@ -3,6 +3,7 @@ const actions = {
   SET_STATE: 'profile/SET_STATE',
   EDIT_PROFILE: 'profile/EDIT_PROFILE',
   CREATE_POST: 'profile/CREATE_POST',
+  EDIT_POST_LOCALLY: 'profile/EDIT_POST_LOCALLY',
   EDIT_POST: 'profile/EDIT_POST',
   EDIT_PRIMARY: 'profile/EDIT_PRIMARY',
   EDIT_SECONDARY: 'profile/EDIT_SECONDARY',

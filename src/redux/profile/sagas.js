@@ -144,7 +144,20 @@ export async function CREATE_POST( { payload }) {
 export async function EDIT_POST({ payload }) {
   // const { mutation, data } = payload
 
-  console.log("create post payload", payload)
+  console.log(payload);
+  console.log("we don't need to do anything here actually?")
+
+  // const response = editProfile(mutation, data);
+  // response.then(values => {
+  //   if (values === "Could not update profile") notify("failure");
+  //   else notify(mutation)
+  // });
+}
+
+export async function EDIT_POST_LOCALLY() {
+  // const { mutation, data } = payload
+
+  console.log("we don't need to do anything here actually?")
 
   // const response = editProfile(mutation, data);
   // response.then(values => {
@@ -286,6 +299,7 @@ export default function* rootSaga() {
   yield all([
     takeEvery(actions.EDIT_PROFILE, EDIT_PROFILE),
     takeEvery(actions.CREATE_POST, CREATE_POST),
+    takeEvery(actions.EDIT_POST_LOCALLY, EDIT_POST_LOCALLY),
     takeEvery(actions.EDIT_POST, EDIT_POST),
     takeEvery(actions.EDIT_PRIMARY, EDIT_PRIMARY),
     takeEvery(actions.EDIT_SECONDARY, EDIT_SECONDARY),
