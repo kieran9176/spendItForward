@@ -58,7 +58,7 @@ class AddForm extends React.Component {
 
     dispatch({
       type: 'profile/CURRENT_POST',
-      payload: { status, id }
+      payload: { status, id, saved: "false" }
     });
 
     return (

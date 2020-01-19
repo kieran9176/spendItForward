@@ -70,7 +70,12 @@ export default function userReducer(state = initialState, action) {
       console.log("STATE", state, "ACTION.PAYLOAD.DATA", action.payload.data)
       return { ...state, ...action.payload.data };
     case actions.CURRENT_POST:
-      state.currentPost = action.payload;
+      console.log("current post action payload", action.payload);
+      state.currentPost = {
+        id: action.payload.id ? action.payload.id : state.currentPost.id,
+        status: action.payload.status ? action.payload.status : state.currentPost.id,
+        saved: action.payload.saved ? action.payload.saved : state.currentPost.saved
+      };
       return state;
     case actions.CREATE_POST:
       state.posts.push(action.post);

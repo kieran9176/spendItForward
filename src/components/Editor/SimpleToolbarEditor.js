@@ -7,7 +7,7 @@ import draftToMarkdown from 'draftjs-to-markdown';
 import draftToHtml from 'draftjs-to-html';
 import Editor from 'draft-js-plugins-editor';
 import createToolbarPlugin from 'draft-js-static-toolbar-plugin';
-import { Row, Col, Card, Divider, Spin, Icon } from 'antd'
+import { Row, Col, Card, Divider } from 'antd'
 import {
   ItalicButton,
   BoldButton,
@@ -40,30 +40,46 @@ class SavedStatus extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      saving: false,
+      saved: "false",
     }
   }
 
   async componentDidMount() {
+    const { dispatch } = this.props;
 
     try {
 
       setInterval(async () => {
-        this.setState({
-          saving: true
-        });
+
+        // this.setState({
+        //   saving: true
+        // });
 
         await this.handleSubmit();
 
-        this.setState({
-          saving: false
+        // this.setState({
+        //   saving: false
+        // });
+
+        dispatch({
+          type: 'profile/CURRENT_POST',
+          payload: { saved: "true" }
         });
+
+        this.setState({ saved: "true" })
 
       }, 30000);
 
     } catch(e) {
       console.log(e);
     }
+  }
+
+  componentWillReceiveProps(props) {
+    const { profile } = props;
+    const { currentPost } = profile;
+    const { saved } = currentPost;
+    this.setState({ saved })
   }
 
   handleSubmit = () => {
@@ -97,15 +113,18 @@ class SavedStatus extends React.Component {
   };
 
   render() {
-    const { saving } = this.state;
-    // const { match } = this.props;
+    // const { saving } = this.state;
+    // const { profile } = this.props;
+    // const { currentPost } = profile;
+    const { saved } = this.state;
 
-    const antIcon = <Icon type="loading" style={{ fontSize: 24 }} spin />;
+    // const antIcon = <Icon type="loading" style={{ fontSize: 24 }} spin />;
 
-    if (saving) {
-      return (<Spin indicator={antIcon} />)
+    if (saved === "true") {
+      return (<p>Saved</p>)
     }
-    return (<Icon type="check-circle" theme="twoTone" twoToneColor="#52c41a" />)
+    return (<p>Saving every 30 seconds ...</p>)
+    // return (<Icon type="check-circle" theme="twoTone" twoToneColor="#52c41a" />)
   }
 }
 
@@ -136,7 +155,6 @@ export default class CustomToolbarEditor extends React.Component {
 
     if (id) {
       [post] = posts.filter(postObj => postObj.id === id);
-
       const { html, markdown, url, title } = post;
       const contentBlock = htmlToDraft(html);
       if (contentBlock) {
@@ -165,12 +183,16 @@ export default class CustomToolbarEditor extends React.Component {
   };
 
   decideToDispatch = (state) => {
-    const { dispatch } = this.props;
+    const {dispatch} = this.props;
     if (state.html) {
       dispatch({
         type: 'profile/EDIT_POST_LOCALLY',
         payload: state
-      })
+      });
+      dispatch({
+        type: 'profile/CURRENT_POST',
+        payload: { saved: "false" }
+      });
     }
   };
 
