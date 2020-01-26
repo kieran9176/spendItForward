@@ -1,14 +1,12 @@
-import {all, takeEvery, put, call} from 'redux-saga/effects'
-import {notification} from 'antd'
-import Amplify, {Auth} from 'aws-amplify';
+import { all, takeEvery, put, call } from 'redux-saga/effects'
+import { notification } from 'antd'
+import Amplify, { Auth } from 'aws-amplify'
 import awsmobile from 'aws-exports'
-import {LOAD_CURRENT_PROFILE} from "../profile/sagas"
+import { LOAD_CURRENT_PROFILE } from '../profile/sagas'
 import actions from './actions'
-
 
 Amplify.configure({
   Auth: {
-
     // REQUIRED - Amazon Cognito Region
     region: 'us-east-2',
 
@@ -21,46 +19,46 @@ Amplify.configure({
     // OPTIONAL - Enforce user authentication prior to accessing AWS resources or not
     mandatorySignIn: false,
   },
-});
+})
 
-Amplify.configure(awsmobile);
+Amplify.configure(awsmobile)
 
-export function* LOGIN({payload}) {
-  const {email, password} = payload;
+export function* LOGIN({ payload }) {
+  const { email, password } = payload
   yield put({
     type: 'user/SET_STATE',
     payload: {
-      loading: true
-    }
-  });
+      loading: true,
+    },
+  })
 
   const user = yield Auth.signIn(email, password)
     // .then(() => true)
     .catch(error => {
       notification.warning({
-        message: "Not Authenticated",
+        message: 'Not Authenticated',
         description: error.message,
       })
-    });
+    })
 
   if (user) {
     notification.success({
       message: 'Logged In',
       description: 'You have successfully logged in to your Éirí console!',
-    });
+    })
 
     yield put({
       type: 'user/SET_STATE',
       payload: {
         loading: true,
-      }
-    });
+      },
+    })
 
-    const { username, attributes } = user;
-    const { sub } = attributes;
+    const { username, attributes } = user
+    const { sub } = attributes
 
     // Call LOAD_CURRENT_PROFILE after we've fetched the 'sub' attribute from Cognito
-    yield call(LOAD_CURRENT_PROFILE, user);
+    yield call(LOAD_CURRENT_PROFILE, user)
 
     yield put({
       type: 'user/SET_STATE',
@@ -72,17 +70,15 @@ export function* LOGIN({payload}) {
         role: 'admin',
         authorized: true,
       },
-    });
+    })
 
     yield put({
       type: 'user/SET_STATE',
       payload: {
         loading: false,
       },
-    });
-  }
-
-  else {
+    })
+  } else {
     yield put({
       type: 'user/SET_STATE',
       payload: {
@@ -92,53 +88,52 @@ export function* LOGIN({payload}) {
   }
 }
 
-export function* SIGNUP({payload}) {
-
-  const { email, password } = payload;
+export function* SIGNUP({ payload }) {
+  const { email, password } = payload
 
   yield put({
     type: 'user/SET_STATE',
     payload: {
-      loading: true
-    }
-  });
+      loading: true,
+    },
+  })
 
   const signupPayload = {
     username: email,
     password,
     attributes: {
-      email: ""
-    }
-  };
+      email: '',
+    },
+  }
 
   // const user = yield Auth.signUp(email, password, attributes)
   const user = yield Auth.signUp(signupPayload)
-  // .then(() => true)
+    // .then(() => true)
     .catch(error => {
       notification.warning({
-        message: "Not Authenticated",
+        message: 'Not Authenticated',
         description: error.message,
       })
-    });
+    })
 
   if (user) {
     notification.success({
       message: 'Logged In',
       description: 'You have successfully signed up for Éirí!',
-    });
+    })
 
     yield put({
       type: 'user/SET_STATE',
       payload: {
         loading: true,
-      }
-    });
+      },
+    })
 
-    const { username, attributes } = user;
-    const { sub } = attributes;
+    const { username, attributes } = user
+    const { sub } = attributes
 
     // Call LOAD_CURRENT_PROFILE after we've fetched the 'sub' attribute from Cognito
-    yield call(LOAD_CURRENT_PROFILE, user);
+    yield call(LOAD_CURRENT_PROFILE, user)
 
     yield put({
       type: 'user/SET_STATE',
@@ -150,17 +145,15 @@ export function* SIGNUP({payload}) {
         role: 'admin',
         authorized: true,
       },
-    });
+    })
 
     yield put({
       type: 'user/SET_STATE',
       payload: {
         loading: false,
       },
-    });
-  }
-
-  else {
+    })
+  } else {
     yield put({
       type: 'user/SET_STATE',
       payload: {
@@ -174,40 +167,40 @@ export function* LOAD_CURRENT_ACCOUNT() {
   yield put({
     type: 'user/SET_STATE',
     payload: {
-      loading: true
-    }
-  });
+      loading: true,
+    },
+  })
 
-  console.log("Aha!");
+  console.log('Aha!')
 
   const user = yield Auth.currentAuthenticatedUser()
     // .then(() => true)
     .catch(error => {
-      console.log(error);
+      console.log(error)
       notification.warning({
-        message: "Not Authenticated",
-        description: "Trying to hack us? We just took a picture of you! :)",
+        message: 'Not Authenticated',
+        description: 'Trying to hack us? We just took a picture of you! :)',
       })
-    });
+    })
 
   if (user) {
     notification.success({
       message: 'Logged In',
       description: 'You have successfully confirmed authentication.',
-    });
+    })
 
     yield put({
       type: 'user/SET_STATE',
       payload: {
         loading: true,
-      }
-    });
+      },
+    })
 
-    const {username, attributes} = user;
-    const {sub} = attributes;
+    const { username, attributes } = user
+    const { sub } = attributes
 
     // Call LOAD_CURRENT_PROFILE after we've fetched the 'sub' attribute from Cognito
-    yield call(LOAD_CURRENT_PROFILE, user);
+    yield call(LOAD_CURRENT_PROFILE, user)
 
     yield put({
       type: 'user/SET_STATE',
@@ -219,18 +212,15 @@ export function* LOAD_CURRENT_ACCOUNT() {
         role: 'admin',
         authorized: true,
       },
-    });
+    })
 
     yield put({
       type: 'user/SET_STATE',
       payload: {
         loading: false,
       },
-    });
-  }
-
-  else {
-
+    })
+  } else {
     yield put({
       type: 'user/SET_STATE',
       payload: {
@@ -239,26 +229,25 @@ export function* LOAD_CURRENT_ACCOUNT() {
         role: '',
         email: '',
         avatar: '',
-        authorized: false
-      }
-    });
+        authorized: false,
+      },
+    })
 
     yield put({
       type: 'user/SET_STATE',
       payload: {
         loading: false,
-      }
-    });
+      },
+    })
   }
 }
 
 export function* LOGOUT() {
-
   yield Auth.signOut()
     .then(() => true)
-    .catch(err => console.log(err));
+    .catch(err => console.log(err))
 
-// yield call(logout);
+  // yield call(logout);
   yield put({
     type: 'user/SET_STATE',
     payload: {
