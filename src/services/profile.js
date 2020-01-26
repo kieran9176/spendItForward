@@ -17,9 +17,21 @@ export function notify (status, type) {
   }
 }
 
-export async function currentAccountProfile (accountId) {
+export async function getProfile (accountId) {
   console.log("received the call", accountId)
   return API.graphql(graphqlOperation(queries.getProfile, { account_id: accountId }))
+}
+
+export async function createProfile(username) {
+  console.log("create a new profile!");
+  return API.graphql(graphqlOperation(mutations.createProfile, {
+      input: {
+        username,
+        first_name: "TBD FirstName",
+        last_name: "TBD LastName"
+      }
+    })
+  )
 }
 
 const pop = (obj) => {
@@ -137,11 +149,13 @@ const performOperations = async (mutation, payloads) => {
         })
       );
     case "editAsset":
-      console.log("editPrimary payload", payloads);
-      return API.graphql(graphqlOperation(mutations.updateAsset, { input: payloads }));
-    case "editSecondary":
-      console.log("editSecondary payload", payloads);
-      return API.graphql(graphqlOperation(mutations.updateAsset, { input: payloads }));
+      console.log("editAsset payload", payloads);
+      if (payloads.id) {
+        return API.graphql(graphqlOperation(mutations.updateAsset, { input: payloads }));
+      }
+      payloads = pop(payloads);
+      console.log("no ID payload", payloads);
+      return API.graphql(graphqlOperation(mutations.createAsset, { input: payloads }));
     case "editLeadership":
       return Promise.all(payloads.map(payload => {
           if (payload.id) {

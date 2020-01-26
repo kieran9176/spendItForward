@@ -73,14 +73,17 @@ class Avatar extends React.Component {
   getInitialValues = (type) => {
     const { profile } = this.props;
     const { assets, posts, currentPost } = profile;
-    const { id } = currentPost;
+
     if (type === "Primary") {
-      return assets.filter(asset => asset.type === "primary")[0];
+      if (assets) return assets.filter(asset => asset.type === "primary")[0];
+      return { id: null, type: "primary", url: "" }
     }
     if (type === "Secondary") {
-      return assets.filter(asset => asset.type === "secondary")[0];
+      if (assets) return assets.filter(asset => asset.type === "secondary")[0];
+      return { id: null, type: "secondary", url: "" }
     }
     if (type === "postImage") {
+      const { id } = currentPost;
       const post = posts.filter(postObj => postObj.id === id)[0];
       return { id, url: post.image_url };
     }
@@ -101,7 +104,7 @@ class Avatar extends React.Component {
 
   async handleUpload(fileObj) {
     const { dispatch } = this.props;
-    const { dispatchEdit, id } = this.state;
+    const { dispatchEdit, id, type } = this.state;
 
     this.setState({
       loading: true
@@ -162,7 +165,7 @@ class Avatar extends React.Component {
 
         dispatch({
           type: dispatchEdit,
-          payload: {id, url}
+          payload: { type, id, url }
         });
 
         this.render();

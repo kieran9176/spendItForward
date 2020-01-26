@@ -160,7 +160,7 @@ class ArticlesForm extends React.Component {
 
     switch (type) {
       case "Articles":
-        return articles;
+        return articles || [];
       default:
         notification.error({
           message: "Could not get initial values.",

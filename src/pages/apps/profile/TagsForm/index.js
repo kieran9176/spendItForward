@@ -44,8 +44,6 @@ class TagsForm extends React.Component {
           const { deleteCoursework, deleteSkill } = response.data;
           let tagValue = "";
 
-          console.log("deleteSkill", deleteSkill)
-
           tags = tags.filter(tag => tag !== removedTag);
           this.setState({ tags });
 
@@ -118,8 +116,6 @@ class TagsForm extends React.Component {
             if (createSkill) {
               const { id } = createSkill;
 
-              console.log("createSkill", createSkill);
-
               tagValue = createSkill.content;
               tags = [...tags, { content: tagValue, id}];
             }
@@ -176,7 +172,7 @@ class TagsForm extends React.Component {
 
   render() {
     const { tags, inputVisible, inputValue } = this.state;
-    const tagChild = tags.map(this.forMap);
+    const tagChild = tags ? tags.map(this.forMap) : null;
 
     return (
       <div>

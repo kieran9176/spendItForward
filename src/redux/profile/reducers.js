@@ -102,7 +102,6 @@ export default function userReducer(state = initialState, action) {
     case actions.EDIT_PRIMARY:
       state.assets = state.assets.map(asset => {
         if (asset.type === "primary") {
-          asset.id = action.payload.id;
           asset.url = action.payload.url;
           return asset;
         }
@@ -112,7 +111,6 @@ export default function userReducer(state = initialState, action) {
     case actions.EDIT_SECONDARY:
       state.assets = state.assets.map(asset => {
         if (asset.type === "secondary") {
-          asset.id = action.payload.id;
           asset.url = action.payload.url;
           return asset;
         }

@@ -267,7 +267,7 @@ class WhatWhereWhenForm extends React.Component {
     console.log("getInitialValues Type", type)
 
     if (type === "Leadership") {
-      return leadership
+      return leadership || [];
     }
     if (type === "Experience") {
       for (let i = 0; i < experience.length; i += 1) {
@@ -283,15 +283,17 @@ class WhatWhereWhenForm extends React.Component {
       return initialValues
     }
     if (type === "Brags") {
-      for (let i = 0; i < brags.length; i += 1) {
-        initialValues.push({
-          position: brags[i].what || null,
-          organization: brags[i].where || null,
-          link: brags[i].url || null,
-          start_date: brags[i].start_date || null,
-          end_date: brags[i].end_date || null,
-          id: brags[i].id || null
-        })
+      if (brags) {
+        for (let i = 0; i < brags.length; i += 1) {
+          initialValues.push({
+            position: brags[i].what || null,
+            organization: brags[i].where || null,
+            link: brags[i].url || null,
+            start_date: brags[i].start_date || null,
+            end_date: brags[i].end_date || null,
+            id: brags[i].id || null
+          })
+        }
       }
       return initialValues
     }

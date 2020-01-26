@@ -93,68 +93,10 @@ export const addArticle = `mutation AddArticle(
 export const createProfile = `mutation CreateProfile($input: CreateProfileInput!) {
   createProfile(input: $input) {
     id
-    account_id
     username
     first_name
     last_name
-    articles {
-      id
-      account_id
-      title
-      caption
-      url
-    }
-    references {
-      id
-      account_id
-      content
-      author_name
-      author_position
-      author_company
-    }
-    experience {
-      id
-      account_id
-      position
-      date
-      company
-      link
-    }
-    leadership {
-      id
-      account_id
-      position
-      date
-      organization
-      link
-    }
-    other {
-      id
-      account_id
-      content
-    }
-    intro {
-      id
-      account_id
-      content
-    }
-    skills {
-      id
-      account_id
-      content
-    }
-    coursework {
-      id
-      account_id
-      course_name
-    }
-    contact {
-      id
-      account_id
-      email
-      phone
-    }
-  }
+   }
 }
 `;
 export const updateProfile = `mutation UpdateProfile($input: UpdateProfileInput!) {
@@ -617,8 +559,6 @@ export const deleteBrag = `mutation DeleteBrags($input: DeleteBragsInput!) {
 `;
 export const createAsset = `mutation CreateAsset($input: CreateAssetInput!) {
   createAsset(input: $input) {
-    id
-    metadata
     url
     type
   }

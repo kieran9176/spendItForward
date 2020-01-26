@@ -43,8 +43,6 @@ export function* LOGIN({payload}) {
       })
     });
 
-  console.log("User", user);
-
   if (user) {
     notification.success({
       message: 'Logged In',
@@ -62,7 +60,7 @@ export function* LOGIN({payload}) {
     const { sub } = attributes;
 
     // Call LOAD_CURRENT_PROFILE after we've fetched the 'sub' attribute from Cognito
-    yield call(LOAD_CURRENT_PROFILE, sub);
+    yield call(LOAD_CURRENT_PROFILE, user);
 
     yield put({
       type: 'user/SET_STATE',
@@ -136,11 +134,11 @@ export function* SIGNUP({payload}) {
       }
     });
 
-    const {username, attributes} = user;
-    const {sub} = attributes;
+    const { username, attributes } = user;
+    const { sub } = attributes;
 
     // Call LOAD_CURRENT_PROFILE after we've fetched the 'sub' attribute from Cognito
-    yield call(LOAD_CURRENT_PROFILE, sub);
+    yield call(LOAD_CURRENT_PROFILE, user);
 
     yield put({
       type: 'user/SET_STATE',
@@ -209,7 +207,7 @@ export function* LOAD_CURRENT_ACCOUNT() {
     const {sub} = attributes;
 
     // Call LOAD_CURRENT_PROFILE after we've fetched the 'sub' attribute from Cognito
-    yield call(LOAD_CURRENT_PROFILE, sub);
+    yield call(LOAD_CURRENT_PROFILE, user);
 
     yield put({
       type: 'user/SET_STATE',

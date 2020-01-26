@@ -1,8 +1,12 @@
 import { all, takeEvery, put } from 'redux-saga/effects'
-import { editProfile, currentAccountProfile, notify } from 'services/profile'
+import { editProfile, getProfile, createProfile, notify } from 'services/profile'
 import actions from './actions'
 
-export function* LOAD_CURRENT_PROFILE(sub) {
+export function* LOAD_CURRENT_PROFILE(user) {
+
+  const { attributes, username } = user;
+  const { sub } = attributes;
+
   yield put({
     type: 'profile/SET_STATE',
     payload: {
@@ -10,13 +14,23 @@ export function* LOAD_CURRENT_PROFILE(sub) {
     }
   });
 
-  const profileResponse = yield currentAccountProfile(sub);
+  let profileResponse = yield getProfile(sub);
+
+  if (!profileResponse.data.getProfile) yield createProfile(username)
+    .then(async () => {
+      profileResponse = await getProfile(sub);
+    });
+
   const profile = profileResponse.data.getProfile;
 
-  console.log("profileResponse", profileResponse);
-
   if (profile) {
-    const {username, articles, experience, references, intro, skills, coursework, leadership, posts, education, brags, assets} = profile;
+    const { articles, experience, references, intro, skills, coursework, leadership, posts, education, brags } = profile;
+    let { assets } = profile;
+    if (!assets) assets = [
+      { id: null, type: "primary", url: "" },
+      { id: null, type: "secondary", url: "" },
+    ];
+
     yield put({
       type: 'profile/SET_STATE',
       payload: {
@@ -146,7 +160,9 @@ export async function EDIT_PRIMARY({ payload }) {
 
   console.log("edit primary payload", payload);
 
-  const response = editProfile("editAsset", payload);
+  const payloadObj = { id: payload.id, type: "primary", url: payload.url };
+  const response = editProfile("editAsset", payloadObj );
+
   response.then(values => {
     if (values === "Could not update profile") notify("failure");
     else notify("success", "assets")
@@ -158,7 +174,9 @@ export async function EDIT_SECONDARY({ payload }) {
 
   console.log("edit secondary payload", payload);
 
-  const response = editProfile("editAsset", payload);
+  const payloadObj = { id: payload.id, type: "secondary", url: payload.url };
+  const response = editProfile("editAsset", payloadObj );
+
   response.then(values => {
     if (values === "Could not update profile") notify("failure");
     else notify("success", "assets")
