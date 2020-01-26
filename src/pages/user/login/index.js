@@ -10,7 +10,7 @@ import styles from './style.module.scss'
 class Login extends Component {
   onSubmit = event => {
     event.preventDefault()
-    const { form, dispatch } = this.props
+    const {form, dispatch} = this.props
     form.validateFields((error, values) => {
       if (!error) {
         dispatch({
@@ -31,15 +31,10 @@ class Login extends Component {
         <Helmet title="Login" />
         <div className={`${styles.title} login-heading`}>
           <h1>
-            <strong>WELCOME TO CLEAN UI REACT - REACT REDUX ADMIN TEMPLATE</strong>
+            <strong>WELCOME TO HATCH - HOME OF THE DIGITAL YOU</strong>
           </h1>
           <p>
-            Pluggable enterprise-level react application framework.
-            <br />
-            An excellent front-end solution for web applications built upon Ant Design and UmiJS.
-            <br />
-            Credentials for testing purposes - <strong>admin@mediatec.org</strong> /{' '}
-            <strong>cleanui</strong>
+            <strong>Let&#39;s get started.</strong>
           </p>
         </div>
         <div className={styles.block}>
@@ -54,13 +49,13 @@ class Login extends Component {
                   <Form layout="vertical" hideRequiredMark onSubmit={this.onSubmit}>
                     <Form.Item label="Email">
                       {form.getFieldDecorator('email', {
-                        initialValue: 'admin@mediatec.org',
+                        initialValue: 'Kieran',
                         rules: [{ required: true, message: 'Please input your e-mail address' }],
                       })(<Input size="default" />)}
                     </Form.Item>
                     <Form.Item label="Password">
                       {form.getFieldDecorator('password', {
-                        initialValue: 'cleanui',
+                        initialValue: '',
                         rules: [{ required: true, message: 'Please input your password' }],
                       })(<Input size="default" type="password" />)}
                     </Form.Item>
@@ -85,15 +80,12 @@ class Login extends Component {
                       >
                         Login
                       </Button>
-                      <span className="ml-3 register-link">
-                        <a
-                          href="javascript: void(0);"
-                          className="text-primary utils__link--underlined"
-                        >
-                          Register
-                        </a>{' '}
-                        if you don&#39;t have account
-                      </span>
+                      <Link
+                        to="/user/signup"
+                        className="utils__link--blue utils__link--underlined pull-right"
+                      >
+                        Signup
+                      </Link>
                     </div>
                     <div className="form-group">
                       <p>Use another service to Log In</p>

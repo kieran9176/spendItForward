@@ -1,15 +1,14 @@
+import uuidv4 from 'uuid/v4'
+
+const id = uuidv4();
+
 export async function getLeftMenuData() {
   return [
-    {
-      title: 'Settings',
-      key: 'settings',
-      icon: 'icmn icmn-cog utils__spin-delayed--pseudo-selector',
-    },
     {
       divider: true,
     },
     {
-      title: 'Dashboard Alpha',
+      title: 'Dashboard',
       key: 'dashboardAlpha',
       url: '/dashboard/alpha',
       icon: 'icmn icmn-home',
@@ -29,21 +28,21 @@ export async function getLeftMenuData() {
           title: 'Feed',
           key: 'blogFeed',
           url: '/blog/feed',
-          pro: true,
-        },
-        {
-          title: 'Post',
-          key: 'blogPost',
-          url: '/blog/post',
-          pro: true,
+          pro: false,
         },
         {
           title: 'Add Post',
           key: 'blogAddPost',
-          url: '/blog/add-blog-post',
-          pro: true,
-        },
+          url: `/blog/edit-blog-post/true/${id}`,
+          pro: true
+        }
       ],
+    },
+    {
+      title: 'Assets',
+      key: 'assets',
+      url: '/apps/gallery',
+      icon: 'icmn icmn-image',
     },
     {
       divider: true,
@@ -53,12 +52,7 @@ export async function getLeftMenuData() {
 export async function getTopMenuData() {
   return [
     {
-      title: 'Settings',
-      key: 'settings',
-      icon: 'icmn icmn-cog utils__spin-delayed--pseudo-selector',
-    },
-    {
-      title: 'Dashboard Alpha',
+      title: 'Dashboard',
       key: 'dashboardAlpha',
       url: '/dashboard/alpha',
       icon: 'icmn icmn-home',
@@ -78,21 +72,21 @@ export async function getTopMenuData() {
           title: 'Feed',
           key: 'blogFeed',
           url: '/blog/feed',
-          pro: true,
-        },
-        {
-          title: 'Post',
-          key: 'blogPost',
-          url: '/blog/post',
-          pro: true,
+          pro: true
         },
         {
           title: 'Add Post',
           key: 'blogAddPost',
-          url: '/blog/add-blog-post',
-          pro: true,
-        },
+          url: `/blog/edit-blog-post/true/${id}`,
+          pro: true
+        }
       ],
+    },
+    {
+      title: 'Assets',
+      key: 'assets',
+      url: '/apps/gallery',
+      icon: 'icmn icmn-image',
     }
   ]
 }

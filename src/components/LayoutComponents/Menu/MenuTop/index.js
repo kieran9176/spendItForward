@@ -73,6 +73,7 @@ class MenuTop extends React.Component {
       if (item.divider) {
         return <Divider key={Math.random()} />
       }
+
       if (item.url) {
         return (
           <Menu.Item key={key} disabled={disabled}>

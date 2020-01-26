@@ -1,14 +1,17 @@
 import React from 'react'
+import { connect } from 'react-redux'
 import { Helmet } from 'react-helmet'
 import InfoCard from 'components/CleanUIComponents/InfoCard'
 import ProductCard from 'components/CleanUIComponents/ProductCard'
 
+@connect(({ profile }) => ({ profile }))
 class ProductsCatalog extends React.Component {
   static defaultProps = {
     pathName: 'Products Catalog',
-  }
+  };
 
   render() {
+
     return (
       <div>
         <Helmet title="Products Catalog" />
@@ -41,42 +44,7 @@ class ProductsCatalog extends React.Component {
           <div className="card-body">
             <div className="productsCatalog">
               <div className="row">
-                <div className="col-xl-4 col-lg-6 col-md-12">
-                  <ProductCard />
-                </div>
-                <div className="col-xl-4 col-lg-6 col-md-12">
-                  <ProductCard />
-                </div>
-                <div className="col-xl-4 col-lg-6 col-md-12">
-                  <ProductCard />
-                </div>
-                <div className="col-xl-4 col-lg-6 col-md-12">
-                  <ProductCard />
-                </div>
-                <div className="col-xl-4 col-lg-6 col-md-12">
-                  <ProductCard />
-                </div>
-                <div className="col-xl-4 col-lg-6 col-md-12">
-                  <ProductCard />
-                </div>
-                <div className="col-xl-4 col-lg-6 col-md-12">
-                  <ProductCard />
-                </div>
-                <div className="col-xl-4 col-lg-6 col-md-12">
-                  <ProductCard />
-                </div>
-                <div className="col-xl-4 col-lg-6 col-md-12">
-                  <ProductCard />
-                </div>
-                <div className="col-xl-4 col-lg-6 col-md-12">
-                  <ProductCard />
-                </div>
-                <div className="col-xl-4 col-lg-6 col-md-12">
-                  <ProductCard />
-                </div>
-                <div className="col-xl-4 col-lg-6 col-md-12">
-                  <ProductCard />
-                </div>
+                <ProductCard />
               </div>
             </div>
           </div>

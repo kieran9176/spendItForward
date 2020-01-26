@@ -1,0 +1,14 @@
+{
+    "develop": {
+        "awscloudformation": {
+            "AuthRoleName": "consolefrontend-develop-20190811163343-authRole",
+            "UnauthRoleArn": "arn:aws:iam::273116933489:role/consolefrontend-develop-20190811163343-unauthRole",
+            "AuthRoleArn": "arn:aws:iam::273116933489:role/consolefrontend-develop-20190811163343-authRole",
+            "Region": "us-east-2",
+            "DeploymentBucketName": "consolefrontend-develop-20190811163343-deployment",
+            "UnauthRoleName": "consolefrontend-develop-20190811163343-unauthRole",
+            "StackName": "consolefrontend-develop-20190811163343",
+            "StackId": "arn:aws:cloudformation:us-east-2:273116933489:stack/consolefrontend-develop-20190811163343/4fbb8410-bc77-11e9-84dc-0ae094dd1c0e"
+        }
+    }
+}

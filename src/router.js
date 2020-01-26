@@ -26,6 +26,11 @@ const routes = [
     component: loadable(() => import('pages/user/forgot')),
     exact: true,
   },
+  {
+    path: '/user/signup',
+    component: loadable(() => import('pages/user/signup')),
+    exact: true,
+  },
 
   // Dashboards
   {
@@ -221,8 +226,13 @@ const routes = [
     component: loadable(() => import('pages/blog/post')),
     exact: true,
   },
+  // {
+  //   path: '/blog/add-blog-post',
+  //   component: loadable(() => import('pages/blog/add-blog-post')),
+  //   exact: true,
+  // },
   {
-    path: '/blog/add-blog-post',
+    path: `/blog/edit-blog-post/:status/:id`,
     component: loadable(() => import('pages/blog/add-blog-post')),
     exact: true,
   },

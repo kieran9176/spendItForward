@@ -1,8 +1,10 @@
 {
   "productStatus": "new",
-  "productImg": "resources/images/ecommerce/004.jpg",
-  "productName": "Comfortable chair",
-  "productPrice": "$542.00",
-  "productOldPrice": "$356.00",
-  "productNote": "Including Lenses"
+  "productImg": "https://d2czw3op36f92o.cloudfront.net/kieranpaul-source/Screen Shot 2020-01-05 at 12.14.27 PM.png",
+  "productName": "Noah",
+  "productPrice": "Free",
+  "productOldPrice": "$500",
+  "productNote": "Included with Subscription",
+  "productSelected": false,
+  "productDemo": "http://development.kieranpaul.com.s3-website.us-east-2.amazonaws.com/"
 }
