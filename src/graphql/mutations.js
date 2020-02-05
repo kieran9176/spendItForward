@@ -67,7 +67,7 @@ export const addProfile = `mutation AddProfile($first_name: String, $last_name: 
     }
   }
 }
-`;
+`
 export const addArticle = `mutation AddArticle(
   $account_id: String!
   $id: ID
@@ -89,7 +89,7 @@ export const addArticle = `mutation AddArticle(
     url
   }
 }
-`;
+`
 export const createProfile = `mutation CreateProfile($input: CreateProfileInput!) {
   createProfile(input: $input) {
     id
@@ -98,7 +98,7 @@ export const createProfile = `mutation CreateProfile($input: CreateProfileInput!
     last_name
    }
 }
-`;
+`
 export const updateProfile = `mutation UpdateProfile($input: UpdateProfileInput!) {
   updateProfile(input: $input) {
     id
@@ -165,7 +165,7 @@ export const updateProfile = `mutation UpdateProfile($input: UpdateProfileInput!
     }
   }
 }
-`;
+`
 export const deleteProfile = `mutation DeleteProfile($input: DeleteProfileInput!) {
   deleteProfile(input: $input) {
     id
@@ -232,7 +232,7 @@ export const deleteProfile = `mutation DeleteProfile($input: DeleteProfileInput!
     }
   }
 }
-`;
+`
 export const createArticle = `mutation CreateArticle($input: CreateArticleInput!) {
   createArticle(input: $input) {
     id
@@ -242,7 +242,7 @@ export const createArticle = `mutation CreateArticle($input: CreateArticleInput!
     url
   }
 }
-`;
+`
 export const updateArticle = `mutation UpdateArticle($input: UpdateArticleInput!) {
   updateArticle(input: $input) {
     id
@@ -252,7 +252,7 @@ export const updateArticle = `mutation UpdateArticle($input: UpdateArticleInput!
     url
   }
 }
-`;
+`
 export const deleteArticle = `mutation DeleteArticle($input: DeleteArticleInput!) {
   deleteArticle(input: $input) {
     id
@@ -262,7 +262,7 @@ export const deleteArticle = `mutation DeleteArticle($input: DeleteArticleInput!
     url
   }
 }
-`;
+`
 export const createReference = `mutation CreateReference($input: CreateReferenceInput!) {
   createReference(input: $input) {
     id
@@ -273,7 +273,7 @@ export const createReference = `mutation CreateReference($input: CreateReference
     author_company
   }
 }
-`;
+`
 export const updateReference = `mutation UpdateReference($input: UpdateReferenceInput!) {
   updateReference(input: $input) {
     id
@@ -284,7 +284,7 @@ export const updateReference = `mutation UpdateReference($input: UpdateReference
     author_company
   }
 }
-`;
+`
 export const deleteReference = `mutation DeleteReference($input: DeleteReferenceInput!) {
   deleteReference(input: $input) {
     id
@@ -295,7 +295,7 @@ export const deleteReference = `mutation DeleteReference($input: DeleteReference
     author_company
   }
 }
-`;
+`
 export const createExperience = `mutation CreateExperience($input: CreateExperienceInput!) {
   createExperience(input: $input) {
     position
@@ -305,7 +305,7 @@ export const createExperience = `mutation CreateExperience($input: CreateExperie
     link
   }
 }
-`;
+`
 export const updateExperience = `mutation UpdateExperience($input: UpdateExperienceInput!) {
   updateExperience(input: $input) {
     id
@@ -316,13 +316,13 @@ export const updateExperience = `mutation UpdateExperience($input: UpdateExperie
     link
   }
 }
-`;
+`
 export const deleteExperience = `mutation DeleteExperience($input: DeleteExperienceInput!) {
   deleteExperience(input: $input) {
     id
   }
 }
-`;
+`
 export const createLeadership = `mutation CreateLeadership($input: CreateLeadershipInput!) {
   createLeadership(input: $input) {
     id
@@ -334,7 +334,7 @@ export const createLeadership = `mutation CreateLeadership($input: CreateLeaders
     link
   }
 }
-`;
+`
 export const updateLeadership = `mutation UpdateLeadership($input: UpdateLeadershipInput!) {
   updateLeadership(input: $input) {
     id
@@ -346,13 +346,13 @@ export const updateLeadership = `mutation UpdateLeadership($input: UpdateLeaders
     link
   }
 }
-`;
+`
 export const deleteLeadership = `mutation DeleteLeadership($input: DeleteLeadershipInput!) {
   deleteLeadership(input: $input) {
     id
   }
 }
-`;
+`
 export const createOther = `mutation CreateOther($input: CreateOtherInput!) {
   createOther(input: $input) {
     id
@@ -360,7 +360,7 @@ export const createOther = `mutation CreateOther($input: CreateOtherInput!) {
     content
   }
 }
-`;
+`
 export const updateOther = `mutation UpdateOther($input: UpdateOtherInput!) {
   updateOther(input: $input) {
     id
@@ -368,7 +368,7 @@ export const updateOther = `mutation UpdateOther($input: UpdateOtherInput!) {
     content
   }
 }
-`;
+`
 export const deleteOther = `mutation DeleteOther($input: DeleteOtherInput!) {
   deleteOther(input: $input) {
     id
@@ -376,23 +376,21 @@ export const deleteOther = `mutation DeleteOther($input: DeleteOtherInput!) {
     content
   }
 }
-`;
+`
 export const createIntro = `mutation CreateIntro($input: CreateIntroInput!) {
   createIntro(input: $input) {
     id
-    account_id
     content
   }
 }
-`;
+`
 export const updateIntro = `mutation UpdateIntro($input: UpdateIntroInput!) {
   updateIntro(input: $input) {
     id
-    account_id
     content
   }
 }
-`;
+`
 export const deleteIntro = `mutation DeleteIntro($input: DeleteIntroInput!) {
   deleteIntro(input: $input) {
     id
@@ -400,14 +398,14 @@ export const deleteIntro = `mutation DeleteIntro($input: DeleteIntroInput!) {
     content
   }
 }
-`;
+`
 export const createSkill = `mutation CreateSkill($input: CreateSkillInput!) {
   createSkill(input: $input) {
     id
     content
   }
 }
-`;
+`
 export const updateSkill = `mutation UpdateSkill($input: UpdateSkillInput!) {
   updateSkill(input: $input) {
     id
@@ -415,21 +413,21 @@ export const updateSkill = `mutation UpdateSkill($input: UpdateSkillInput!) {
     content
   }
 }
-`;
+`
 export const deleteSkill = `mutation DeleteSkill($input: DeleteSkillInput!) {
   deleteSkill(input: $input) {
     id
     content
   }
 }
-`;
+`
 export const createCoursework = `mutation CreateCoursework($input: CreateCourseworkInput!) {
   createCoursework(input: $input) {
     id
     course_name
   }
 }
-`;
+`
 export const updateCoursework = `mutation UpdateCoursework($input: UpdateCourseworkInput!) {
   updateCoursework(input: $input) {
     id
@@ -437,7 +435,7 @@ export const updateCoursework = `mutation UpdateCoursework($input: UpdateCoursew
     course_name
   }
 }
-`;
+`
 export const deleteCoursework = `mutation DeleteCoursework($input: DeleteCourseworkInput!) {
   deleteCoursework(input: $input) {
     id
@@ -445,7 +443,7 @@ export const deleteCoursework = `mutation DeleteCoursework($input: DeleteCoursew
     course_name
   }
 }
-`;
+`
 export const createContact = `mutation CreateContact($input: CreateContactInput!) {
   createContact(input: $input) {
     id
@@ -454,7 +452,7 @@ export const createContact = `mutation CreateContact($input: CreateContactInput!
     phone
   }
 }
-`;
+`
 export const updateContact = `mutation UpdateContact($input: UpdateContactInput!) {
   updateContact(input: $input) {
     id
@@ -463,7 +461,7 @@ export const updateContact = `mutation UpdateContact($input: UpdateContactInput!
     phone
   }
 }
-`;
+`
 export const deleteContact = `mutation DeleteContact($input: DeleteContactInput!) {
   deleteContact(input: $input) {
     id
@@ -472,7 +470,7 @@ export const deleteContact = `mutation DeleteContact($input: DeleteContactInput!
     phone
   }
 }
-`;
+`
 export const createPost = `mutation CreatePost($input: CreatePostInput!) {
   createPost(input: $input) {
     id
@@ -484,7 +482,7 @@ export const createPost = `mutation CreatePost($input: CreatePostInput!) {
     series
   }
 }
-`;
+`
 export const updatePost = `mutation UpdatePost($input: UpdatePostInput!) {
   updatePost(input: $input) {
     id
@@ -496,7 +494,7 @@ export const updatePost = `mutation UpdatePost($input: UpdatePostInput!) {
     series
   }
 }
-`;
+`
 export const createEducation = `mutation CreateEducation($input: CreateEducationInput!) {
   createEducation(input: $input) {
     degreeType
@@ -509,7 +507,7 @@ export const createEducation = `mutation CreateEducation($input: CreateEducation
     graduationDate
   }
 }
-`;
+`
 export const updateEducation = `mutation UpdateEducation($input: UpdateEducationInput!) {
   updateEducation(input: $input) {
     id
@@ -523,13 +521,13 @@ export const updateEducation = `mutation UpdateEducation($input: UpdateEducation
     graduationDate
   }
 }
-`;
+`
 export const deleteEducation = `mutation DeleteEducation($input: DeleteEducationInput!) {
   deleteEducation(input: $input) {
     id
   }
 }
-`;
+`
 export const createBrag = `mutation CreateBrags($input: CreateBragsInput!) {
   createBrags(input: $input) {
     what
@@ -539,7 +537,7 @@ export const createBrag = `mutation CreateBrags($input: CreateBragsInput!) {
     end_date
   }
 }
-`;
+`
 export const updateBrag = `mutation UpdateBrags($input: UpdateBragsInput!) {
   updateBrags(input: $input) {
     id
@@ -550,20 +548,20 @@ export const updateBrag = `mutation UpdateBrags($input: UpdateBragsInput!) {
     end_date
   }
 }
-`;
+`
 export const deleteBrag = `mutation DeleteBrags($input: DeleteBragsInput!) {
   deleteBrags(input: $input) {
     id
   }
 }
-`;
+`
 export const createAsset = `mutation CreateAsset($input: CreateAssetInput!) {
   createAsset(input: $input) {
     url
     type
   }
 }
-`;
+`
 export const updateAsset = `mutation UpdateAsset($input: UpdateAssetInput!) {
   updateAsset(input: $input) {
     id
@@ -572,6 +570,4 @@ export const updateAsset = `mutation UpdateAsset($input: UpdateAssetInput!) {
     type
   }
 }
-`;
-
-
+`

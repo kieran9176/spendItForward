@@ -5,34 +5,36 @@ import { Helmet } from 'react-helmet'
 import EducationForm from './EducationForm'
 import WhatWhenWhereForm from './WhatWhereWhenForm'
 import TagsForm from './TagsForm'
-import ArticleForm from './ArticleForm';
+import TextForm from './TextForm'
+import ArticleForm from './ArticleForm'
 import style from './style.module.scss'
-import { triggerDevelopmentBuild } from "../../../services/website"
+import { triggerDevelopmentBuild } from '../../../services/website'
 
 @connect(({ profile }) => ({ profile }))
 class ProfileApp extends React.Component {
-
-  handleClick = async (e) => {
-    e.preventDefault();
+  handleClick = async e => {
+    e.preventDefault()
     const { profile } = this.props
     const { sub } = profile
-    const response = await triggerDevelopmentBuild(sub);
-    console.log("handleClick Response", response)
-  };
+    const response = await triggerDevelopmentBuild(sub)
+    console.log('handleClick Response', response)
+  }
 
   render() {
-
-    const {Panel} = Collapse;
+    const { Panel } = Collapse
 
     const text = {
-      experienceText: "Input any professional experience you have. If you don't have any, no worries! This is an optional section.",
-      skillsText: "You got mad skillz?",
-      courseworkText: "Tell us about all that ish you done learnt.",
-      educationText: "Maths? Science? MBA in Craft Beer Brewing?",
-      leadershipText: "If your actions inspire others to dream more, learn more, do more and become more, you are a leader.",
-      bragsText: "Brag about yourself. You deserve it.",
-      articlesText: "What have you been reading lately?"
-    };
+      experienceText:
+        "Input any professional experience you have. If you don't have any, no worries! This is an optional section.",
+      introText: 'The secret to getting ahead is getting started ...',
+      skillsText: 'You got mad skillz?',
+      courseworkText: 'Tell us about all that ish you done learnt.',
+      educationText: 'Maths? Science? MBA in Craft Beer Brewing?',
+      leadershipText:
+        'If your actions inspire others to dream more, learn more, do more and become more, you are a leader.',
+      bragsText: 'Brag about yourself. You deserve it.',
+      articlesText: 'What have you been reading lately?',
+    }
 
     const customPanelStyle = {
       background: '#ffffff',
@@ -40,19 +42,29 @@ class ProfileApp extends React.Component {
       marginBottom: 24,
       border: 0,
       overflow: 'hidden',
-    };
+    }
 
     return (
       <div>
         <Helmet title="Profile" />
         <div className={style.profile}>
-          <Button type="primary" onClick={this.handleClick} style={{marginBottom: 24}}>
+          <Button type="primary" onClick={this.handleClick} style={{ marginBottom: 24 }}>
             Build Development Site
           </Button>
           <Collapse
             bordered={false}
+            defaultActiveKey={['1']}
+            expandIcon={({ isActive }) => <Icon type="caret-right" rotate={isActive ? 90 : 0} />}
+          >
+            <Panel header="Intro" key="1" style={customPanelStyle}>
+              <p>{text.introText}</p>
+              <TextForm type="Intro" />
+            </Panel>
+          </Collapse>
+          <Collapse
+            bordered={false}
             defaultActiveKey={['2']}
-            expandIcon={({isActive}) => <Icon type="caret-right" rotate={isActive ? 90 : 0} />}
+            expandIcon={({ isActive }) => <Icon type="caret-right" rotate={isActive ? 90 : 0} />}
           >
             <Panel header="Experience" key="1" style={customPanelStyle}>
               <p>{text.experienceText}</p>
@@ -62,7 +74,7 @@ class ProfileApp extends React.Component {
           <Collapse
             bordered={false}
             defaultActiveKey={['2']}
-            expandIcon={({isActive}) => <Icon type="caret-right" rotate={isActive ? 90 : 0} />}
+            expandIcon={({ isActive }) => <Icon type="caret-right" rotate={isActive ? 90 : 0} />}
           >
             <Panel header="Skills" key="2" style={customPanelStyle}>
               <p>{text.skillsText}</p>
@@ -72,7 +84,7 @@ class ProfileApp extends React.Component {
           <Collapse
             bordered={false}
             defaultActiveKey={['3']}
-            expandIcon={({isActive}) => <Icon type="caret-right" rotate={isActive ? 90 : 0} />}
+            expandIcon={({ isActive }) => <Icon type="caret-right" rotate={isActive ? 90 : 0} />}
           >
             <Panel header="Coursework" key="3" style={customPanelStyle}>
               <p>{text.courseworkText}</p>
@@ -82,7 +94,7 @@ class ProfileApp extends React.Component {
           <Collapse
             bordered={false}
             defaultActiveKey={['1']}
-            expandIcon={({isActive}) => <Icon type="caret-right" rotate={isActive ? 90 : 0} />}
+            expandIcon={({ isActive }) => <Icon type="caret-right" rotate={isActive ? 90 : 0} />}
           >
             <Panel header="Education" key="4" style={customPanelStyle}>
               <p>{text.educationText}</p>
@@ -92,7 +104,7 @@ class ProfileApp extends React.Component {
           <Collapse
             bordered={false}
             defaultActiveKey={['1']}
-            expandIcon={({isActive}) => <Icon type="caret-right" rotate={isActive ? 90 : 0} />}
+            expandIcon={({ isActive }) => <Icon type="caret-right" rotate={isActive ? 90 : 0} />}
           >
             <Panel header="Leadership" key="4" style={customPanelStyle}>
               <p>{text.leadershipText}</p>
@@ -102,7 +114,7 @@ class ProfileApp extends React.Component {
           <Collapse
             bordered={false}
             defaultActiveKey={['1']}
-            expandIcon={({isActive}) => <Icon type="caret-right" rotate={isActive ? 90 : 0} />}
+            expandIcon={({ isActive }) => <Icon type="caret-right" rotate={isActive ? 90 : 0} />}
           >
             <Panel header="Above and Beyond / Brags" key="5" style={customPanelStyle}>
               <p>{text.bragsText}</p>
@@ -112,7 +124,7 @@ class ProfileApp extends React.Component {
           <Collapse
             bordered={false}
             defaultActiveKey={['1']}
-            expandIcon={({isActive}) => <Icon type="caret-right" rotate={isActive ? 90 : 0} />}
+            expandIcon={({ isActive }) => <Icon type="caret-right" rotate={isActive ? 90 : 0} />}
           >
             <Panel header="Favorite Articles" key="6" style={customPanelStyle}>
               <p>{text.articlesText}</p>

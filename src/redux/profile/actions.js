@@ -2,6 +2,7 @@ const actions = {
   CREATE_PROFILE: 'profile/CREATE_PROFILE',
   SET_STATE: 'profile/SET_STATE',
   EDIT_PROFILE: 'profile/EDIT_PROFILE',
+  EDIT_INTRO: 'profile/EDIT_INTRO',
   CURRENT_POST: 'profile/CURRENT_POST',
   CREATE_POST: 'profile/CREATE_POST',
   SAVE_POST: 'profile/SAVE_POST',
@@ -20,7 +21,7 @@ const actions = {
   EDIT_BRAGS: 'profile/EDIT_BRAGS',
   DELETE_BRAGS: 'profile/DELETE_BRAGS',
   SELECT_THEME: 'profile/SELECT_THEME',
-  LOAD_CURRENT_PROFILE: 'profile/LOAD_CURRENT_PROFILE'
+  LOAD_CURRENT_PROFILE: 'profile/LOAD_CURRENT_PROFILE',
 }
 
 export default actions
