@@ -1,7 +1,9 @@
 import React from 'react'
 import { connect } from 'react-redux'
+import { API, graphqlOperation } from 'aws-amplify'
 import { Collapse, Icon, Button } from 'antd'
 import { Helmet } from 'react-helmet'
+import * as subscriptions from 'graphql/subscriptions'
 import EducationForm from './EducationForm'
 import WhatWhenWhereForm from './WhatWhereWhenForm'
 import TagsForm from './TagsForm'
@@ -9,9 +11,23 @@ import TextForm from './TextForm'
 import ArticleForm from './ArticleForm'
 import style from './style.module.scss'
 import { triggerDevelopmentBuild } from '../../../services/website'
+// import { siteMetadataSubscription } from "../../../services/profileSubscriptions";
 
 @connect(({ profile }) => ({ profile }))
 class ProfileApp extends React.Component {
+  subscription = API.graphql(
+    graphqlOperation(subscriptions.onCreateSiteMetadata2, {
+      account_id: 'dee652d3-30d5-460d-bea1-4e8df10101d7',
+    }),
+  ).subscribe({
+    next: siteMetadata => console.log(siteMetadata),
+  })
+
+  componentDidMount() {
+    console.log('about to subscribe')
+    console.log(this.subscription)
+  }
+
   handleClick = async e => {
     e.preventDefault()
     const { profile } = this.props

@@ -2,6 +2,8 @@ import { API, graphqlOperation } from 'aws-amplify'
 import { notification } from 'antd'
 import * as subscriptions from 'graphql/subscriptions'
 
+console.log('hello, world (from profileSubscriptions')
+
 export default function notify(status, type) {
   if (status === 'success') {
     notification.success({
@@ -18,7 +20,7 @@ export default function notify(status, type) {
 }
 
 // Subscribe to creation of Todo
-const siteMetadataSubscription = API.graphql(
+export const siteMetadataSubscription = API.graphql(
   graphqlOperation(subscriptions.onCreateSiteMetadata),
 ).subscribe({
   next: siteMetadata => console.log('returned siteMetadata', siteMetadata),

@@ -10,7 +10,7 @@ export const articles = `query Articles {
     url
   }
 }
-`;
+`
 export const getProfile = `query GetProfile($account_id: String!) {
   getProfile(account_id: $account_id) {
     username
@@ -69,8 +69,8 @@ export const getProfile = `query GetProfile($account_id: String!) {
     site_metadata {
     	development_url
       production_url
-      source_s3_bucket_path
-      destination_bucket
+      appId
+      repoUrl
       theme
     }
     assets {
@@ -111,7 +111,7 @@ export const getProfile = `query GetProfile($account_id: String!) {
     }
   }
 }
-`;
+`
 export const listProfiles = `query ListProfiles(
   $filter: TableProfileFilterInput
   $limit: Int
@@ -186,7 +186,7 @@ export const listProfiles = `query ListProfiles(
     nextToken
   }
 }
-`;
+`
 export const getArticle = `query GetArticle($id: ID!) {
   getArticle(id: $id) {
     id
@@ -196,7 +196,7 @@ export const getArticle = `query GetArticle($id: ID!) {
     url
   }
 }
-`;
+`
 export const listArticles = `query ListArticles(
   $filter: TableArticleFilterInput
   $limit: Int
@@ -213,7 +213,7 @@ export const listArticles = `query ListArticles(
     nextToken
   }
 }
-`;
+`
 export const queryArticlesByIdAccountIdIndex = `query QueryArticlesByIdAccountIdIndex(
   $account_id: String!
   $first: Int
@@ -234,7 +234,7 @@ export const queryArticlesByIdAccountIdIndex = `query QueryArticlesByIdAccountId
     nextToken
   }
 }
-`;
+`
 export const getReference = `query GetReference($id: ID!) {
   getReference(id: $id) {
     id
@@ -245,7 +245,7 @@ export const getReference = `query GetReference($id: ID!) {
     author_company
   }
 }
-`;
+`
 export const listReferences = `query ListReferences(
   $filter: TableReferenceFilterInput
   $limit: Int
@@ -263,7 +263,7 @@ export const listReferences = `query ListReferences(
     nextToken
   }
 }
-`;
+`
 export const queryReferencesByIdAccountIdIndex = `query QueryReferencesByIdAccountIdIndex(
   $account_id: String!
   $first: Int
@@ -285,7 +285,7 @@ export const queryReferencesByIdAccountIdIndex = `query QueryReferencesByIdAccou
     nextToken
   }
 }
-`;
+`
 export const getExperience = `query GetExperience($id: ID!) {
   getExperience(id: $id) {
     id
@@ -296,7 +296,7 @@ export const getExperience = `query GetExperience($id: ID!) {
     link
   }
 }
-`;
+`
 export const listExperiences = `query ListExperiences(
   $filter: TableExperienceFilterInput
   $limit: Int
@@ -314,7 +314,7 @@ export const listExperiences = `query ListExperiences(
     nextToken
   }
 }
-`;
+`
 export const queryExperiencesByIdAccountIdIndex = `query QueryExperiencesByIdAccountIdIndex(
   $account_id: String!
   $first: Int
@@ -336,7 +336,7 @@ export const queryExperiencesByIdAccountIdIndex = `query QueryExperiencesByIdAcc
     nextToken
   }
 }
-`;
+`
 export const getLeadership = `query GetLeadership($id: ID!) {
   getLeadership(id: $id) {
     id
@@ -347,7 +347,7 @@ export const getLeadership = `query GetLeadership($id: ID!) {
     link
   }
 }
-`;
+`
 export const listLeaderships = `query ListLeaderships(
   $filter: TableLeadershipFilterInput
   $limit: Int
@@ -365,7 +365,7 @@ export const listLeaderships = `query ListLeaderships(
     nextToken
   }
 }
-`;
+`
 export const queryLeadershipsByIdAccountIdIndex = `query QueryLeadershipsByIdAccountIdIndex(
   $account_id: String!
   $first: Int
@@ -387,7 +387,7 @@ export const queryLeadershipsByIdAccountIdIndex = `query QueryLeadershipsByIdAcc
     nextToken
   }
 }
-`;
+`
 export const getOther = `query GetOther($id: ID!) {
   getOther(id: $id) {
     id
@@ -395,7 +395,7 @@ export const getOther = `query GetOther($id: ID!) {
     content
   }
 }
-`;
+`
 export const listOthers = `query ListOthers(
   $filter: TableOtherFilterInput
   $limit: Int
@@ -410,7 +410,7 @@ export const listOthers = `query ListOthers(
     nextToken
   }
 }
-`;
+`
 export const queryOthersByIdAccountIdIndex = `query QueryOthersByIdAccountIdIndex(
   $account_id: String!
   $first: Int
@@ -429,7 +429,7 @@ export const queryOthersByIdAccountIdIndex = `query QueryOthersByIdAccountIdInde
     nextToken
   }
 }
-`;
+`
 export const getIntro = `query GetIntro($id: ID!) {
   getIntro(id: $id) {
     id
@@ -437,7 +437,7 @@ export const getIntro = `query GetIntro($id: ID!) {
     content
   }
 }
-`;
+`
 export const listIntros = `query ListIntros(
   $filter: TableIntroFilterInput
   $limit: Int
@@ -452,7 +452,7 @@ export const listIntros = `query ListIntros(
     nextToken
   }
 }
-`;
+`
 export const queryIntrosByIdAccountIdIndex = `query QueryIntrosByIdAccountIdIndex(
   $account_id: String!
   $first: Int
@@ -471,7 +471,7 @@ export const queryIntrosByIdAccountIdIndex = `query QueryIntrosByIdAccountIdInde
     nextToken
   }
 }
-`;
+`
 export const getSkill = `query GetSkill($id: ID!) {
   getSkill(id: $id) {
     id
@@ -479,7 +479,7 @@ export const getSkill = `query GetSkill($id: ID!) {
     content
   }
 }
-`;
+`
 export const listSkills = `query ListSkills(
   $filter: TableSkillFilterInput
   $limit: Int
@@ -494,7 +494,7 @@ export const listSkills = `query ListSkills(
     nextToken
   }
 }
-`;
+`
 export const querySkillsByIdAccountIdIndex = `query QuerySkillsByIdAccountIdIndex(
   $account_id: String!
   $first: Int
@@ -513,7 +513,7 @@ export const querySkillsByIdAccountIdIndex = `query QuerySkillsByIdAccountIdInde
     nextToken
   }
 }
-`;
+`
 export const getCoursework = `query GetCoursework($id: ID!) {
   getCoursework(id: $id) {
     id
@@ -521,7 +521,7 @@ export const getCoursework = `query GetCoursework($id: ID!) {
     course_name
   }
 }
-`;
+`
 export const listCourseworks = `query ListCourseworks(
   $filter: TableCourseworkFilterInput
   $limit: Int
@@ -536,7 +536,7 @@ export const listCourseworks = `query ListCourseworks(
     nextToken
   }
 }
-`;
+`
 export const queryCourseworksByIdAccountIdIndex = `query QueryCourseworksByIdAccountIdIndex(
   $account_id: String!
   $first: Int
@@ -555,7 +555,7 @@ export const queryCourseworksByIdAccountIdIndex = `query QueryCourseworksByIdAcc
     nextToken
   }
 }
-`;
+`
 export const getContact = `query GetContact($id: ID!) {
   getContact(id: $id) {
     id
@@ -564,7 +564,7 @@ export const getContact = `query GetContact($id: ID!) {
     phone
   }
 }
-`;
+`
 export const listContacts = `query ListContacts(
   $filter: TableContactFilterInput
   $limit: Int
@@ -580,7 +580,7 @@ export const listContacts = `query ListContacts(
     nextToken
   }
 }
-`;
+`
 export const queryContactsByIdAccountIdIndex = `query QueryContactsByIdAccountIdIndex(
   $account_id: String!
   $first: Int
@@ -600,4 +600,4 @@ export const queryContactsByIdAccountIdIndex = `query QueryContactsByIdAccountId
     nextToken
   }
 }
-`;
+`

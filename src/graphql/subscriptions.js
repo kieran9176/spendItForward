@@ -710,3 +710,16 @@ export const onCreateSiteMetadata = `subscription OnCreateSiteMetadata(
   }
 }
 `
+
+export const onCreateSiteMetadata2 = `subscription onCreateSiteMetadata($account_id: String) {
+  onCreateSiteMetadata (
+    account_id: $account_id
+  ) {
+    id
+    development_url
+    appId
+    repoUrl
+    theme
+  }
+}
+`
