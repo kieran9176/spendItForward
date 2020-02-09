@@ -1,24 +1,24 @@
 import { all, takeEvery, put } from 'redux-saga/effects'
-import { editProfile, getProfile, createProfile, notify } from 'services/profile'
+import {
+  editProfile,
+  getProfile,
+  createProfile,
+  createProfileResources,
+  notify,
+} from 'services/profile'
+import uuidv4 from 'uuid/v4'
 import actions from './actions'
 
-export function* LOAD_CURRENT_PROFILE(user) {
-  const { attributes, username } = user
-  const { sub } = attributes
-
-  yield put({
-    type: 'profile/SET_STATE',
-    payload: {
-      loading: true,
-    },
-  })
-
+export function* LOAD_CURRENT_PROFILE(username, sub) {
   let profileResponse = yield getProfile(sub)
 
-  if (!profileResponse.data.getProfile)
+  if (!profileResponse.data.getProfile) {
     yield createProfile(username).then(async () => {
       profileResponse = await getProfile(sub)
+      const id = uuidv4()
+      createProfileResources(sub, id)
     })
+  }
 
   const profile = profileResponse.data.getProfile
 

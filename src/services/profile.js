@@ -1,4 +1,5 @@
 import { API, graphqlOperation } from 'aws-amplify'
+import AWS from 'aws-sdk'
 import { notification } from 'antd'
 import * as mutations from 'graphql/mutations'
 import * as queries from 'graphql/queries'
@@ -34,6 +35,50 @@ export async function createProfile(username) {
       },
     }),
   )
+}
+
+export async function createProfileResources(accountId, repoName) {
+  console.log('hit createProfileResources')
+
+  // const accountId = 'dee652d3-30d5-460d-bea1-4e8df10101d7';
+  // const repoName = 'kieran-hugo-2';
+
+  AWS.config.update({
+    accessKeyId: process.env.REACT_APP_S3_ACCESS_KEY_ID,
+    secretAccessKey: process.env.REACT_APP_S3_SECRET_ACCESS_KEY,
+  })
+
+  AWS.config.update({ region: 'us-east-2' })
+
+  // Create publish parameters
+
+  console.log(accountId)
+  console.log(repoName)
+
+  const payload = JSON.stringify(`{\"accountId\": \"${accountId}\",\"repoName\": \"${repoName}\"}`)
+
+  // const params = {
+  //   Message: JSON.stringify("{\"accountId\":\"abc123\",\"repoName\":\"kieran-hugo-2\"}"), /* required */
+  //   TopicArn: 'arn:aws:sns:us-east-2:273116933489:create-repo-sns'
+  // };
+
+  const params = {
+    Message: payload /* required */,
+    TopicArn: 'arn:aws:sns:us-east-2:273116933489:create-repo-sns',
+  }
+
+  // Create promise and SNS service object
+  const publishTextPromise = new AWS.SNS({ apiVersion: '2010-03-31' }).publish(params).promise()
+
+  // Handle promise's fulfilled/rejected states
+  publishTextPromise
+    .then(function(data) {
+      console.log(`Message ${params.Message} send sent to the topic ${params.TopicArn}`)
+      console.log(`MessageID is ${data.MessageId}`)
+    })
+    .catch(function(err) {
+      console.error(err, err.stack)
+    })
 }
 
 const pop = obj => {

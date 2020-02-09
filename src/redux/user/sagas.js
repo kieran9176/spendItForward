@@ -58,7 +58,7 @@ export function* LOGIN({ payload }) {
     const { sub } = attributes
 
     // Call LOAD_CURRENT_PROFILE after we've fetched the 'sub' attribute from Cognito
-    yield call(LOAD_CURRENT_PROFILE, user)
+    yield call(LOAD_CURRENT_PROFILE, username, sub)
 
     yield put({
       type: 'user/SET_STATE',
@@ -107,7 +107,7 @@ export function* SIGNUP({ payload }) {
   }
 
   // const user = yield Auth.signUp(email, password, attributes)
-  const user = yield Auth.signUp(signupPayload)
+  const userObj = yield Auth.signUp(signupPayload)
     // .then(() => true)
     .catch(error => {
       notification.warning({
@@ -116,7 +116,7 @@ export function* SIGNUP({ payload }) {
       })
     })
 
-  if (user) {
+  if (userObj) {
     notification.success({
       message: 'Logged In',
       description: 'You have successfully signed up for Éirí!',
@@ -129,16 +129,20 @@ export function* SIGNUP({ payload }) {
       },
     })
 
-    const { username, attributes } = user
-    const { sub } = attributes
+    console.log('signup user', userObj)
+
+    const { user } = userObj
+    const { username } = user
+    const { userSub } = userObj
+    // const { sub } = attributes
 
     // Call LOAD_CURRENT_PROFILE after we've fetched the 'sub' attribute from Cognito
-    yield call(LOAD_CURRENT_PROFILE, user)
+    yield call(LOAD_CURRENT_PROFILE, username, userSub)
 
     yield put({
       type: 'user/SET_STATE',
       payload: {
-        id: sub,
+        id: userSub,
         name: username,
         email,
         avatar: null,
@@ -196,11 +200,13 @@ export function* LOAD_CURRENT_ACCOUNT() {
       },
     })
 
+    // const payload = "{\"accountId\": \"Sample message for iOS endpoints\",\"repoName\": \"Sample message for iOS endpoints\"}";
+
     const { username, attributes } = user
     const { sub } = attributes
 
     // Call LOAD_CURRENT_PROFILE after we've fetched the 'sub' attribute from Cognito
-    yield call(LOAD_CURRENT_PROFILE, user)
+    yield call(LOAD_CURRENT_PROFILE, username, sub)
 
     yield put({
       type: 'user/SET_STATE',
