@@ -1,17 +1,11 @@
 import uuidv4 from 'uuid/v4'
 
-const id = uuidv4();
+const id = uuidv4()
 
 export async function getLeftMenuData() {
   return [
     {
       divider: true,
-    },
-    {
-      title: 'Dashboard',
-      key: 'dashboardAlpha',
-      url: '/dashboard/alpha',
-      icon: 'icmn icmn-home',
     },
     {
       title: 'Profile',
@@ -34,8 +28,8 @@ export async function getLeftMenuData() {
           title: 'Add Post',
           key: 'blogAddPost',
           url: `/blog/edit-blog-post/true/${id}`,
-          pro: true
-        }
+          pro: true,
+        },
       ],
     },
     {
@@ -45,18 +39,18 @@ export async function getLeftMenuData() {
       icon: 'icmn icmn-image',
     },
     {
+      title: 'Settings',
+      key: 'settings',
+      url: '/ecommerce/cart',
+      icon: 'icmn icmn-cog',
+    },
+    {
       divider: true,
     },
-   ]
+  ]
 }
 export async function getTopMenuData() {
   return [
-    {
-      title: 'Dashboard',
-      key: 'dashboardAlpha',
-      url: '/dashboard/alpha',
-      icon: 'icmn icmn-home',
-    },
     {
       title: 'Profile',
       key: 'profile',
@@ -72,14 +66,14 @@ export async function getTopMenuData() {
           title: 'Feed',
           key: 'blogFeed',
           url: '/blog/feed',
-          pro: true
+          pro: true,
         },
         {
           title: 'Add Post',
           key: 'blogAddPost',
           url: `/blog/edit-blog-post/true/${id}`,
-          pro: true
-        }
+          pro: true,
+        },
       ],
     },
     {
@@ -87,6 +81,12 @@ export async function getTopMenuData() {
       key: 'assets',
       url: '/apps/gallery',
       icon: 'icmn icmn-image',
-    }
+    },
+    {
+      title: 'Settings',
+      key: 'settings',
+      url: '/ecommerce/cart',
+      icon: 'icmn icmn-cog',
+    },
   ]
 }

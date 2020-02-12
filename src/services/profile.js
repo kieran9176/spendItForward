@@ -62,6 +62,10 @@ export async function createProfileResources(accountId, repoName) {
   //   TopicArn: 'arn:aws:sns:us-east-2:273116933489:create-repo-sns'
   // };
 
+  // "{\"id\":\"fbf9c7db-76f0-47ae-a445-1cf8609aa009\",\"accountId\":\"dee652d3-30d5-460d-bea1-4e8df10101d7\",\"devUrl\":\"https://dev.fakeurl.com\",\"prodUrl\":\"https://prod.fakeurl.com\",\"theme\":\"noah\",\"appId\":\"appid123\",\"repoName\":\"kieran-hugo-2\"}"
+
+  // accountId, devUrl, prodUrl, theme, appId, repoName
+
   const params = {
     Message: payload /* required */,
     TopicArn: 'arn:aws:sns:us-east-2:273116933489:create-repo-sns',

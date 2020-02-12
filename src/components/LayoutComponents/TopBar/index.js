@@ -1,16 +1,27 @@
 import React from 'react'
+import { connect } from 'react-redux'
 import { Button } from 'antd'
 import { FormattedMessage } from 'react-intl'
-import HomeMenu from './HomeMenu'
+// import HomeMenu from './HomeMenu'
 import ProjectManagement from './ProjectManagement'
 import IssuesHistory from './IssuesHistory'
 import LiveSearch from './LiveSearch'
-import BitcoinPrice from './BitcoinPrice'
+// import BitcoinPrice from './BitcoinPrice'
 import ProfileMenu from './ProfileMenu'
-import LanguageSelector from './LanguageSelector'
+// import LanguageSelector from './LanguageSelector'
 import styles from './style.module.scss'
+import { triggerDevelopmentBuild } from '../../../services/website'
 
+@connect(({ profile }) => ({ profile }))
 class TopBar extends React.Component {
+  handleClick = async e => {
+    e.preventDefault()
+    const { profile } = this.props
+    const { sub } = profile
+    const response = await triggerDevelopmentBuild(sub)
+    console.log('handleClick Response', response)
+  }
+
   render() {
     return (
       <div className={styles.topbar}>
@@ -29,19 +40,20 @@ class TopBar extends React.Component {
           rel="noopener noreferrer"
           className="mr-4 d-none d-sm-inline"
         >
-          <Button type="danger">
+          <Button type="success" onClick={this.handleClick}>
             <FormattedMessage id="topBar.buyNow" />
           </Button>
         </a>
-        <div className="mr-4">
-          <BitcoinPrice />
-        </div>
-        <div className="mr-4">
-          <LanguageSelector />
-        </div>
-        <div className="mr-4">
-          <HomeMenu />
-        </div>
+        <a
+          href="https://themeforest.net/item/clean-ui-react-admin-template/21938700"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="mr-4 d-none d-sm-inline"
+        >
+          <Button type="danger" onClick={this.handleClick}>
+            <FormattedMessage id="topBar.buyNow" />
+          </Button>
+        </a>
         <ProfileMenu />
       </div>
     )

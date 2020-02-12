@@ -1,6 +1,6 @@
 import React from 'react'
 import { Menu, Dropdown } from 'antd'
-import { FormattedMessage } from 'react-intl'
+// import { FormattedMessage } from 'react-intl'
 import { Link } from 'react-router-dom'
 import styles from './style.module.scss'
 
@@ -60,9 +60,7 @@ class IssuesHistory extends React.Component {
         <div className={styles.dropdown}>
           <i className={`${styles.icon} icmn-folder-open`} />
           <span className="d-none d-xl-inline">
-            <strong>
-              <FormattedMessage id="topBar.issuesHistory" />
-            </strong>
+            <strong>FAQs</strong>
           </span>
         </div>
       </Dropdown>
