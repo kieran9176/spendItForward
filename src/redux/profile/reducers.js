@@ -82,7 +82,8 @@ export default function userReducer(state = initialState, action) {
       return state
     case actions.EDIT_POST_LOCALLY:
       state.posts = state.posts.map(post => {
-        if (post.id === action.payload.id)
+        if (post.id === action.payload.id) {
+          console.log('edit post locally, action.payload.url', action.payload.url)
           return {
             id: action.payload.id,
             title: action.payload.title || post.title,
@@ -91,6 +92,7 @@ export default function userReducer(state = initialState, action) {
             image_url: action.payload.url || post.image_url,
             date_published: action.payload.date_published || post.date_published,
           }
+        }
         return post
       })
       return state

@@ -16,10 +16,25 @@ class BlogFeed extends React.Component {
     latestArticlesData: data.latestArticlesData,
   }
 
+  createArticleUrl = key => {
+    const imageRequest = JSON.stringify({
+      bucket: 'cf-simple-s3-origin-cloudfrontfors3-273116933489',
+      key,
+      edits: {
+        resize: {
+          width: 500,
+          height: 300,
+          fit: 'inside',
+        },
+      },
+    })
+    return `https://d1kk667yopfgms.cloudfront.net/${btoa(imageRequest)}`
+  }
+
   render() {
-    const { articlesCategories, latestArticlesData } = this.state;
-    const { profile } = this.props;
-    const { firstName, lastName, posts } = profile;
+    const { articlesCategories, latestArticlesData } = this.state
+    const { profile } = this.props
+    const { firstName, lastName, posts } = profile
 
     return (
       <div>
@@ -35,7 +50,7 @@ class BlogFeed extends React.Component {
               <div className="row">
                 <div className="col-lg-8">
                   <main>
-                    {posts.map( (article) => (
+                    {posts.map(article => (
                       <article className={styles.article} key={Math.random()}>
                         <div className={styles.information}>
                           <div className={styles.title}>
@@ -46,17 +61,30 @@ class BlogFeed extends React.Component {
                           <ul className={styles.meta}>
                             <li className={styles.metaInf}>
                               <span>
-                                Post By <a href="javascript: void(0);">{firstName} {lastName}</a>
+                                Post By{' '}
+                                <a href="javascript: void(0);">
+                                  {firstName} {lastName}
+                                </a>
                               </span>
                             </li>
                             <li className={styles.metaInf}>
-                              <span className={styles.articleDate}>{`On ${article.date_published}`}</span>
+                              <span className={styles.articleDate}>
+                                {`On ${article.date_published}`}
+                              </span>
                             </li>
                           </ul>
                         </div>
                         <div className={styles.articleMedia}>
                           <a href="javascript: void(0);" className={styles.link}>
-                            <img src={article.image_url ? article.image_url : 'https://d2czw3op36f92o.cloudfront.net/kieranpaul-source/16722614_10206532771118488_3464355287299241309_o.jpg'} alt={article.title} />
+                            {console.log('image_url', article.image_url)}
+                            <img
+                              src={
+                                article.image_url
+                                  ? this.createArticleUrl(article.image_url)
+                                  : 'https://d2czw3op36f92o.cloudfront.net/kieranpaul-source/16722614_10206532771118488_3464355287299241309_o.jpg'
+                              }
+                              alt={article.title}
+                            />
                           </a>
                         </div>
                         <div className={styles.content}>

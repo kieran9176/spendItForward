@@ -2,6 +2,7 @@ import React from 'react'
 import { connect } from 'react-redux'
 import { Form, Upload, Icon, message, Progress, notification } from 'antd'
 import AWS from 'aws-sdk'
+import uuidv4 from 'uuid/v4'
 import styles from './style.css'
 
 // function getBase64(img, callback) {
@@ -100,6 +101,21 @@ class Avatar extends React.Component {
     }
   }
 
+  createArticleUrl = key => {
+    const imageRequest = JSON.stringify({
+      bucket: 'cf-simple-s3-origin-cloudfrontfors3-273116933489',
+      key,
+      edits: {
+        resize: {
+          width: 500,
+          height: 300,
+          fit: 'inside',
+        },
+      },
+    })
+    return `https://d1kk667yopfgms.cloudfront.net/${btoa(imageRequest)}`
+  }
+
   async handleUpload(fileObj) {
     const { dispatch } = this.props
     const { dispatchEdit, id, type } = this.state
@@ -114,11 +130,12 @@ class Avatar extends React.Component {
     })
 
     const S3 = new AWS.S3()
-    const encoded = encodeURI(fileObj.name)
+    const key = uuidv4()
+    // const encoded = encodeURI(fileObj.name)
 
     const objParams = {
       Bucket: 'cf-simple-s3-origin-cloudfrontfors3-273116933489',
-      Key: `kieranpaul-source/${encoded}`,
+      Key: key,
       Body: fileObj,
       ContentType: fileObj.type,
     }
@@ -147,7 +164,7 @@ class Avatar extends React.Component {
           progress: false,
         })
 
-        const resURL = `https://d2czw3op36f92o.cloudfront.net/kieranpaul-source/${encoded}`
+        const resURL = this.createArticleUrl(key)
 
         // getBase64(fileObj, imageUrl =>
         //   this.setState({
@@ -159,11 +176,11 @@ class Avatar extends React.Component {
           url: resURL,
         })
 
-        const { url } = this.state
+        console.log('dispatchPayload', { type, id, key })
 
         dispatch({
           type: dispatchEdit,
-          payload: { type, id, url },
+          payload: { type, id, url: key },
         })
 
         this.render()
@@ -175,8 +192,6 @@ class Avatar extends React.Component {
   render() {
     const { loading, progress, url } = this.state
     const { form, post } = this.props
-
-    // const initialValues = this.getInitialValues(type);
 
     if (form && post) {
       form.getFieldDecorator('image_url', {
