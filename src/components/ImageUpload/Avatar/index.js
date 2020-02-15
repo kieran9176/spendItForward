@@ -20,9 +20,9 @@ function beforeUpload(file) {
     })
     console.log('You can only upload JPG/PNG file!')
   }
-  const isLt2M = file.size / 1024 / 1024 < 5
+  const isLt2M = file.size / 1024 / 1024 < 10
   if (!isLt2M) {
-    message.error('Image must be smaller than 5MB!')
+    message.error('Image must be smaller than 10MB!')
     notification.error({
       message: 'File too large.',
       description: 'Image must be smaller than 5MB!',
@@ -164,7 +164,7 @@ class Avatar extends React.Component {
           progress: false,
         })
 
-        const resURL = this.createArticleUrl(key)
+        // const resURL = this.createArticleUrl(key)
 
         // getBase64(fileObj, imageUrl =>
         //   this.setState({
@@ -173,7 +173,7 @@ class Avatar extends React.Component {
         // );
 
         this.setState({
-          url: resURL,
+          url: key,
         })
 
         console.log('dispatchPayload', { type, id, key })
@@ -232,7 +232,11 @@ class Avatar extends React.Component {
         beforeUpload={beforeUpload}
         onChange={this.handleChange}
       >
-        {url ? <img src={url} alt="avatar" style={{ width: '100%' }} /> : uploadButton}
+        {url ? (
+          <img src={this.createArticleUrl(url)} alt="avatar" style={{ width: '100%' }} />
+        ) : (
+          uploadButton
+        )}
       </Upload>
     )
   }
