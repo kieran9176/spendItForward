@@ -1,7 +1,7 @@
 import React from 'react'
 import { connect } from 'react-redux'
 import { API, graphqlOperation } from 'aws-amplify'
-import { Collapse, Icon, Button } from 'antd'
+import { Collapse, Icon } from 'antd'
 import { Helmet } from 'react-helmet'
 import * as subscriptions from 'graphql/subscriptions'
 import EducationForm from './EducationForm'
@@ -10,8 +10,6 @@ import TagsForm from './TagsForm'
 import TextForm from './TextForm'
 import ArticleForm from './ArticleForm'
 import style from './style.module.scss'
-import { triggerDevelopmentBuild } from '../../../services/website'
-// import { siteMetadataSubscription } from "../../../services/profileSubscriptions";
 
 @connect(({ profile }) => ({ profile }))
 class ProfileApp extends React.Component {
@@ -26,14 +24,6 @@ class ProfileApp extends React.Component {
   componentDidMount() {
     console.log('about to subscribe')
     console.log(this.subscription)
-  }
-
-  handleClick = async e => {
-    e.preventDefault()
-    const { profile } = this.props
-    const { sub } = profile
-    const response = await triggerDevelopmentBuild(sub)
-    console.log('handleClick Response', response)
   }
 
   render() {
@@ -64,9 +54,6 @@ class ProfileApp extends React.Component {
       <div>
         <Helmet title="Profile" />
         <div className={style.profile}>
-          <Button type="primary" onClick={this.handleClick} style={{ marginBottom: 24 }}>
-            Build Development Site
-          </Button>
           <Collapse
             bordered={false}
             defaultActiveKey={['1']}

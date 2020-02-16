@@ -56,19 +56,7 @@ export function* LOAD_CURRENT_PROFILE(username, sub) {
         education,
         brags,
         assets,
-        siteMetadata: [
-          {
-            id: '152ab450-df2e-440c-bdcb-a0af51e2d707',
-            account_id: sub,
-            development_url:
-              'http://development.kieranpaul.com.s3-website.us-east-2.amazonaws.com/',
-            production_url: 'http://development.kieranpaul.com.s3-website.us-east-2.amazonaws.com/',
-            destination_bucket: 'development.kieranpaul.com',
-            source_s3_bucket_path: 'kieranpaul-source',
-            theme: 'Noah',
-            themeID: '152ab450-df2e-440c-bdcb-a0af51e2d708',
-          },
-        ],
+        siteMetadata: profile.site_metadata,
         sub,
         themeOptions: [
           {

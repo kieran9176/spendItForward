@@ -67,11 +67,12 @@ export const getProfile = `query GetProfile($account_id: String!) {
       id
     }
     site_metadata {
-    	development_url
+      id
+      development_url
       production_url
+      theme
       appId
       repoUrl
-      theme
     }
     assets {
       type

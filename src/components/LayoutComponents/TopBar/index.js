@@ -2,13 +2,10 @@ import React from 'react'
 import { connect } from 'react-redux'
 import { Button } from 'antd'
 import { FormattedMessage } from 'react-intl'
-// import HomeMenu from './HomeMenu'
 import ProjectManagement from './ProjectManagement'
 import IssuesHistory from './IssuesHistory'
 import LiveSearch from './LiveSearch'
-// import BitcoinPrice from './BitcoinPrice'
 import ProfileMenu from './ProfileMenu'
-// import LanguageSelector from './LanguageSelector'
 import styles from './style.module.scss'
 import { triggerDevelopmentBuild } from '../../../services/website'
 
@@ -41,7 +38,7 @@ class TopBar extends React.Component {
           className="mr-4 d-none d-sm-inline"
         >
           <Button type="success" onClick={this.handleClick}>
-            <FormattedMessage id="topBar.buyNow" />
+            <FormattedMessage id="Publish (Staging)" />
           </Button>
         </a>
         <a
@@ -51,7 +48,7 @@ class TopBar extends React.Component {
           className="mr-4 d-none d-sm-inline"
         >
           <Button type="danger" onClick={this.handleClick}>
-            <FormattedMessage id="topBar.buyNow" />
+            <FormattedMessage id="Publish" />
           </Button>
         </a>
         <ProfileMenu />

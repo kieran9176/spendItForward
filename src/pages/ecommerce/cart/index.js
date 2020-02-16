@@ -1,18 +1,17 @@
 import React from 'react'
-import { Steps, Button, message, Icon, Table, InputNumber } from 'antd'
+import { connect } from 'react-redux'
+import { Steps, Button, message, Icon, Table } from 'antd'
 import { Helmet } from 'react-helmet'
 import Invoice from 'components/CleanUIComponents/Invoice'
 import WrappedCartCheckoutForm from './CheckoutForm/index'
-import data from './data.json'
+// import data from './data.json'
 import styles from './style.module.scss'
 
 const { Step } = Steps
 
+@connect(({ profile }) => ({ profile }))
 class Cart extends React.Component {
-  state = {
-    ordersTableData: [],
-    invoicePrices: {},
-  }
+  state = {}
 
   constructor(props) {
     super(props)
@@ -21,11 +20,46 @@ class Cart extends React.Component {
     }
   }
 
-  componentWillMount() {
-    this.setState({
-      ordersTableData: data.ordersTableData,
-      invoicePrices: data.invoicePrices,
-    })
+  // componentWillMount() {
+  //   this.setState({
+  //   })
+  // }
+
+  getInitialValues = type => {
+    const { profile } = this.props
+    const { siteMetadata } = profile
+
+    if (type === 'siteMetadata') {
+      return siteMetadata || []
+    }
+    return []
+  }
+
+  transformToTable = initialValues => {
+    const data = initialValues[0]
+
+    return {
+      siteMetadataTableData: [
+        {
+          key: '1',
+          number: '1',
+          description: 'Theme',
+          metadata: data.theme,
+        },
+        {
+          key: '2',
+          number: '2',
+          description: 'Staging URL',
+          metadata: data.development_url,
+        },
+        {
+          key: '3',
+          number: '3',
+          description: 'Production URL',
+          metadata: data.production_url,
+        },
+      ],
+    }
   }
 
   next() {
@@ -45,7 +79,10 @@ class Cart extends React.Component {
   }
 
   render() {
-    const { current, ordersTableData, invoicePrices } = this.state
+    const { current } = this.state
+
+    const initialValues = this.getInitialValues('siteMetadata')
+    const { siteMetadataTableData } = this.transformToTable(initialValues)
 
     const columns = [
       {
@@ -55,71 +92,37 @@ class Cart extends React.Component {
       {
         title: 'Description',
         dataIndex: 'description',
+        render: text => <div>{text}</div>,
+      },
+      {
+        title: 'Metadata',
+        dataIndex: 'metadata',
         render: text => (
-          <a className="utils__link--underlined" href="javascript: void(0);">
+          <a
+            className="utils__link--underlined"
+            href={text}
+            target="_blank"
+            rel="noopener noreferrer"
+          >
             {text}
           </a>
-        ),
-      },
-      {
-        title: 'Quantity',
-        dataIndex: 'quantity',
-        render: text => <InputNumber defaultValue={text} size="small" />,
-      },
-      {
-        title: 'Unit Cost',
-        dataIndex: 'unitcost',
-      },
-      {
-        title: 'Total',
-        dataIndex: 'total',
-      },
-      {
-        title: '',
-        dataIndex: '',
-        render: () => (
-          <Button icon="cross" size="small">
-            Remove
-          </Button>
         ),
       },
     ]
 
     const steps = [
       {
-        title: 'Cart',
-        icon: <Icon type="shopping-cart" style={{ fontSize: 40 }} />,
+        title: 'Site Details',
+        icon: <Icon type="solution" style={{ fontSize: 40 }} />,
         content: (
           <div>
             <Table
               className="utils__scrollTable"
               scroll={{ x: '100%' }}
-              dataSource={ordersTableData}
+              dataSource={siteMetadataTableData}
               columns={columns}
               pagination={false}
             />
-            <div className="text-right clearfix mt-4">
-              <div className="pull-right">
-                <p>
-                  Sub - Total amount:{' '}
-                  <strong>
-                    <span>{invoicePrices.invoiceAmount}</span>
-                  </strong>
-                </p>
-                <p>
-                  VAT:{' '}
-                  <strong>
-                    <span>{invoicePrices.invoiceVAT}</span>
-                  </strong>
-                </p>
-                <p>
-                  <strong>
-                    Grand Total: <span>{invoicePrices.invoiceTotal}</span>
-                  </strong>
-                </p>
-                <br />
-              </div>
-            </div>
           </div>
         ),
       },

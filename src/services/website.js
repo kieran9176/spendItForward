@@ -24,8 +24,6 @@ const createPayload = profile => {
     posts,
   } = getProfile
 
-  console.log(process.env.REACT_APP_EDIT_API_KEY)
-
   return {
     languageCode: 'en-us',
     baseURL: 'http://development.kieranpaul.com.s3-website.us-east-2.amazonaws.com/',
@@ -72,31 +70,6 @@ export async function triggerDevelopmentBuild(sub) {
       })
   })
 }
-
-// export async function triggerDevelopmentBuild (sub) {
-//
-//   const profileResponse = getProfileQuery(sub);
-//
-//   console.log("TRIGGER DEV BUILD", );
-//
-//   profileResponse.then(profileObj => {
-//
-//     const payload = createPayload(profileObj)
-//
-//     console.log("Payload", payload)
-//
-//     pbmgmt.post('/edit-then-build', {
-//       "input": `${payload}`,
-//       "stateMachineArn": "arn:aws:states:us-east-2:273116933489:stateMachine:HelloWorldExample"
-//     })
-//       .then(response => {
-//         console.log(response);
-//       })
-//       .catch(error => {
-//         console.log(error);
-//       });
-//   })
-// }
 
 export async function triggerProductionBuild(profile) {
   console.log(profile)
