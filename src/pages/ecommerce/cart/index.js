@@ -4,7 +4,6 @@ import { Steps, Button, message, Icon, Table } from 'antd'
 import { Helmet } from 'react-helmet'
 import Invoice from 'components/CleanUIComponents/Invoice'
 import WrappedCartCheckoutForm from './CheckoutForm/index'
-// import data from './data.json'
 import styles from './style.module.scss'
 
 const { Step } = Steps
@@ -19,11 +18,6 @@ class Cart extends React.Component {
       current: 0,
     }
   }
-
-  // componentWillMount() {
-  //   this.setState({
-  //   })
-  // }
 
   getInitialValues = type => {
     const { profile } = this.props
@@ -44,19 +38,25 @@ class Cart extends React.Component {
           key: '1',
           number: '1',
           description: 'Theme',
-          metadata: data.theme,
+          metadata: data
+            ? data.theme
+            : 'Details pending, will populate ~2 mins from signup (refresh required).',
         },
         {
           key: '2',
           number: '2',
           description: 'Staging URL',
-          metadata: data.development_url,
+          metadata: data
+            ? data.development_url
+            : 'Details pending, will populate ~30 seconds from signup (refresh required).',
         },
         {
           key: '3',
           number: '3',
           description: 'Production URL',
-          metadata: data.production_url,
+          metadata: data
+            ? data.production_url
+            : 'Details pending, will populate ~30 seconds from signup (refresh required).',
         },
       ],
     }

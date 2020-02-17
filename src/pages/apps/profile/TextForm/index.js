@@ -127,18 +127,6 @@ class TextForm extends React.Component {
     }
   }
 
-  // toggleDisabled = (e, index) => {
-  //   const { form } = this.props;
-  //   const { checkboxes } = form.getFieldsValue();
-  //
-  //   form.setFieldsValue({
-  //     checkboxes: checkboxes.map((checked, i) => {
-  //       if (i === index) return !checked;
-  //       return checked
-  //     })
-  //   })
-  // };
-
   handleSubmit = e => {
     e.preventDefault()
     const { form, dispatch, type } = this.props
@@ -165,35 +153,11 @@ class TextForm extends React.Component {
     })
   }
 
-  showModal = (k, index) => {
-    this.setState({
-      // visible: true,
-      k,
-      index,
-    })
-  }
-
-  // handleOk = (e) => {
-  //   e.preventDefault();
-  //   this.setState({
-  //     visible: false,
-  //   });
-  //   this.remove()
-  // };
-
-  // handleCancel = () => {
-  //   this.setState({
-  //     visible: false,
-  //   });
-  // };
-
   setFormState = type => {
     switch (type) {
       case 'Intro':
         this.setState({
           dispatchEdit: 'profile/EDIT_INTRO',
-          // dispatchDelete: 'profile/DELETE_LEADERSHIP',
-          // labels: ["Intro"]
         })
         return 'Intro Success'
       case 'FakeSecondOption':
@@ -251,13 +215,18 @@ class TextForm extends React.Component {
 
     const { keys } = getFieldsValue()
 
+    if (!keys.length) keys.push({})
+
     const textFormItem = keys.map((k, index) => {
       return (
         <div key={k}>
           <Form.Item>
             {getFieldDecorator(`text[${index}]`, {
               validateTrigger: ['onChange', 'onBlur'],
-              initialValue: index < initialValues.length ? initialValues[index].content : '',
+              initialValue:
+                index < initialValues.length
+                  ? initialValues[index].content
+                  : 'Ever since I heard the howling wind ...',
               rules: [
                 {
                   required: true,
@@ -265,13 +234,7 @@ class TextForm extends React.Component {
                   message: 'Please input additional experience or delete this field.',
                 },
               ],
-            })(
-              <TextArea
-                rows={4}
-                placeholder="Ever since I heard the howling wind ..."
-                style={{ width: '60%', marginRight: 8 }}
-              />,
-            )}
+            })(<TextArea rows={4} style={{ width: '60%', marginRight: 8 }} />)}
           </Form.Item>
         </div>
       )

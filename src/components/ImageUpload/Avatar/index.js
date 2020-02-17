@@ -127,6 +127,7 @@ class Avatar extends React.Component {
     AWS.config.update({
       accessKeyId: process.env.REACT_APP_S3_ACCESS_KEY_ID,
       secretAccessKey: process.env.REACT_APP_S3_SECRET_ACCESS_KEY,
+      region: 'us-east-1',
     })
 
     const S3 = new AWS.S3()
@@ -172,11 +173,13 @@ class Avatar extends React.Component {
         //   })
         // );
 
+        console.log('handleUpload key', key)
+
         this.setState({
           url: key,
         })
 
-        console.log('dispatchPayload', { type, id, key })
+        // console.log('dispatchPayload', { type, id, key });
 
         dispatch({
           type: dispatchEdit,
@@ -232,6 +235,7 @@ class Avatar extends React.Component {
         beforeUpload={beforeUpload}
         onChange={this.handleChange}
       >
+        {console.log('upload url', url)}
         {url ? (
           <img src={this.createArticleUrl(url)} alt="avatar" style={{ width: '100%' }} />
         ) : (

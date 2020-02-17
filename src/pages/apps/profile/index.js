@@ -1,9 +1,9 @@
 import React from 'react'
 import { connect } from 'react-redux'
-import { API, graphqlOperation } from 'aws-amplify'
+// import { API, graphqlOperation } from 'aws-amplify'
 import { Collapse, Icon } from 'antd'
 import { Helmet } from 'react-helmet'
-import * as subscriptions from 'graphql/subscriptions'
+// import * as subscriptions from 'graphql/subscriptions'
 import EducationForm from './EducationForm'
 import WhatWhenWhereForm from './WhatWhereWhenForm'
 import TagsForm from './TagsForm'
@@ -13,18 +13,18 @@ import style from './style.module.scss'
 
 @connect(({ profile }) => ({ profile }))
 class ProfileApp extends React.Component {
-  subscription = API.graphql(
-    graphqlOperation(subscriptions.onCreateSiteMetadata2, {
-      account_id: 'dee652d3-30d5-460d-bea1-4e8df10101d7',
-    }),
-  ).subscribe({
-    next: siteMetadata => console.log(siteMetadata),
-  })
-
-  componentDidMount() {
-    console.log('about to subscribe')
-    console.log(this.subscription)
-  }
+  // subscription = API.graphql(
+  //   graphqlOperation(subscriptions.onCreateSiteMetadata2, {
+  //     account_id: 'dee652d3-30d5-460d-bea1-4e8df10101d7',
+  //   }),
+  // ).subscribe({
+  //   next: siteMetadata => console.log(siteMetadata),
+  // })
+  //
+  // componentDidMount() {
+  //   console.log('about to subscribe')
+  //   console.log(this.subscription)
+  // }
 
   render() {
     const { Panel } = Collapse

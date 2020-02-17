@@ -38,11 +38,6 @@ export async function createProfile(username) {
 }
 
 export async function createProfileResources(accountId, repoName) {
-  console.log('hit createProfileResources')
-
-  // const accountId = 'dee652d3-30d5-460d-bea1-4e8df10101d7';
-  // const repoName = 'kieran-hugo-2';
-
   AWS.config.update({
     accessKeyId: process.env.REACT_APP_S3_ACCESS_KEY_ID,
     secretAccessKey: process.env.REACT_APP_S3_SECRET_ACCESS_KEY,
@@ -50,21 +45,7 @@ export async function createProfileResources(accountId, repoName) {
 
   AWS.config.update({ region: 'us-east-2' })
 
-  // Create publish parameters
-
-  console.log(accountId)
-  console.log(repoName)
-
   const payload = JSON.stringify(`{\"accountId\": \"${accountId}\",\"repoName\": \"${repoName}\"}`)
-
-  // const params = {
-  //   Message: JSON.stringify("{\"accountId\":\"abc123\",\"repoName\":\"kieran-hugo-2\"}"), /* required */
-  //   TopicArn: 'arn:aws:sns:us-east-2:273116933489:create-repo-sns'
-  // };
-
-  // "{\"id\":\"fbf9c7db-76f0-47ae-a445-1cf8609aa009\",\"accountId\":\"dee652d3-30d5-460d-bea1-4e8df10101d7\",\"devUrl\":\"https://dev.fakeurl.com\",\"prodUrl\":\"https://prod.fakeurl.com\",\"theme\":\"noah\",\"appId\":\"appid123\",\"repoName\":\"kieran-hugo-2\"}"
-
-  // accountId, devUrl, prodUrl, theme, appId, repoName
 
   const params = {
     Message: payload /* required */,
@@ -153,12 +134,13 @@ const createPayloads = (mutation, data) => {
         : {
             input: {
               title: data.title,
-              caption: data.caption,
+              description: data.caption,
               image_url: data.image_url,
               markdown: data.markdown,
               html: data.html,
               date_published: data.date_published,
-              series: data.series,
+              series: 'posts',
+              draft: true,
             },
           }
     default:
