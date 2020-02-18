@@ -1,8 +1,7 @@
 @import 'assets/styles/mixins.scss';
 
 .blogFeed {
-  max-width: rem(1000);
-  margin: 0 auto;
+  margin: 0;
 }
 
 .article {
@@ -65,7 +64,6 @@
 
 .footer {
   padding: rem(10) 0;
-  border-top: 1px solid $gray-border;
   border-bottom: 1px solid $gray-border;
 }
 

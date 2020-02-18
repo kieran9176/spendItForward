@@ -2,7 +2,7 @@ import React from 'react'
 import { connect } from 'react-redux'
 import { Link, withRouter } from 'react-router-dom'
 import { injectIntl } from 'react-intl'
-import { Row, Col, Card, Divider } from 'antd'
+import { Row, Col, Card, Divider, Button } from 'antd'
 import { convertToRaw, EditorState, ContentState } from 'draft-js'
 import htmlToDraft from 'html-to-draftjs'
 import draftToMarkdown from 'draftjs-to-markdown'
@@ -130,6 +130,11 @@ class BlogAddPost extends React.Component {
     }
   }
 
+  onSubmit = e => {
+    e.preventDefault()
+    console.log(this.state)
+  }
+
   convertToReadable = editorState => {
     const rawContentState = convertToRaw(editorState.getCurrentContent())
     const markdown = draftToMarkdown(rawContentState)
@@ -220,10 +225,8 @@ class BlogAddPost extends React.Component {
           >
             <Link to="/blog/feed/">
               <button className={styles.close} type="button" onClick={this.hideLiveSearch}>
-                <Link to="/blog/feed/">
-                  <span className="utils__visibilityHidden">Закрыть</span>
-                  <i className="icmn-cross" />
-                </Link>
+                <span className="utils__visibilityHidden">Закрыть</span>
+                <i className="icmn-cross" />
               </button>
             </Link>
             <div className="container-fluid">
@@ -265,6 +268,9 @@ class BlogAddPost extends React.Component {
                     </div>
                   </div>
                 </div>
+                <Button type="primary" onClick={this.onSubmit}>
+                  Save
+                </Button>
               </div>
             </div>
           </div>
