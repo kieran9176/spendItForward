@@ -141,15 +141,14 @@ export async function EDIT_PROFILE({ payload }) {
   })
 }
 
-export async function SAVE_POST({ payload }) {
-  const { mutation, post } = payload
+export async function EDIT_POST({ payload }) {
+  console.log("SAVE_POST here's what we'll save:", payload)
 
-  console.log("here's what we'll save:", payload)
-
-  const response = editProfile(mutation, post)
+  const response = editProfile('editPost', payload)
   response.then(values => {
+    console.log('editProfile RESPONSE', response)
     if (values === 'Could not update profile') notify('failure')
-    else notify(mutation)
+    else notify('success', 'posts')
   })
 }
 
@@ -296,7 +295,7 @@ export async function DELETE_BRAGS(payload) {
 export default function* rootSaga() {
   yield all([
     takeEvery(actions.EDIT_PROFILE, EDIT_PROFILE),
-    takeEvery(actions.SAVE_POST, SAVE_POST),
+    takeEvery(actions.EDIT_POST, EDIT_POST),
     takeEvery(actions.EDIT_PRIMARY, EDIT_PRIMARY),
     takeEvery(actions.EDIT_SECONDARY, EDIT_SECONDARY),
     takeEvery(actions.SELECT_THEME, SELECT_THEME),

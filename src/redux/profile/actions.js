@@ -5,7 +5,6 @@ const actions = {
   EDIT_INTRO: 'profile/EDIT_INTRO',
   CURRENT_POST: 'profile/CURRENT_POST',
   CREATE_POST: 'profile/CREATE_POST',
-  SAVE_POST: 'profile/SAVE_POST',
   EDIT_POST_LOCALLY: 'profile/EDIT_POST_LOCALLY',
   EDIT_POST: 'profile/EDIT_POST',
   EDIT_PRIMARY: 'profile/EDIT_PRIMARY',

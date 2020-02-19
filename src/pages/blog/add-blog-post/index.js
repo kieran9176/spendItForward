@@ -132,7 +132,16 @@ class BlogAddPost extends React.Component {
 
   onSubmit = e => {
     e.preventDefault()
+    const { dispatch } = this.props
+
     console.log(this.state)
+
+    const { id, title, html, markdown, url } = this.state
+
+    dispatch({
+      type: 'profile/EDIT_POST',
+      payload: { id, title, html, markdown, url },
+    })
   }
 
   convertToReadable = editorState => {

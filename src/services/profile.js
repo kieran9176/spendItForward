@@ -246,10 +246,11 @@ const performOperations = async (mutation, payloads) => {
       )
     case 'deleteBrag':
       return API.graphql(graphqlOperation(mutations.deleteBrag, { input: payloads.data }))
-    case 'updatePosts':
-      return payloads.input.id
-        ? API.graphql(graphqlOperation(mutations.updatePost, payloads))
-        : API.graphql(graphqlOperation(mutations.createPost, payloads))
+    case 'editPost':
+      console.log('performOperations --> editPost payloads', payloads)
+      return payloads.id
+        ? API.graphql(graphqlOperation(mutations.updatePost, { input: payloads }))
+        : API.graphql(graphqlOperation(mutations.createPost, { input: payloads }))
     case 'editEducation':
       return Promise.all(
         payloads.map(payload => {
@@ -264,8 +265,8 @@ const performOperations = async (mutation, payloads) => {
       return API.graphql(graphqlOperation(mutations.deleteEducation, { input: payloads.data }))
     case 'createPost':
       return API.graphql(graphqlOperation(mutations.createPost, { input: payloads }))
-    case 'updatePost':
-      return API.graphql(graphqlOperation(mutations.updatePost, { input: payloads }))
+    // case 'updatePost':
+    //   return API.graphql(graphqlOperation(mutations.updatePost, { input: payloads }));
     default:
       return 'Could not update profile'
   }
@@ -304,7 +305,7 @@ export async function editProfile(mutation, data) {
       return performOperations(mutation, data)
     case 'createPost':
       return performOperations(mutation, data)
-    case 'updatePost':
+    case 'editPost':
       return performOperations(mutation, data)
     case 'editEducation':
       return performOperations(mutation, data)
