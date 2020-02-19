@@ -21,6 +21,7 @@ import {
   OrderedListButton,
   CodeBlockButton,
 } from 'draft-js-buttons'
+import uuidv4 from 'uuid/v4'
 import './styles/draft.css'
 import './styles/plugin.css'
 import editorStyles from './styles/editorStyles.css'
@@ -106,10 +107,10 @@ class BlogAddPost extends React.Component {
   setFormState = () => {
     const { profile } = this.props
     const { posts, currentPost } = profile
-    const { id } = currentPost
+    const { id, status } = currentPost
     let post = {}
 
-    if (id) {
+    if (status !== 'new') {
       ;[post] = posts.filter(postObj => postObj.id === id)
       const { html, markdown, url, title } = post
       const contentBlock = htmlToDraft(html)
@@ -123,10 +124,29 @@ class BlogAddPost extends React.Component {
           markdown,
           id,
           url,
+          status: 'existing',
         })
       }
     } else {
-      this.setState(post)
+      const { title, markdown, html } = post
+      this.setState({
+        id,
+        title,
+        markdown,
+        html,
+        datePublished: post.date_published,
+        status: 'new',
+      })
+    }
+  }
+
+  setFormState1 = () => {
+    const { id } = this.props
+
+    if (id) console.log("there's an ID!")
+    else {
+      console.log("it's a new post")
+      this.setState({})
     }
   }
 
@@ -136,11 +156,15 @@ class BlogAddPost extends React.Component {
 
     console.log(this.state)
 
-    const { id, title, html, markdown, url } = this.state
+    const { id, title, html, markdown, url, status } = this.state
 
     dispatch({
       type: 'profile/EDIT_POST',
-      payload: { id, title, html, markdown, url },
+      payload: { id, title, html, markdown, url, status },
+    })
+
+    this.setState({
+      status: 'existing',
     })
   }
 
@@ -152,19 +176,19 @@ class BlogAddPost extends React.Component {
     return { html, markdown }
   }
 
-  decideToDispatch = state => {
-    const { dispatch } = this.props
-    if (state.html) {
-      dispatch({
-        type: 'profile/EDIT_POST_LOCALLY',
-        payload: state,
-      })
-      dispatch({
-        type: 'profile/CURRENT_POST',
-        payload: { saved: 'false' },
-      })
-    }
-  }
+  // decideToDispatch = state => {
+  //   const { dispatch } = this.props
+  //   if (state.html) {
+  //     dispatch({
+  //       type: 'profile/EDIT_POST_LOCALLY',
+  //       payload: state,
+  //     })
+  //     dispatch({
+  //       type: 'profile/CURRENT_POST',
+  //       payload: { saved: 'false' },
+  //     })
+  //   }
+  // }
 
   onChange = (changeType, e) => {
     if (changeType === 'title') {
@@ -172,7 +196,7 @@ class BlogAddPost extends React.Component {
       this.setState({
         title: e.target.value,
       })
-      this.decideToDispatch(this.state)
+      // this.decideToDispatch(this.state)
     }
 
     if (changeType === 'editor') {
@@ -182,7 +206,7 @@ class BlogAddPost extends React.Component {
         html,
         markdown,
       })
-      this.decideToDispatch(this.state)
+      // this.decideToDispatch(this.state)
     }
   }
 
@@ -198,25 +222,31 @@ class BlogAddPost extends React.Component {
 
   render() {
     const { showSearch, editorState, title } = this.state
-    const { match, dispatch } = this.props
+    const { dispatch, match } = this.props
     const { params } = match
-    const { id, status } = params
+    let { id, status } = params
 
-    console.log('addForm match', match)
-
-    if (status === 'true') {
-      dispatch({
-        type: 'profile/CREATE_POST',
-        post: {
-          id,
-          html: '<p>Let&apos;s hear it.</p>',
-          markdown: "Let's hear it.",
-          url: '',
-          title: 'Insert title ...',
-          series: '',
-        },
-      })
+    if (!id) {
+      id = uuidv4()
+      status = 'new'
     }
+
+    // console.log('addForm match', match)
+
+    // if (status === 'true') {
+    //   dispatch({
+    //     type: 'profile/CREATE_POST',
+    //     post: {
+    //       id,
+    //       html: '<p>Let&apos;s hear it.</p>',
+    //       markdown: "Let's hear it.",
+    //       url: '',
+    //       title: 'Insert title ...',
+    //       series: '',
+    //     },
+    //   })
+    // }
+    //
 
     dispatch({
       type: 'profile/CURRENT_POST',

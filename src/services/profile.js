@@ -248,9 +248,24 @@ const performOperations = async (mutation, payloads) => {
       return API.graphql(graphqlOperation(mutations.deleteBrag, { input: payloads.data }))
     case 'editPost':
       console.log('performOperations --> editPost payloads', payloads)
-      return payloads.id
-        ? API.graphql(graphqlOperation(mutations.updatePost, { input: payloads }))
-        : API.graphql(graphqlOperation(mutations.createPost, { input: payloads }))
+      if (payloads.status !== 'new') {
+        payloads = {
+          id: payloads.id,
+          title: payloads.title,
+          html: payloads.html,
+          markdown: payloads.markdown,
+          image_url: payloads.url,
+        }
+        return API.graphql(graphqlOperation(mutations.updatePost, { input: payloads }))
+      }
+      payloads = {
+        id: payloads.id,
+        title: payloads.title,
+        html: payloads.html,
+        markdown: payloads.markdown,
+        image_url: payloads.url,
+      }
+      return API.graphql(graphqlOperation(mutations.createPost, { input: payloads }))
     case 'editEducation':
       return Promise.all(
         payloads.map(payload => {

@@ -45,21 +45,15 @@ class BlogFeed extends React.Component {
                         <div className={styles.information}>
                           <div className={styles.title}>
                             <h1>
-                              <a href="javascript: void(0);">{article.title}</a>
+                              <Link to={`/blog/edit-blog-post/false/${article.id}`}>
+                                {article.title}
+                              </Link>
                             </h1>
                           </div>
                           <ul className={styles.meta}>
                             <li className={styles.metaInf}>
                               <span>
-                                Post By{' '}
-                                <a href="javascript: void(0);">
-                                  {firstName} {lastName}
-                                </a>
-                              </span>
-                            </li>
-                            <li className={styles.metaInf}>
-                              <span className={styles.articleDate}>
-                                {`On ${article.date_published}`}
+                                Post By {firstName} {lastName}
                               </span>
                             </li>
                           </ul>

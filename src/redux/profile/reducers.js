@@ -97,6 +97,11 @@ export default function userReducer(state = initialState, action) {
       })
       return state
     case actions.EDIT_POST:
+      console.log('EDIT_POST Reducer payload', action.payload)
+      if (action.payload.status === 'new') {
+        state.posts.push(action.payload)
+        return state
+      }
       state.posts = state.posts.map(post => {
         if (post.id === action.payload.id) return action.payload
         return post
