@@ -4,6 +4,7 @@ import { connect } from 'react-redux'
 import { Collapse, Icon } from 'antd'
 import { Helmet } from 'react-helmet'
 // import * as subscriptions from 'graphql/subscriptions'
+import NameForm from './NameForm'
 import EducationForm from './EducationForm'
 import WhatWhenWhereForm from './WhatWhereWhenForm'
 import TagsForm from './TagsForm'
@@ -30,6 +31,7 @@ class ProfileApp extends React.Component {
     const { Panel } = Collapse
 
     const text = {
+      nameText: 'First name, last name?',
       experienceText:
         "Input any professional experience you have. If you don't have any, no worries! This is an optional section.",
       introText: 'The secret to getting ahead is getting started ...',
@@ -54,6 +56,16 @@ class ProfileApp extends React.Component {
       <div>
         <Helmet title="Profile" />
         <div className={style.profile}>
+          <Collapse
+            bordered={false}
+            defaultActiveKey={['1']}
+            expandIcon={({ isActive }) => <Icon type="caret-right" rotate={isActive ? 90 : 0} />}
+          >
+            <Panel header="Name" key="1" style={customPanelStyle}>
+              <p>{text.nameText}</p>
+              <NameForm type="Name" />
+            </Panel>
+          </Collapse>
           <Collapse
             bordered={false}
             defaultActiveKey={['1']}

@@ -69,6 +69,11 @@ export default function userReducer(state = initialState, action) {
     case actions.EDIT_PROFILE:
       console.log('STATE', state, 'ACTION.PAYLOAD.DATA', action.payload.data)
       return { ...state, ...action.payload.data }
+    case actions.EDIT_NAME:
+      console.log('EDIT_NAME reducer', action.payload[0])
+      state.firstName = action.payload[0].first_name
+      state.lastName = action.payload[0].last_name
+      return state
     case actions.CURRENT_POST:
       console.log('current post action payload', action.payload)
       state.currentPost = {

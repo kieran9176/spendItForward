@@ -141,6 +141,16 @@ export async function EDIT_PROFILE({ payload }) {
   })
 }
 
+export async function EDIT_NAME({ payload }) {
+  console.log('EDIT_NAME data', payload)
+
+  // const response = editProfile('editName', data);
+  // response.then(values => {
+  //   if (values === 'Could not update profile') notify('failure');
+  //   else notify('success', 'name')
+  // })
+}
+
 export async function EDIT_POST({ payload }) {
   console.log("SAVE_POST here's what we'll save:", payload)
 
@@ -295,6 +305,7 @@ export async function DELETE_BRAGS(payload) {
 export default function* rootSaga() {
   yield all([
     takeEvery(actions.EDIT_PROFILE, EDIT_PROFILE),
+    takeEvery(actions.EDIT_NAME, EDIT_NAME),
     takeEvery(actions.EDIT_POST, EDIT_POST),
     takeEvery(actions.EDIT_PRIMARY, EDIT_PRIMARY),
     takeEvery(actions.EDIT_SECONDARY, EDIT_SECONDARY),

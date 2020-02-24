@@ -2,6 +2,7 @@ const actions = {
   CREATE_PROFILE: 'profile/CREATE_PROFILE',
   SET_STATE: 'profile/SET_STATE',
   EDIT_PROFILE: 'profile/EDIT_PROFILE',
+  EDIT_NAME: 'profile/EDIT_NAME',
   EDIT_INTRO: 'profile/EDIT_INTRO',
   CURRENT_POST: 'profile/CURRENT_POST',
   CREATE_POST: 'profile/CREATE_POST',
