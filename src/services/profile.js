@@ -196,6 +196,9 @@ const performOperations = async (mutation, payloads) => {
             : API.graphql(graphqlOperation(mutations.createCoursework, payload))
         }),
       )
+    case 'editName':
+      console.log('payloads', payloads)
+      return API.graphql(graphqlOperation(mutations.updateName, { input: payloads[0] }))
     case 'editAsset':
       console.log('editAsset payload', payloads)
       if (payloads.id) {
@@ -319,6 +322,8 @@ export async function editProfile(mutation, data) {
     case 'deleteArticle':
       return performOperations(mutation, data)
     case 'createPost':
+      return performOperations(mutation, data)
+    case 'editName':
       return performOperations(mutation, data)
     case 'editPost':
       return performOperations(mutation, data)

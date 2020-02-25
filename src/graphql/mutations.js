@@ -166,6 +166,13 @@ export const updateProfile = `mutation UpdateProfile($input: UpdateProfileInput!
   }
 }
 `
+export const updateName = `mutation UpdateProfile($input: UpdateProfileInput!) {
+  updateProfile(input: $input) {
+    first_name
+    last_name
+  }
+}
+`
 export const deleteProfile = `mutation DeleteProfile($input: DeleteProfileInput!) {
   deleteProfile(input: $input) {
     id

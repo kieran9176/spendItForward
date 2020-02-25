@@ -38,11 +38,13 @@ class NameForm extends React.Component {
       case 'Name':
         console.log('Name Values', values)
         for (let i = 0; i < values.keys.length; i += 1) {
-          payloads.push({
-            first_name: values['first-name'][i] || null,
-            last_name: values['last-name'][i] || null,
-            changed: values.changed[i],
-          })
+          if (values.changed[i] === true) {
+            payloads.push({
+              first_name: values['first-name'][i] || null,
+              last_name: values['last-name'][i] || null,
+              // changed: values.changed[i],
+            })
+          }
         }
         console.log('createPayloads', payloads)
         return payloads

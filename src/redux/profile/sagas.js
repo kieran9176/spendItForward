@@ -144,11 +144,11 @@ export async function EDIT_PROFILE({ payload }) {
 export async function EDIT_NAME({ payload }) {
   console.log('EDIT_NAME data', payload)
 
-  // const response = editProfile('editName', data);
-  // response.then(values => {
-  //   if (values === 'Could not update profile') notify('failure');
-  //   else notify('success', 'name')
-  // })
+  const response = editProfile('editName', payload)
+  response.then(values => {
+    if (values === 'Could not update profile') notify('failure')
+    else notify('success', 'name')
+  })
 }
 
 export async function EDIT_POST({ payload }) {
