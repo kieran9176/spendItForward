@@ -89,6 +89,8 @@ export const getProfile = `query GetProfile($account_id: String!) {
       title
       date_published
       html
+      series
+      draft
       markdown
       image_url
     }

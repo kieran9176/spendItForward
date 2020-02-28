@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { Form, Input, Button, Checkbox } from 'antd'
+import { Form, Input, Button, Checkbox, Divider } from 'antd'
 import { Helmet } from 'react-helmet'
 import { Link } from 'react-router-dom'
 import { connect } from 'react-redux'
@@ -10,7 +10,7 @@ import styles from './style.module.scss'
 class Login extends Component {
   onSubmit = event => {
     event.preventDefault()
-    const {form, dispatch} = this.props
+    const { form, dispatch } = this.props
     form.validateFields((error, values) => {
       if (!error) {
         dispatch({
@@ -43,13 +43,13 @@ class Login extends Component {
               <div className={styles.inner}>
                 <div className={styles.form}>
                   <h4 className="text-uppercase">
-                    <strong>Please log in</strong>
+                    <strong>log in</strong>
                   </h4>
                   <br />
                   <Form layout="vertical" hideRequiredMark onSubmit={this.onSubmit}>
                     <Form.Item label="Email">
                       {form.getFieldDecorator('email', {
-                        initialValue: 'Kieran',
+                        initialValue: '',
                         rules: [{ required: true, message: 'Please input your e-mail address' }],
                       })(<Input size="default" />)}
                     </Form.Item>
@@ -72,37 +72,13 @@ class Login extends Component {
                       </Link>
                     </Form.Item>
                     <div className="form-actions">
-                      <Button
-                        type="primary"
-                        className="width-150 mr-4"
-                        htmlType="submit"
-                        loading={loading}
-                      >
+                      <Button type="primary" htmlType="submit" loading={loading}>
                         Login
                       </Button>
-                      <Link
-                        to="/user/signup"
-                        className="utils__link--blue utils__link--underlined pull-right"
-                      >
+                      <Divider type="vertical" />
+                      <Link to="/user/signup" className="utils__link--blue utils__link--underlined">
                         Signup
                       </Link>
-                    </div>
-                    <div className="form-group">
-                      <p>Use another service to Log In</p>
-                      <div className="mt-2">
-                        <a href="javascript: void(0);" className="btn btn-icon mr-2">
-                          <i className="icmn-facebook" />
-                        </a>
-                        <a href="javascript: void(0);" className="btn btn-icon mr-2">
-                          <i className="icmn-google" />
-                        </a>
-                        <a href="javascript: void(0);" className="btn btn-icon mr-2">
-                          <i className="icmn-windows" />
-                        </a>
-                        <a href="javascript: void(0);" className="btn btn-icon mr-2">
-                          <i className="icmn-twitter" />
-                        </a>
-                      </div>
                     </div>
                   </Form>
                 </div>

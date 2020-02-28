@@ -8,6 +8,7 @@ import htmlToDraft from 'html-to-draftjs'
 import draftToMarkdown from 'draftjs-to-markdown'
 import draftToHtml from 'draftjs-to-html'
 import Editor from 'draft-js-plugins-editor'
+import moment from 'moment'
 import createToolbarPlugin from 'draft-js-static-toolbar-plugin'
 import {
   ItalicButton,
@@ -112,7 +113,7 @@ class BlogAddPost extends React.Component {
 
     if (status !== 'new') {
       ;[post] = posts.filter(postObj => postObj.id === id)
-      const { html, markdown, url, title } = post
+      const { html, markdown, url, title, draft } = post
       const contentBlock = htmlToDraft(html)
       if (contentBlock) {
         const contentState = ContentState.createFromBlockArray(contentBlock.contentBlocks)
@@ -124,6 +125,7 @@ class BlogAddPost extends React.Component {
           markdown,
           id,
           url,
+          draft,
           status: 'existing',
         })
       }
@@ -136,6 +138,7 @@ class BlogAddPost extends React.Component {
         html,
         datePublished: post.date_published,
         status: 'new',
+        draft: true,
       })
     }
   }
@@ -150,7 +153,7 @@ class BlogAddPost extends React.Component {
     }
   }
 
-  onSubmit = e => {
+  onSubmit = (e, context) => {
     e.preventDefault()
     const { dispatch } = this.props
 
@@ -158,10 +161,19 @@ class BlogAddPost extends React.Component {
 
     const { id, title, html, markdown, url, status } = this.state
 
-    dispatch({
-      type: 'profile/EDIT_POST',
-      payload: { id, title, html, markdown, url, status },
-    })
+    if (context === 'save') {
+      dispatch({
+        type: 'profile/EDIT_POST',
+        payload: { id, title, html, markdown, url, status },
+      })
+    } else if (context === 'publish') {
+      const date = moment().format('YYYY-MM-DD[T]HH:mm:ss')
+
+      dispatch({
+        type: 'profile/EDIT_POST',
+        payload: { id, title, html, markdown, url, status, draft: false, date_published: date },
+      })
+    }
 
     this.setState({
       status: 'existing',
@@ -175,20 +187,6 @@ class BlogAddPost extends React.Component {
 
     return { html, markdown }
   }
-
-  // decideToDispatch = state => {
-  //   const { dispatch } = this.props
-  //   if (state.html) {
-  //     dispatch({
-  //       type: 'profile/EDIT_POST_LOCALLY',
-  //       payload: state,
-  //     })
-  //     dispatch({
-  //       type: 'profile/CURRENT_POST',
-  //       payload: { saved: 'false' },
-  //     })
-  //   }
-  // }
 
   onChange = (changeType, e) => {
     if (changeType === 'title') {
@@ -230,23 +228,6 @@ class BlogAddPost extends React.Component {
       id = uuidv4()
       status = 'new'
     }
-
-    // console.log('addForm match', match)
-
-    // if (status === 'true') {
-    //   dispatch({
-    //     type: 'profile/CREATE_POST',
-    //     post: {
-    //       id,
-    //       html: '<p>Let&apos;s hear it.</p>',
-    //       markdown: "Let's hear it.",
-    //       url: '',
-    //       title: 'Insert title ...',
-    //       series: '',
-    //     },
-    //   })
-    // }
-    //
 
     dispatch({
       type: 'profile/CURRENT_POST',
@@ -307,9 +288,15 @@ class BlogAddPost extends React.Component {
                     </div>
                   </div>
                 </div>
-                <Button type="primary" onClick={this.onSubmit}>
-                  Save
-                </Button>
+                <Row>
+                  <Button type="primary" onClick={e => this.onSubmit(e, 'save')}>
+                    Save
+                  </Button>
+                  <Divider type="vertical" />
+                  <Button type="secondary" onClick={e => this.onSubmit(e, 'publish')}>
+                    Publish
+                  </Button>
+                </Row>
               </div>
             </div>
           </div>

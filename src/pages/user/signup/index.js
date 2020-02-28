@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { Form, Input, Button, Checkbox } from 'antd'
+import { Form, Input, Button, Checkbox, Divider } from 'antd'
 import { Helmet } from 'react-helmet'
 import { Link } from 'react-router-dom'
 import { connect } from 'react-redux'
@@ -13,14 +13,14 @@ class Signup extends Component {
     const { form, dispatch } = this.props
     form.validateFields((error, values) => {
       if (!error) {
-        console.log("VALUES:", values)
+        console.log('VALUES:', values)
         dispatch({
           type: 'user/SIGNUP',
           payload: values,
         })
       }
     })
-  };
+  }
 
   render() {
     const {
@@ -32,15 +32,10 @@ class Signup extends Component {
         <Helmet title="Login" />
         <div className={`${styles.title} login-heading`}>
           <h1>
-            <strong>WELCOME TO CLEAN UI REACT - REACT REDUX ADMIN TEMPLATE</strong>
+            <strong>WELCOME TO HATCH - HOME OF THE DIGITAL YOU</strong>
           </h1>
           <p>
-            Pluggable enterprise-level react application framework.
-            <br />
-            An excellent front-end solution for web applications built upon Ant Design and UmiJS.
-            <br />
-            Credentials for testing purposes - <strong>admin@mediatec.org</strong> /{' '}
-            <strong>cleanui</strong>
+            <strong>Let&#39;s get started.</strong>
           </p>
         </div>
         <div className={styles.block}>
@@ -55,19 +50,19 @@ class Signup extends Component {
                   <Form layout="vertical" hideRequiredMark onSubmit={this.onSubmit}>
                     <Form.Item label="Email">
                       {form.getFieldDecorator('email', {
-                        initialValue: 'admin@mediatec.org',
+                        initialValue: '',
                         rules: [{ required: true, message: 'Please input your e-mail address' }],
                       })(<Input size="default" />)}
                     </Form.Item>
                     <Form.Item label="Password">
                       {form.getFieldDecorator('password', {
-                        initialValue: 'cleanui',
+                        initialValue: '',
                         rules: [{ required: true, message: 'Please input your password' }],
                       })(<Input size="default" type="password" />)}
                     </Form.Item>
                     <Form.Item label="Password-Confirmation">
                       {form.getFieldDecorator('password-confirmation', {
-                        initialValue: 'cleanui',
+                        initialValue: '',
                         rules: [{ required: true, message: 'Please repeat your password' }],
                       })(<Input size="default" type="password" />)}
                     </Form.Item>
@@ -78,37 +73,13 @@ class Signup extends Component {
                       })(<Checkbox>Remember me</Checkbox>)}
                     </Form.Item>
                     <div className="form-actions">
-                      <Button
-                        type="primary"
-                        className="width-150 mr-4"
-                        htmlType="submit"
-                        loading={loading}
-                      >
+                      <Button type="primary" htmlType="submit" loading={loading}>
                         Signup
                       </Button>
-                      <Link
-                        to="/user/login"
-                        className="utils__link--blue utils__link--underlined pull-right"
-                      >
+                      <Divider type="vertical" />
+                      <Link to="/user/login" className="utils__link--blue utils__link--underlined">
                         Login
                       </Link>
-                    </div>
-                    <div className="form-group">
-                      <p>Use another service to Log In</p>
-                      <div className="mt-2">
-                        <a href="javascript: void(0);" className="btn btn-icon mr-2">
-                          <i className="icmn-facebook" />
-                        </a>
-                        <a href="javascript: void(0);" className="btn btn-icon mr-2">
-                          <i className="icmn-google" />
-                        </a>
-                        <a href="javascript: void(0);" className="btn btn-icon mr-2">
-                          <i className="icmn-windows" />
-                        </a>
-                        <a href="javascript: void(0);" className="btn btn-icon mr-2">
-                          <i className="icmn-twitter" />
-                        </a>
-                      </div>
                     </div>
                   </Form>
                 </div>

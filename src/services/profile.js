@@ -257,6 +257,8 @@ const performOperations = async (mutation, payloads) => {
           title: payloads.title,
           html: payloads.html,
           markdown: payloads.markdown,
+          draft: payloads.draft,
+          date_published: payloads.date_published,
           image_url: payloads.url,
         }
         return API.graphql(graphqlOperation(mutations.updatePost, { input: payloads }))
@@ -266,6 +268,8 @@ const performOperations = async (mutation, payloads) => {
         title: payloads.title,
         html: payloads.html,
         markdown: payloads.markdown,
+        draft: payloads.draft,
+        series: 'posts',
         image_url: payloads.url,
       }
       return API.graphql(graphqlOperation(mutations.createPost, { input: payloads }))

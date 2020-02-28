@@ -13,11 +13,9 @@ Amplify.configure({
     region: 'us-east-2',
 
     // OPTIONAL - Amazon Cognito User Pool ID
-    // userPoolId: 'us-east-2_2hwpEnfaj',
     userPoolId: 'us-east-2_NxYax0giI',
 
     // OPTIONAL - Amazon Cognito Web Client ID (26-char alphanumeric string)
-    // userPoolWebClientId: '4m03impsp8i9lmp6g6ko6ilmb2',
     userPoolWebClientId: '2tqnr5livk9hffpi3uu407ue7d',
 
     // OPTIONAL - Enforce user authentication prior to accessing AWS resources or not
@@ -38,10 +36,6 @@ const cognito = new AWS.CognitoIdentityServiceProvider()
 export function* LOGIN({ payload }) {
   const { email, password } = payload
 
-  console.log('made it to login')
-  console.log('email', email)
-  console.log('password', password)
-
   yield put({
     type: 'user/SET_STATE',
     payload: {
@@ -49,14 +43,12 @@ export function* LOGIN({ payload }) {
     },
   })
 
-  const user = yield Auth.signIn(email, password)
-    // .then(() => true)
-    .catch(error => {
-      notification.warning({
-        message: 'Not Authenticated',
-        description: error.message,
-      })
+  const user = yield Auth.signIn(email, password).catch(error => {
+    notification.warning({
+      message: 'Not Authenticated',
+      description: error.message,
     })
+  })
 
   if (user) {
     notification.success({
@@ -148,7 +140,6 @@ export function* SIGNUP({ payload }) {
     },
   }
 
-  // const user = yield Auth.signUp(email, password, attributes)
   const userObj = yield Auth.signUp(signupPayload)
     // .then(() => true)
     .catch(error => {
@@ -174,44 +165,8 @@ export function* SIGNUP({ payload }) {
     const { user } = userObj
     const { username } = user
     const { userSub } = userObj
-    // const { sub } = attributes;
-
-    // const action = ({
-    //   type: 'user/SET_STATE',
-    //   payload: {
-    //     id: userSub,
-    //     name: username,
-    //     email,
-    //     avatar: null,
-    //     role: 'admin',
-    //     authorized: true,
-    //     loading: false
-    //   }
-    // });
 
     yield call(LOGIN_AFTER_SIGNUP, userSub, username, email, password)
-
-    // Call LOAD_CURRENT_PROFILE after we've fetched the 'sub' attribute from Cognito
-    // yield call(LOAD_CURRENT_PROFILE, username, userSub);
-
-    // yield put({
-    //   type: 'user/SET_STATE',
-    //   payload: {
-    //     id: userSub,
-    //     name: username,
-    //     email,
-    //     avatar: null,
-    //     role: 'admin',
-    //     authorized: true,
-    //     loading: false
-    //   },
-    // });
-    // yield put({
-    //   type: 'user/SET_STATE',
-    //   payload: {
-    //     loading: false,
-    //   },
-    // })
   } else {
     yield put({
       type: 'user/SET_STATE',
@@ -234,10 +189,6 @@ export function* LOAD_CURRENT_ACCOUNT() {
     // .then(() => true)
     .catch(error => {
       console.log(error)
-      notification.warning({
-        message: 'Not Authenticated',
-        description: 'Trying to hack us? We just took a picture of you! :)',
-      })
     })
 
   if (user) {
@@ -254,19 +205,21 @@ export function* LOAD_CURRENT_ACCOUNT() {
     })
 
     const { username, attributes } = user
-    const { sub } = attributes
+    const { sub, email } = attributes
 
     // Call LOAD_CURRENT_PROFILE after we've fetched the 'sub' attribute from Cognito
     yield call(LOAD_CURRENT_PROFILE, username, sub)
+
+    console.log('attributes', attributes)
 
     yield put({
       type: 'user/SET_STATE',
       payload: {
         id: sub,
         name: username,
-        email: 'fake@gmail.com',
+        email,
         avatar: null,
-        role: 'admin',
+        role: 'Administrator',
         authorized: true,
       },
     })

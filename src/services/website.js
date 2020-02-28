@@ -27,12 +27,11 @@ const createPayload = profile => {
 
   return {
     languageCode: 'en-us',
-    baseURL: 'http://development.kieranpaul.com.s3-website.us-east-2.amazonaws.com/',
+    baseURL: getProfile.site_metadata.development_url,
     title: `${getProfile.first_name} ${getProfile.last_name}`,
     params: {
       first_name: getProfile.first_name,
       last_name: getProfile.last_name,
-      build: 'development',
       middleInitial: '_éi',
       lastInitial: 'rí_',
       email: 'kieranderfus@gmail.com',

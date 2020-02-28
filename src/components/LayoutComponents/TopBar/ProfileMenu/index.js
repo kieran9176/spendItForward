@@ -31,9 +31,6 @@ class ProfileMenu extends React.Component {
     const menu = (
       <Menu selectable={false}>
         <Menu.Item>
-          <strong>
-            <FormattedMessage id="topBar.profileMenu.hello" />, {user.name || 'Anonymous'}
-          </strong>
           <div>
             <strong className="mr-1">
               <FormattedMessage id="topBar.profileMenu.billingPlan" />:{' '}
@@ -54,11 +51,6 @@ class ProfileMenu extends React.Component {
               <FormattedMessage id="topBar.profileMenu.email" />:{' '}
             </strong>
             {user.email}
-            <br />
-            <strong>
-              <FormattedMessage id="topBar.profileMenu.phone" />:{' '}
-            </strong>
-            {user.phone || '-'}
           </div>
         </Menu.Item>
         <Menu.Divider />
