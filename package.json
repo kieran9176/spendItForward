@@ -31,6 +31,7 @@
     ]
   },
   "dependencies": {
+    "@ant-design/icons": "4.0.0",
     "@rowno/sparkline": "^4.0.0",
     "@types/uuid": "^3.4.6",
     "antd": "^3.20.3",

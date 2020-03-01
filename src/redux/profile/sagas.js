@@ -175,11 +175,21 @@ export async function EDIT_PRIMARY({ payload }) {
 }
 
 export async function EDIT_SECONDARY({ payload }) {
-  // const { mutation, data } = payload
-
   console.log('edit secondary payload', payload)
 
   const payloadObj = { id: payload.id, type: 'secondary', url: payload.url }
+  const response = editProfile('editAsset', payloadObj)
+
+  response.then(values => {
+    if (values === 'Could not update profile') notify('failure')
+    else notify('success', 'assets')
+  })
+}
+
+export async function EDIT_RESUME({ payload }) {
+  console.log('edit resume payload', payload)
+
+  const payloadObj = { id: payload.id, type: 'resume', url: payload.url }
   const response = editProfile('editAsset', payloadObj)
 
   response.then(values => {
@@ -309,6 +319,7 @@ export default function* rootSaga() {
     takeEvery(actions.EDIT_POST, EDIT_POST),
     takeEvery(actions.EDIT_PRIMARY, EDIT_PRIMARY),
     takeEvery(actions.EDIT_SECONDARY, EDIT_SECONDARY),
+    takeEvery(actions.EDIT_RESUME, EDIT_RESUME),
     takeEvery(actions.SELECT_THEME, SELECT_THEME),
     takeEvery(actions.EDIT_EDUCATION, EDIT_EDUCATION),
     takeEvery(actions.DELETE_EDUCATION, DELETE_EDUCATION),

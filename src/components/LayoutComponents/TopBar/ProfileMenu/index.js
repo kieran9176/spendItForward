@@ -1,14 +1,14 @@
 import React from 'react'
 import { connect } from 'react-redux'
-import { Menu, Dropdown, Avatar, Badge } from 'antd'
+import { Menu, Dropdown, Avatar } from 'antd'
 import { FormattedMessage } from 'react-intl'
 import styles from './style.module.scss'
 
 @connect(({ user }) => ({ user }))
 class ProfileMenu extends React.Component {
-  state = {
-    count: 7,
-  }
+  // state = {
+  //   count: 7,
+  // }
 
   logout = () => {
     const { dispatch } = this.props
@@ -27,7 +27,7 @@ class ProfileMenu extends React.Component {
 
   render() {
     const { user } = this.props
-    const { count } = this.state
+    // const { count } = this.state
     const menu = (
       <Menu selectable={false}>
         <Menu.Item>
@@ -70,11 +70,9 @@ class ProfileMenu extends React.Component {
       </Menu>
     )
     return (
-      <Dropdown overlay={menu} trigger={['click']} onVisibleChange={this.addCount}>
+      <Dropdown overlay={menu} trigger={['click']}>
         <div className={styles.dropdown}>
-          <Badge count={count}>
-            <Avatar className={styles.avatar} shape="square" size="large" icon="user" />
-          </Badge>
+          <Avatar className={styles.avatar} shape="square" size="large" icon="user" />
         </div>
       </Dropdown>
     )

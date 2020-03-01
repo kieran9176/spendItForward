@@ -130,6 +130,15 @@ export default function userReducer(state = initialState, action) {
         return asset
       })
       return state
+    case actions.EDIT_RESUME:
+      state.assets = state.assets.map(asset => {
+        if (asset.type === 'resume') {
+          asset.url = action.payload.url
+          return asset
+        }
+        return asset
+      })
+      return state
     case actions.SELECT_THEME:
       state.siteMetadata = state.siteMetadata.map(metadata => {
         metadata.themeID = action.payload.data.themeID
