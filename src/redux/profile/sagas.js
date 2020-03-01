@@ -242,6 +242,26 @@ export async function DELETE_ARTICLES(payload) {
   return payload
 }
 
+export async function EDIT_REFERENCES({ payload }) {
+  console.log('EDIT_REFERENCES SAGA', payload)
+  const response = editProfile('editReferences', payload)
+  response.then(values => {
+    if (values === 'Could not update profile') notify('failure')
+    else notify('success', 'references')
+  })
+  return payload
+}
+
+export async function DELETE_REFERENCES(payload) {
+  console.log('DELETE_REFERENCES SAGA', payload)
+  const response = editProfile('deleteReference', payload)
+  response.then(values => {
+    if (values === 'Could not update profile') notify('failure')
+    else notify('success', 'references')
+  })
+  return payload
+}
+
 export async function EDIT_EXPERIENCE({ payload }) {
   console.log('EDIT_EXPERIENCE SAGA', payload)
   const response = editProfile('editExperience', payload)
@@ -332,6 +352,8 @@ export default function* rootSaga() {
     takeEvery(actions.DELETE_LEADERSHIP, DELETE_LEADERSHIP),
     takeEvery(actions.EDIT_BRAGS, EDIT_BRAGS),
     takeEvery(actions.DELETE_BRAGS, DELETE_BRAGS),
+    takeEvery(actions.EDIT_REFERENCES, EDIT_REFERENCES),
+    takeEvery(actions.DELETE_REFERENCES, DELETE_REFERENCES),
     takeEvery(actions.LOAD_CURRENT_PROFILE, LOAD_CURRENT_PROFILE),
   ])
 }

@@ -4,29 +4,18 @@ import { connect } from 'react-redux'
 import { Collapse, Icon } from 'antd'
 import { Helmet } from 'react-helmet'
 // import * as subscriptions from 'graphql/subscriptions'
+import Avatar from '../../../components/ImageUpload/Avatar'
 import NameForm from './NameForm'
 import EducationForm from './EducationForm'
 import WhatWhenWhereForm from './WhatWhereWhenForm'
 import TagsForm from './TagsForm'
 import TextForm from './TextForm'
 import ArticleForm from './ArticleForm'
+import ReferencesForm from './ReferenceForm'
 import style from './style.module.scss'
 
 @connect(({ profile }) => ({ profile }))
 class ProfileApp extends React.Component {
-  // subscription = API.graphql(
-  //   graphqlOperation(subscriptions.onCreateSiteMetadata2, {
-  //     account_id: 'dee652d3-30d5-460d-bea1-4e8df10101d7',
-  //   }),
-  // ).subscribe({
-  //   next: siteMetadata => console.log(siteMetadata),
-  // })
-  //
-  // componentDidMount() {
-  //   console.log('about to subscribe')
-  //   console.log(this.subscription)
-  // }
-
   render() {
     const { Panel } = Collapse
 
@@ -40,6 +29,7 @@ class ProfileApp extends React.Component {
       educationText: 'Maths? Science? MBA in Craft Beer Brewing?',
       leadershipText:
         'If your actions inspire others to dream more, learn more, do more and become more, you are a leader.',
+      referencesText: "I've got some people who carry me.",
       bragsText: 'Brag about yourself. You deserve it.',
       articlesText: 'What have you been reading lately?',
     }
@@ -81,9 +71,46 @@ class ProfileApp extends React.Component {
             defaultActiveKey={['2']}
             expandIcon={({ isActive }) => <Icon type="caret-right" rotate={isActive ? 90 : 0} />}
           >
+            <Collapse
+              bordered={false}
+              defaultActiveKey={['2']}
+              expandIcon={({ isActive }) => <Icon type="caret-right" rotate={isActive ? 90 : 0} />}
+            >
+              <Panel header="Primary Image" key="1" style={customPanelStyle}>
+                <Avatar type="Primary" />
+              </Panel>
+            </Collapse>
+            <Collapse
+              bordered={false}
+              defaultActiveKey={['2']}
+              expandIcon={({ isActive }) => <Icon type="caret-right" rotate={isActive ? 90 : 0} />}
+            >
+              <Panel header="Secondary Image" key="1" style={customPanelStyle}>
+                <Avatar type="Secondary" />
+              </Panel>
+            </Collapse>
+            <Collapse
+              bordered={false}
+              defaultActiveKey={['2']}
+              expandIcon={({ isActive }) => <Icon type="caret-right" rotate={isActive ? 90 : 0} />}
+            >
+              <Panel header="Resume" key="1" style={customPanelStyle}>
+                <Avatar type="Resume" />
+              </Panel>
+            </Collapse>
             <Panel header="Experience" key="1" style={customPanelStyle}>
               <p>{text.experienceText}</p>
               <WhatWhenWhereForm type="Experience" />
+            </Panel>
+          </Collapse>
+          <Collapse
+            bordered={false}
+            defaultActiveKey={['1']}
+            expandIcon={({ isActive }) => <Icon type="caret-right" rotate={isActive ? 90 : 0} />}
+          >
+            <Panel header="Leadership" key="4" style={customPanelStyle}>
+              <p>{text.leadershipText}</p>
+              <WhatWhenWhereForm type="Leadership" />
             </Panel>
           </Collapse>
           <Collapse
@@ -121,9 +148,9 @@ class ProfileApp extends React.Component {
             defaultActiveKey={['1']}
             expandIcon={({ isActive }) => <Icon type="caret-right" rotate={isActive ? 90 : 0} />}
           >
-            <Panel header="Leadership" key="4" style={customPanelStyle}>
-              <p>{text.leadershipText}</p>
-              <WhatWhenWhereForm type="Leadership" />
+            <Panel header="References" key="6" style={customPanelStyle}>
+              <p>{text.referencesText}</p>
+              <ReferencesForm type="References" />
             </Panel>
           </Collapse>
           <Collapse
@@ -131,17 +158,7 @@ class ProfileApp extends React.Component {
             defaultActiveKey={['1']}
             expandIcon={({ isActive }) => <Icon type="caret-right" rotate={isActive ? 90 : 0} />}
           >
-            <Panel header="Above and Beyond / Brags" key="5" style={customPanelStyle}>
-              <p>{text.bragsText}</p>
-              <WhatWhenWhereForm type="Brags" />
-            </Panel>
-          </Collapse>
-          <Collapse
-            bordered={false}
-            defaultActiveKey={['1']}
-            expandIcon={({ isActive }) => <Icon type="caret-right" rotate={isActive ? 90 : 0} />}
-          >
-            <Panel header="Favorite Articles" key="6" style={customPanelStyle}>
+            <Panel header="Favorite Articles" key="7" style={customPanelStyle}>
               <p>{text.articlesText}</p>
               <ArticleForm type="Articles" />
             </Panel>

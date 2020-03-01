@@ -235,6 +235,19 @@ const performOperations = async (mutation, payloads) => {
       )
     case 'deleteArticle':
       return API.graphql(graphqlOperation(mutations.deleteArticle, { input: payloads.data }))
+    case 'editReferences':
+      console.log('editReferences performOperations')
+      return Promise.all(
+        payloads.map(payload => {
+          if (payload.id) {
+            return API.graphql(graphqlOperation(mutations.updateReference, { input: payload }))
+          }
+          payload = pop(payload)
+          return API.graphql(graphqlOperation(mutations.createReference, { input: payload }))
+        }),
+      )
+    case 'deleteReference':
+      return API.graphql(graphqlOperation(mutations.deleteReference, { input: payloads.data }))
     case 'editBrags':
       console.log('performOperations: edit brags payloads', payloads)
       return Promise.all(
@@ -324,6 +337,10 @@ export async function editProfile(mutation, data) {
     case 'editArticles':
       return performOperations(mutation, filterData(mutation, data))
     case 'deleteArticle':
+      return performOperations(mutation, data)
+    case 'editReferences':
+      return performOperations(mutation, data)
+    case 'deleteReference':
       return performOperations(mutation, data)
     case 'createPost':
       return performOperations(mutation, data)

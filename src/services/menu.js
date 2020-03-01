@@ -29,12 +29,6 @@ export async function getLeftMenuData() {
       ],
     },
     {
-      title: 'Assets',
-      key: 'assets',
-      url: '/apps/gallery',
-      icon: 'icmn icmn-image',
-    },
-    {
       title: 'Settings',
       key: 'settings',
       url: '/ecommerce/cart',
@@ -71,12 +65,6 @@ export async function getTopMenuData() {
           pro: true,
         },
       ],
-    },
-    {
-      title: 'Assets',
-      key: 'assets',
-      url: '/apps/gallery',
-      icon: 'icmn icmn-image',
     },
     {
       title: 'Settings',

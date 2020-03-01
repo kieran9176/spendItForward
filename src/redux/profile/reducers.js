@@ -102,7 +102,6 @@ export default function userReducer(state = initialState, action) {
       })
       return state
     case actions.EDIT_POST:
-      console.log('EDIT_POST Reducer payload', action.payload)
       if (action.payload.status === 'new') {
         state.posts.push(action.payload)
         return state
@@ -173,6 +172,12 @@ export default function userReducer(state = initialState, action) {
       return state
     case actions.DELETE_LEADERSHIP:
       state.leadership = state.leadership.filter(leadership => leadership.id !== action.data.id)
+      return state
+    case actions.EDIT_REFERENCES:
+      state.references = action.payload
+      return state
+    case actions.DELETE_REFERENCES:
+      state.references = state.references.filter(reference => reference.id !== action.data.id)
       return state
     case actions.EDIT_BRAGS:
       state.brags = action.payload

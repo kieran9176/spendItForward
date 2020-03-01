@@ -31,6 +31,7 @@ export const getProfile = `query GetProfile($account_id: String!) {
       id
     }
     references {
+      id
       content
       author_name
       author_company

@@ -160,13 +160,12 @@ class TextForm extends React.Component {
           dispatchEdit: 'profile/EDIT_INTRO',
         })
         return 'Intro Success'
-      case 'FakeSecondOption':
+      case 'Fake Second Option':
         this.setState({
-          dispatchEdit: 'profile/EDIT_EXPERIENCE',
-          dispatchDelete: 'profile/DELETE_EXPERIENCE',
-          // labels: ["Company", "Company", "Title"]
+          dispatchEdit: 'profile/EDIT_REFERENCES',
+          dispatchDelete: 'profile/DELETE_REFERENCES',
         })
-        return 'Experience Success'
+        return 'References Success'
       default:
         return null
     }
