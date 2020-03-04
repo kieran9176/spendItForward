@@ -32,8 +32,8 @@ const createPayload = profile => {
     params: {
       first_name: getProfile.first_name,
       last_name: getProfile.last_name,
-      middleInitial: '_éi',
-      lastInitial: 'rí_',
+      middleInitial: 'CY',
+      lastInitial: 'PG',
       email: 'kieranderfus@gmail.com',
       site_metadata: getProfile.site_metadata,
       assets,

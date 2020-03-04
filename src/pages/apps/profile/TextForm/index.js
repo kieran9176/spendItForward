@@ -94,7 +94,6 @@ class TextForm extends React.Component {
 
     switch (type) {
       case 'Intro':
-        console.log('Intro Values', values)
         for (let i = 0; i < values.keys.length; i += 1) {
           payloads.push({
             content: values.text[i] || null,
@@ -134,8 +133,6 @@ class TextForm extends React.Component {
 
     form.validateFields((err, values) => {
       if (!err) {
-        console.log('handleSubmit values', values)
-
         const payload = this.createPayloads(type, values)
 
         dispatch({
@@ -175,8 +172,6 @@ class TextForm extends React.Component {
     const { profile } = this.props
     const { intro, experience } = profile
     const initialValues = []
-
-    console.log('getInitialValues Type', type)
 
     if (type === 'Intro') {
       return intro || []

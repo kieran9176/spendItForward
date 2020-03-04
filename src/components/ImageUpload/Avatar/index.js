@@ -91,7 +91,7 @@ class Avatar extends React.Component {
         return 'Resume Success'
       case 'postImage':
         this.setState({
-          dispatchEdit: 'profile/EDIT_POST_LOCALLY',
+          dispatchEdit: 'profile/EDIT_POST',
         })
         return 'postImage Success'
       default:
@@ -100,8 +100,8 @@ class Avatar extends React.Component {
   }
 
   getInitialValues = type => {
-    const { profile } = this.props
-    const { assets, posts, currentPost } = profile
+    const { profile, id } = this.props
+    const { assets, posts } = profile
 
     if (type === 'Primary') {
       if (assets) return assets.filter(asset => asset.type === 'primary')[0]
@@ -120,7 +120,7 @@ class Avatar extends React.Component {
       return { id: null, type: 'resume', url: '' }
     }
     if (type === 'postImage') {
-      const { id } = currentPost
+      // const { id } = currentPost
       const post = posts.filter(postObj => postObj.id === id)[0]
       return { id, url: post.image_url }
     }
@@ -312,7 +312,7 @@ class Avatar extends React.Component {
       )
     }
 
-    if (type === 'Primary' || type === 'Secondary') {
+    if (type === 'Primary' || type === 'Secondary' || type === 'postImage') {
       return (
         <Upload
           name="avatar"

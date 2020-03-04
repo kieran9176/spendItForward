@@ -20,7 +20,6 @@ export function notify(status, type) {
 }
 
 export async function getProfile(accountId) {
-  console.log('received the call', accountId)
   return API.graphql(graphqlOperation(queries.getProfile, { account_id: accountId }))
 }
 
@@ -236,7 +235,6 @@ const performOperations = async (mutation, payloads) => {
     case 'deleteArticle':
       return API.graphql(graphqlOperation(mutations.deleteArticle, { input: payloads.data }))
     case 'editReferences':
-      console.log('editReferences performOperations')
       return Promise.all(
         payloads.map(payload => {
           if (payload.id) {
@@ -249,7 +247,6 @@ const performOperations = async (mutation, payloads) => {
     case 'deleteReference':
       return API.graphql(graphqlOperation(mutations.deleteReference, { input: payloads.data }))
     case 'editBrags':
-      console.log('performOperations: edit brags payloads', payloads)
       return Promise.all(
         payloads.map(payload => {
           if (payload.id) {
@@ -262,6 +259,19 @@ const performOperations = async (mutation, payloads) => {
       )
     case 'deleteBrag':
       return API.graphql(graphqlOperation(mutations.deleteBrag, { input: payloads.data }))
+    case 'editSocials':
+      return Promise.all(
+        payloads.map(payload => {
+          if (payload.id) {
+            payload = pop(payload)
+            return API.graphql(graphqlOperation(mutations.updateSocial, { input: payload }))
+          }
+          payload = pop(payload)
+          return API.graphql(graphqlOperation(mutations.createSocial, { input: payload }))
+        }),
+      )
+    case 'deleteSocials':
+      return API.graphql(graphqlOperation(mutations.deleteSocial, { input: payloads.data }))
     case 'editPost':
       console.log('performOperations --> editPost payloads', payloads)
       if (payloads.status !== 'new') {
@@ -341,6 +351,10 @@ export async function editProfile(mutation, data) {
     case 'editReferences':
       return performOperations(mutation, data)
     case 'deleteReference':
+      return performOperations(mutation, data)
+    case 'editSocials':
+      return performOperations(mutation, data)
+    case 'deleteSocials':
       return performOperations(mutation, data)
     case 'createPost':
       return performOperations(mutation, data)

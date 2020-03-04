@@ -179,6 +179,12 @@ export default function userReducer(state = initialState, action) {
     case actions.DELETE_REFERENCES:
       state.references = state.references.filter(reference => reference.id !== action.data.id)
       return state
+    case actions.EDIT_SOCIALS:
+      state.socials = action.payload
+      return state
+    case actions.DELETE_SOCIALS:
+      state.socials = state.socials.filter(social => social.id !== action.data.id)
+      return state
     case actions.EDIT_BRAGS:
       state.brags = action.payload
       return state

@@ -578,3 +578,24 @@ export const updateAsset = `mutation UpdateAsset($input: UpdateAssetInput!) {
   }
 }
 `
+export const createSocial = `mutation CreateSocials($input: CreateSocialInput!) {
+  createSocial(input: $input) {
+    type
+    url
+  }
+}
+`
+export const updateSocial = `mutation UpdateSocials($input: UpdateSocialInput!) {
+  updateSocial(input: $input) {
+    id
+    type
+    url
+  }
+}
+`
+export const deleteSocial = `mutation DeleteSocials($input: DeleteSocialInput!) {
+  deleteSocial(input: $input) {
+    id
+  }
+}
+`

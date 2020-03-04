@@ -12,6 +12,7 @@ import TagsForm from './TagsForm'
 import TextForm from './TextForm'
 import ArticleForm from './ArticleForm'
 import ReferencesForm from './ReferenceForm'
+import SocialForm from './SocialsForm'
 import style from './style.module.scss'
 
 @connect(({ profile }) => ({ profile }))
@@ -32,6 +33,7 @@ class ProfileApp extends React.Component {
       referencesText: "I've got some people who carry me.",
       bragsText: 'Brag about yourself. You deserve it.',
       articlesText: 'What have you been reading lately?',
+      socialsText: 'Where can people find you?',
     }
 
     const customPanelStyle = {
@@ -161,6 +163,16 @@ class ProfileApp extends React.Component {
             <Panel header="Favorite Articles" key="7" style={customPanelStyle}>
               <p>{text.articlesText}</p>
               <ArticleForm type="Articles" />
+            </Panel>
+          </Collapse>
+          <Collapse
+            bordered={false}
+            defaultActiveKey={['1']}
+            expandIcon={({ isActive }) => <Icon type="caret-right" rotate={isActive ? 90 : 0} />}
+          >
+            <Panel header="Socials" key="8" style={customPanelStyle}>
+              <p>{text.socialsText}</p>
+              <SocialForm type="Socials" />
             </Panel>
           </Collapse>
         </div>

@@ -3,6 +3,7 @@ import { Link, withRouter } from 'react-router-dom'
 import { connect } from 'react-redux'
 import { Helmet } from 'react-helmet'
 import styles from './style.module.scss'
+import Avatar from '../../../components/ImageUpload/Avatar'
 
 @withRouter
 @connect(({ profile }) => ({ profile }))
@@ -66,6 +67,9 @@ class BlogFeed extends React.Component {
                               <i className="ml-2 fa fa-angle-right" aria-hidden="true" />
                             </Link>
                           </div>
+                        </div>
+                        <div>
+                          <Avatar className="pull-right" type="postImage" id={article.id} />
                         </div>
                         <footer className={styles.footer} />
                       </article>

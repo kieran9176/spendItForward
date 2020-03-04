@@ -8,6 +8,7 @@ import {
 } from 'services/profile'
 import uuidv4 from 'uuid/v4'
 import actions from './actions'
+import assetData from './data'
 
 export function* LOAD_CURRENT_PROFILE(username, sub) {
   let profileResponse = yield getProfile(sub)
@@ -34,10 +35,11 @@ export function* LOAD_CURRENT_PROFILE(username, sub) {
       posts,
       education,
       brags,
+      socials,
     } = profile
     let { assets } = profile
-    if (!assets)
-      assets = [{ id: null, type: 'primary', url: '' }, { id: null, type: 'secondary', url: '' }]
+    // eslint-disable-next-line prefer-destructuring
+    if (!assets.length) assets = assetData
 
     yield put({
       type: 'profile/SET_STATE',
@@ -54,6 +56,7 @@ export function* LOAD_CURRENT_PROFILE(username, sub) {
         intro,
         posts,
         education,
+        socials,
         brags,
         assets,
         siteMetadata: profile.site_metadata,
@@ -312,12 +315,32 @@ export async function DELETE_LEADERSHIP(payload) {
   return payload
 }
 
+export async function EDIT_SOCIALS({ payload }) {
+  console.log('EDIT_SOCIALS SAGA', payload)
+  const response = editProfile('editSocials', payload)
+  response.then(values => {
+    if (values === 'Could not update profile') notify('failure')
+    else notify('success', 'socials')
+  })
+  return payload
+}
+
+export async function DELETE_SOCIALS(payload) {
+  console.log('DELETE_SOCIALS SAGA', payload)
+  const response = editProfile('deleteSocials', payload)
+  response.then(values => {
+    if (values === 'Could not update profile') notify('failure')
+    else notify('success', 'socials')
+  })
+  return payload
+}
+
 export async function EDIT_BRAGS({ payload }) {
   console.log('EDIT_BRAGS SAGA', payload)
   const response = editProfile('editBrags', payload)
   response.then(values => {
     if (values === 'Could not update profile') notify('failure')
-    else notify('success', 'brags')
+    else notify('success', 'socials')
   })
   return payload
 }
@@ -354,6 +377,8 @@ export default function* rootSaga() {
     takeEvery(actions.DELETE_BRAGS, DELETE_BRAGS),
     takeEvery(actions.EDIT_REFERENCES, EDIT_REFERENCES),
     takeEvery(actions.DELETE_REFERENCES, DELETE_REFERENCES),
+    takeEvery(actions.EDIT_SOCIALS, EDIT_SOCIALS),
+    takeEvery(actions.DELETE_SOCIALS, DELETE_SOCIALS),
     takeEvery(actions.LOAD_CURRENT_PROFILE, LOAD_CURRENT_PROFILE),
   ])
 }

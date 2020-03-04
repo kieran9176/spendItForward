@@ -36,7 +36,6 @@ class NameForm extends React.Component {
 
     switch (type) {
       case 'Name':
-        console.log('Name Values', values)
         for (let i = 0; i < values.keys.length; i += 1) {
           if (values.changed[i] === true) {
             payloads.push({
@@ -46,7 +45,6 @@ class NameForm extends React.Component {
             })
           }
         }
-        console.log('createPayloads', payloads)
         return payloads
       case 'FakeSecondOption':
         for (let i = 0; i < values.keys.length; i += 1) {
@@ -79,12 +77,7 @@ class NameForm extends React.Component {
 
     form.validateFields((err, values) => {
       if (!err) {
-        console.log('handleSubmit values', values)
-
         const payload = this.createPayloads(type, values)
-
-        console.log('dispatchEdit', dispatchEdit)
-        console.log('dispatchEdit Payload', payload)
 
         dispatch({
           type: dispatchEdit,
@@ -124,8 +117,6 @@ class NameForm extends React.Component {
     const { profile } = this.props
     const { firstName, lastName, experience } = profile
     const initialValues = []
-
-    console.log('getInitialValues Type', type)
 
     if (type === 'Name') {
       return [{ firstName, lastName }] || []
