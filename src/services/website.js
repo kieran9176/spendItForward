@@ -9,7 +9,7 @@ const pbmgmt = axios.create({
   },
 })
 
-const createPayload = profile => {
+const createPayload = (profile, email) => {
   const { getProfile } = profile.data
   const {
     assets,
@@ -32,9 +32,9 @@ const createPayload = profile => {
     params: {
       first_name: getProfile.first_name,
       last_name: getProfile.last_name,
-      middleInitial: 'CY',
-      lastInitial: 'PG',
-      email: 'kieranderfus@gmail.com',
+      middleInitial: 'AW',
+      lastInitial: 'MC',
+      email,
       site_metadata: getProfile.site_metadata,
       assets,
       coursework,
@@ -51,13 +51,13 @@ const createPayload = profile => {
   }
 }
 
-export async function triggerDevelopmentBuild(sub) {
+export async function triggerDevelopmentBuild(sub, email) {
   const profileResponse = getProfileQuery(sub)
 
   console.log('TRIGGER DEV BUILD')
 
   profileResponse.then(profileObj => {
-    const payload = createPayload(profileObj)
+    const payload = createPayload(profileObj, email)
 
     console.log('Payload', payload)
 

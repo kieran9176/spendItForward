@@ -7,7 +7,7 @@ import ProfileMenu from './ProfileMenu'
 import styles from './style.module.scss'
 import { triggerDevelopmentBuild, triggerProductionBuild } from '../../../services/website'
 
-@connect(({ profile }) => ({ profile }))
+@connect(({ profile, user }) => ({ profile, user }))
 class TopBar extends React.Component {
   state = {
     staging: false,
@@ -31,11 +31,11 @@ class TopBar extends React.Component {
 
   handleClick = async (e, context) => {
     e.preventDefault()
-    const { profile } = this.props
+    const { profile, user } = this.props
     const { sub } = profile
-
+    const { email } = user
     if (context === 'Staging') {
-      const response = await triggerDevelopmentBuild(sub)
+      const response = await triggerDevelopmentBuild(sub, email)
       console.log('triggerDevBuild Response', response)
       this.setState({
         staging: true,
