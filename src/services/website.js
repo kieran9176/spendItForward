@@ -1,4 +1,5 @@
 import { getProfile as getProfileQuery } from 'services/profile'
+import AWS from 'aws-sdk'
 import axios from 'axios'
 
 const pbmgmt = axios.create({
@@ -59,8 +60,6 @@ export async function triggerDevelopmentBuild(sub, email) {
   profileResponse.then(profileObj => {
     const payload = createPayload(profileObj, email)
 
-    console.log('Payload', payload)
-
     pbmgmt
       .post('/edit-config', payload)
       .then(response => {
@@ -72,6 +71,38 @@ export async function triggerDevelopmentBuild(sub, email) {
   })
 }
 
-export async function triggerProductionBuild(profile) {
-  console.log(profile)
+export async function triggerProductionBuild(accountId, repoUrl) {
+  console.log('accountId', accountId)
+  console.log('repoUrl', repoUrl)
+
+  const repoName = repoUrl.substr(37)
+
+  console.log('repoName', repoName)
+
+  AWS.config.update({
+    accessKeyId: process.env.REACT_APP_S3_ACCESS_KEY_ID,
+    secretAccessKey: process.env.REACT_APP_S3_SECRET_ACCESS_KEY,
+  })
+
+  AWS.config.update({ region: 'us-east-2' })
+
+  const payload = JSON.stringify(`{\"accountId\": \"${accountId}\",\"repoName\": \"${repoName}\"}`)
+
+  const params = {
+    Message: payload /* required */,
+    TopicArn: 'arn:aws:sns:us-east-2:273116933489:create-and-merge-pr-sns',
+  }
+
+  // Create promise and SNS service object
+  const publishTextPromise = new AWS.SNS({ apiVersion: '2010-03-31' }).publish(params).promise()
+
+  // Handle promise's fulfilled/rejected states
+  publishTextPromise
+    .then(function(data) {
+      console.log(`Message ${params.Message} send sent to the topic ${params.TopicArn}`)
+      console.log(`MessageID is ${data.MessageId}`)
+    })
+    .catch(function(err) {
+      console.error(err, err.stack)
+    })
 }

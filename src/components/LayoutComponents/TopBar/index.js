@@ -11,7 +11,7 @@ import { triggerDevelopmentBuild, triggerProductionBuild } from '../../../servic
 class TopBar extends React.Component {
   state = {
     staging: false,
-    production: true,
+    production: false,
   }
 
   setTimeout = context => {
@@ -32,8 +32,9 @@ class TopBar extends React.Component {
   handleClick = async (e, context) => {
     e.preventDefault()
     const { profile, user } = this.props
-    const { sub } = profile
+    const { sub, siteMetadata } = profile
     const { email } = user
+    const repoName = siteMetadata[0].repoUrl
     if (context === 'Staging') {
       const response = await triggerDevelopmentBuild(sub, email)
       console.log('triggerDevBuild Response', response)
@@ -47,7 +48,7 @@ class TopBar extends React.Component {
       })
       this.setTimeout(context)
     } else if (context === 'Production') {
-      const response = await triggerProductionBuild(sub)
+      const response = await triggerProductionBuild(sub, repoName)
       console.log('triggerProdBuild Response', response)
       this.setState({
         staging: true,
