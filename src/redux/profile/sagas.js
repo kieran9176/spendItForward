@@ -12,12 +12,14 @@ import assetData from './data'
 
 export function* LOAD_CURRENT_PROFILE(username, sub) {
   let profileResponse = yield getProfile(sub)
+  let firstTimeLoginStatus = false
 
   if (!profileResponse.data.getProfile) {
     yield createProfile(username).then(async () => {
       profileResponse = await getProfile(sub)
       const id = uuidv4()
       createProfileResources(sub, id)
+      firstTimeLoginStatus = true
     })
   }
 
@@ -59,6 +61,11 @@ export function* LOAD_CURRENT_PROFILE(username, sub) {
         socials,
         brags,
         assets,
+        firstTimeLogin: {
+          firstName: 'TBD',
+          lastName: 'TBD',
+          status: firstTimeLoginStatus,
+        },
         siteMetadata: profile.site_metadata,
         sub,
         themeOptions: [

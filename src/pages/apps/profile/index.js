@@ -13,12 +13,15 @@ import TextForm from './TextForm'
 import ArticleForm from './ArticleForm'
 import ReferencesForm from './ReferenceForm'
 import SocialForm from './SocialsForm'
+import FirstTimeLogin from '../../first-time-login'
 import style from './style.module.scss'
 
 @connect(({ profile }) => ({ profile }))
 class ProfileApp extends React.Component {
   render() {
     const { Panel } = Collapse
+    const { profile } = this.props
+    const { firstTimeLogin } = profile
 
     const text = {
       nameText: 'First name, last name?',
@@ -44,6 +47,9 @@ class ProfileApp extends React.Component {
       overflow: 'hidden',
     }
 
+    if (firstTimeLogin.status === true) {
+      return <FirstTimeLogin />
+    }
     return (
       <div>
         <Helmet title="Profile" />

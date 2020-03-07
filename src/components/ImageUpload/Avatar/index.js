@@ -1,10 +1,11 @@
 import React from 'react'
 import { connect } from 'react-redux'
+import { Redirect } from 'react-router'
 import { Form, Upload, Icon, message, Progress, Button, notification } from 'antd'
 import { UploadOutlined } from '@ant-design/icons'
 import AWS from 'aws-sdk'
 import uuidv4 from 'uuid/v4'
-import styles from './style.css'
+import styles from './style.module.scss'
 
 function beforeUpload(file, type) {
   console.log('before upload file type', file.type)
@@ -246,7 +247,8 @@ class Avatar extends React.Component {
 
   render() {
     const { loading, progress, url, id } = this.state
-    const { form, post, type } = this.props
+    const { form, post, type, profile, dispatch } = this.props
+    const { firstTimeLogin } = profile
 
     if (form && post) {
       form.getFieldDecorator('image_url', {
@@ -254,25 +256,43 @@ class Avatar extends React.Component {
       })
     }
 
+    console.log('styles', styles)
+
     const uploadImageButton = (
-      <div>
+      <div className={styles.avatarUploader}>
         <Icon type={loading ? 'loading' : 'plus'} />
-        <div className="ant-upload-text">Upload Cover Image</div>
+        <div>Upload Picture</div>
       </div>
     )
+
+    if (progress === 100 && firstTimeLogin.status === true) {
+      const { firstName, lastName } = firstTimeLogin
+
+      dispatch({
+        type: 'profile/EDIT_NAME',
+        payload: [{ first_name: firstName, last_name: lastName }],
+      })
+
+      dispatch({
+        type: 'profile/EDIT_FIRST_TIME_LOGIN',
+        payload: 'Step 2',
+      })
+
+      return <Redirect to="/apps/profile" />
+    }
 
     if (progress && type !== 'Resume') {
       return (
         <Upload
           name="avatar"
           listType="picture-card"
-          className={styles.avataruploader}
+          className={styles.avatarUploader}
           showUploadList={false}
           action="https://www.mocky.io/v2/5cc8019d300000980a055e76"
           beforeUpload={file => beforeUpload(file, type)}
           onChange={this.handleChange}
         >
-          <Progress type="circle" percent={progress} width={80} />
+          <Progress className={styles.avatarUploader} type="circle" percent={progress} width={80} />
         </Upload>
       )
     }
@@ -285,6 +305,7 @@ class Avatar extends React.Component {
             action="https://www.mocky.io/v2/5cc8019d300000980a055e76"
             beforeUpload={file => beforeUpload(file, type)}
             onChange={this.handleResumeChange}
+            className={styles.avatarUploader}
             fileList={
               url
                 ? [
@@ -298,7 +319,8 @@ class Avatar extends React.Component {
             }
           >
             <Button>
-              <UploadOutlined /> Click to Upload
+              <UploadOutlined className={styles.avatarUploader} />
+              Click to Upload
             </Button>
           </Upload>
           <Progress
@@ -317,7 +339,7 @@ class Avatar extends React.Component {
         <Upload
           name="avatar"
           listType="picture-card"
-          className={styles.avataruploader}
+          className={styles.avatarUploader}
           showUploadList={false}
           action="https://www.mocky.io/v2/5cc8019d300000980a055e76"
           beforeUpload={file => beforeUpload(file, type)}
@@ -337,6 +359,7 @@ class Avatar extends React.Component {
         action="https://www.mocky.io/v2/5cc8019d300000980a055e76"
         beforeUpload={file => beforeUpload(file, type)}
         onChange={this.handleResumeChange}
+        className={styles.avatarUploader}
         fileList={
           url
             ? [

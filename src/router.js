@@ -31,6 +31,11 @@ const routes = [
     component: loadable(() => import('pages/user/signup')),
     exact: true,
   },
+  {
+    path: '/user/first-time-login',
+    component: loadable(() => import('pages/first-time-login')),
+    exact: true,
+  },
 
   // Dashboards
   {

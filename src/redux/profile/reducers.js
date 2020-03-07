@@ -191,6 +191,9 @@ export default function userReducer(state = initialState, action) {
     case actions.DELETE_BRAGS:
       state.brags = state.brags.filter(article => article.id !== action.data.id)
       return state
+    case actions.EDIT_FIRST_TIME_LOGIN:
+      state.firstTimeLogin = action.payload
+      return state
     default:
       return state
   }

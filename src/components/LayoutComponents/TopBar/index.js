@@ -5,7 +5,12 @@ import ProjectManagement from './ProjectManagement'
 import IssuesHistory from './IssuesHistory'
 import ProfileMenu from './ProfileMenu'
 import styles from './style.module.scss'
-import { triggerDevelopmentBuild, triggerProductionBuild } from '../../../services/website'
+import {
+  triggerDevelopmentBuild,
+  triggerProductionBuild,
+  listAmplifyJobs,
+} from '../../../services/website'
+// import listJobs from '../../../services/amplifyOperations'
 
 @connect(({ profile, user }) => ({ profile, user }))
 class TopBar extends React.Component {
@@ -35,6 +40,16 @@ class TopBar extends React.Component {
     const { sub, siteMetadata } = profile
     const { email } = user
     const repoName = siteMetadata[0].repoUrl
+    const { appId } = siteMetadata[0]
+
+    if (context === 'List Jobs') {
+      const response = await listAmplifyJobs(appId, 'develop')
+      console.log('listJobs response', response)
+      notification.success({
+        message: 'Logging Jobs',
+        description: 'Might work?',
+      })
+    }
     if (context === 'Staging') {
       const response = await triggerDevelopmentBuild(sub, email)
       console.log('triggerDevBuild Response', response)
@@ -73,6 +88,16 @@ class TopBar extends React.Component {
         <div className="mr-auto">
           <ProjectManagement />
         </div>
+        <a
+          href="https://themeforest.net/item/clean-ui-react-admin-template/21938700"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="mr-4 d-none d-sm-inline"
+        >
+          <Button type="success" onClick={e => this.handleClick(e, 'List Jobs')} disabled={staging}>
+            List Jobs
+          </Button>
+        </a>
         <a
           href="https://themeforest.net/item/clean-ui-react-admin-template/21938700"
           target="_blank"

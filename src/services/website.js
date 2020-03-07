@@ -10,6 +10,14 @@ const pbmgmt = axios.create({
   },
 })
 
+const buildStatusApi = axios.create({
+  baseURL: 'https://i1nc1drhji.execute-api.us-east-2.amazonaws.com/dev',
+  headers: {
+    'Content-Type': 'application/json',
+    'x-api-key': process.env.REACT_APP_GET_BUILD_STATUS_API_KEY,
+  },
+})
+
 const createPayload = (profile, email) => {
   const { getProfile } = profile.data
   const {
@@ -33,8 +41,8 @@ const createPayload = (profile, email) => {
     params: {
       first_name: getProfile.first_name,
       last_name: getProfile.last_name,
-      middleInitial: 'AW',
-      lastInitial: 'MC',
+      middleInitial: 'CY',
+      lastInitial: 'PG',
       email,
       site_metadata: getProfile.site_metadata,
       assets,
@@ -104,5 +112,25 @@ export async function triggerProductionBuild(accountId, repoUrl) {
     })
     .catch(function(err) {
       console.error(err, err.stack)
+    })
+}
+
+export async function listAmplifyJobs(appId, branchName) {
+  console.log('GET JOBS')
+
+  const payload = {
+    appId,
+    branchName,
+  }
+
+  console.log('payload', payload)
+
+  buildStatusApi
+    .post('/get-build-status', payload)
+    .then(response => {
+      console.log(response)
+    })
+    .catch(error => {
+      console.log(error)
     })
 }
