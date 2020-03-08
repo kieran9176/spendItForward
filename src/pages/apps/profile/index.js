@@ -1,7 +1,7 @@
 import React from 'react'
 import { connect } from 'react-redux'
 // import { API, graphqlOperation } from 'aws-amplify'
-import { Collapse, Icon } from 'antd'
+import { Collapse, Icon, Card } from 'antd'
 import { Helmet } from 'react-helmet'
 // import * as subscriptions from 'graphql/subscriptions'
 import Avatar from '../../../components/ImageUpload/Avatar'
@@ -15,6 +15,7 @@ import ReferencesForm from './ReferenceForm'
 import SocialForm from './SocialsForm'
 import FirstTimeLogin from '../../first-time-login'
 import style from './style.module.scss'
+import BuildStatus from './BuildStatus'
 
 @connect(({ profile }) => ({ profile }))
 class ProfileApp extends React.Component {
@@ -54,6 +55,9 @@ class ProfileApp extends React.Component {
       <div>
         <Helmet title="Profile" />
         <div className={style.profile}>
+          <Card title="Build Status" key="1" style={customPanelStyle}>
+            <BuildStatus />
+          </Card>
           <Collapse
             bordered={false}
             defaultActiveKey={['1']}

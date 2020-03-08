@@ -106,10 +106,19 @@ export function* LOAD_CURRENT_PROFILE(username, sub) {
       },
     })
 
+    // yield put({
+    //   type: 'profile/SET_STATE',
+    //   payload: {
+    //     loading: false,
+    //   },
+    // })
+
     yield put({
-      type: 'profile/SET_STATE',
+      type: 'builds/EDIT_BUILDS',
       payload: {
-        loading: false,
+        appId: profile.site_metadata[0].appId,
+        developResponse: { status: 'PENDING' },
+        masterResponse: { status: 'PENDING' },
       },
     })
   } else {

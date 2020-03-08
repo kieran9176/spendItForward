@@ -3,7 +3,8 @@ import user from './user/sagas'
 import menu from './menu/sagas'
 import settings from './settings/sagas'
 import profile from './profile/sagas'
+import builds from './builds/sagas'
 
 export default function* rootSaga() {
-  yield all([user(), menu(), settings(), profile()])
+  yield all([user(), menu(), settings(), profile(), builds()])
 }

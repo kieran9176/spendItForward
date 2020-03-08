@@ -116,21 +116,12 @@ export async function triggerProductionBuild(accountId, repoUrl) {
 }
 
 export async function listAmplifyJobs(appId, branchName) {
-  console.log('GET JOBS')
-
   const payload = {
     appId,
     branchName,
   }
 
-  console.log('payload', payload)
+  const response = await buildStatusApi.post('/get-build-status', payload)
 
-  buildStatusApi
-    .post('/get-build-status', payload)
-    .then(response => {
-      console.log(response)
-    })
-    .catch(error => {
-      console.log(error)
-    })
+  return response.data
 }

@@ -62,7 +62,7 @@ const initialState = {
   loading: false,
 }
 
-export default function userReducer(state = initialState, action) {
+export default function profileReducer(state = initialState, action) {
   switch (action.type) {
     case actions.SET_STATE:
       return { ...state, ...action.payload }
@@ -193,6 +193,12 @@ export default function userReducer(state = initialState, action) {
       return state
     case actions.EDIT_FIRST_TIME_LOGIN:
       state.firstTimeLogin = action.payload
+      return state
+    case actions.EDIT_BUILD_STATUS:
+      // eslint-disable-next-line no-case-declarations
+      const buildStatus = action.payload
+      // eslint-disable-next-line no-case-declarations
+      state.buildStatus = buildStatus
       return state
     default:
       return state
