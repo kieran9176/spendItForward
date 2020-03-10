@@ -116,7 +116,7 @@ export function* LOAD_CURRENT_PROFILE(username, sub) {
     yield put({
       type: 'builds/EDIT_BUILDS',
       payload: {
-        appId: profile.site_metadata[0].appId,
+        appId: profile.site_metadata[0] ? profile.site_metadata[0].appId : 'PENDING',
         developResponse: { status: 'PENDING' },
         masterResponse: { status: 'PENDING' },
       },
