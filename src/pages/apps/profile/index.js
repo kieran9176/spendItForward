@@ -1,194 +1,216 @@
 import React from 'react'
-import { connect } from 'react-redux'
-// import { API, graphqlOperation } from 'aws-amplify'
-import { Collapse, Icon, Card } from 'antd'
+import { Button, Tabs } from 'antd'
 import { Helmet } from 'react-helmet'
-// import * as subscriptions from 'graphql/subscriptions'
-import Avatar from '../../../components/ImageUpload/Avatar'
-import NameForm from './NameForm'
-import EducationForm from './EducationForm'
-import WhatWhenWhereForm from './WhatWhereWhenForm'
-import TagsForm from './TagsForm'
-import TextForm from './TextForm'
-import ArticleForm from './ArticleForm'
-import ReferencesForm from './ReferenceForm'
-import SocialForm from './SocialsForm'
-import FirstTimeLogin from '../../first-time-login'
+import Avatar from 'components/CleanUIComponents/Avatar'
+import Donut from 'components/CleanUIComponents/Donut'
+import SettingsForm from './SettingsForm'
+import data from './data.json'
 import style from './style.module.scss'
+import TextForm from './TextForm'
+import TagsForm from './TagsForm'
+import SocialForm from './SocialsForm'
 import BuildStatus from './BuildStatus'
+import WhatWhereWhenForm from './WhatWhereWhenForm'
+import EducationForm from './EducationForm'
+import ReferencesForm from './ReferenceForm'
+import ArticleForm from './ArticleForm'
 
-@connect(({ profile }) => ({ profile }))
-class ProfileApp extends React.Component {
+const { TabPane } = Tabs
+
+class NewProfileApp extends React.Component {
+  state = {
+    name: '',
+    nickname: '',
+    photo: '',
+    background: '',
+    post: '',
+    postsCount: '',
+    followersCount: '',
+    lastActivity: '',
+    status: '',
+  }
+
+  componentWillMount() {
+    this.setState({
+      name: data.name,
+      nickname: data.nickname,
+      photo: data.photo,
+      background: data.background,
+      post: data.post,
+      postsCount: data.postsCount,
+      followersCount: data.followersCount,
+      lastActivity: data.lastActivity,
+      status: data.status,
+    })
+  }
+
   render() {
-    const { Panel } = Collapse
-    const { profile } = this.props
-    const { firstTimeLogin } = profile
+    const {
+      name,
+      nickname,
+      photo,
+      background,
+      post,
+      postsCount,
+      followersCount,
+      lastActivity,
+      status,
+    } = this.state
 
-    const text = {
-      nameText: 'First name, last name?',
-      experienceText:
-        "Input any professional experience you have. If you don't have any, no worries! This is an optional section.",
-      introText: 'The secret to getting ahead is getting started ...',
-      skillsText: 'You got mad skillz?',
-      courseworkText: 'Tell us about all that ish you done learnt.',
-      educationText: 'Maths? Science? MBA in Craft Beer Brewing?',
-      leadershipText:
-        'If your actions inspire others to dream more, learn more, do more and become more, you are a leader.',
-      referencesText: "I've got some people who carry me.",
-      bragsText: 'Brag about yourself. You deserve it.',
-      articlesText: 'What have you been reading lately?',
-      socialsText: 'Where can people find you?',
-    }
-
-    const customPanelStyle = {
-      background: '#ffffff',
-      borderRadius: 4,
-      marginBottom: 24,
-      border: 0,
-      overflow: 'hidden',
-    }
-
-    if (firstTimeLogin.status === true) {
-      return <FirstTimeLogin />
-    }
     return (
       <div>
         <Helmet title="Profile" />
         <div className={style.profile}>
-          <Card title="Build Status" key="1" style={customPanelStyle}>
-            <BuildStatus />
-          </Card>
-          <Collapse
-            bordered={false}
-            defaultActiveKey={['1']}
-            expandIcon={({ isActive }) => <Icon type="caret-right" rotate={isActive ? 90 : 0} />}
-          >
-            <Panel header="Name" key="1" style={customPanelStyle}>
-              <p>{text.nameText}</p>
-              <NameForm type="Name" />
-            </Panel>
-          </Collapse>
-          <Collapse
-            bordered={false}
-            defaultActiveKey={['1']}
-            expandIcon={({ isActive }) => <Icon type="caret-right" rotate={isActive ? 90 : 0} />}
-          >
-            <Panel header="Intro" key="1" style={customPanelStyle}>
-              <p>{text.introText}</p>
-              <TextForm type="Intro" />
-            </Panel>
-          </Collapse>
-          <Collapse
-            bordered={false}
-            defaultActiveKey={['2']}
-            expandIcon={({ isActive }) => <Icon type="caret-right" rotate={isActive ? 90 : 0} />}
-          >
-            <Collapse
-              bordered={false}
-              defaultActiveKey={['2']}
-              expandIcon={({ isActive }) => <Icon type="caret-right" rotate={isActive ? 90 : 0} />}
-            >
-              <Panel header="Primary Image" key="1" style={customPanelStyle}>
-                <Avatar type="Primary" />
-              </Panel>
-            </Collapse>
-            <Collapse
-              bordered={false}
-              defaultActiveKey={['2']}
-              expandIcon={({ isActive }) => <Icon type="caret-right" rotate={isActive ? 90 : 0} />}
-            >
-              <Panel header="Secondary Image" key="1" style={customPanelStyle}>
-                <Avatar type="Secondary" />
-              </Panel>
-            </Collapse>
-            <Collapse
-              bordered={false}
-              defaultActiveKey={['2']}
-              expandIcon={({ isActive }) => <Icon type="caret-right" rotate={isActive ? 90 : 0} />}
-            >
-              <Panel header="Resume" key="1" style={customPanelStyle}>
-                <Avatar type="Resume" />
-              </Panel>
-            </Collapse>
-            <Panel header="Experience" key="1" style={customPanelStyle}>
-              <p>{text.experienceText}</p>
-              <WhatWhenWhereForm type="Experience" />
-            </Panel>
-          </Collapse>
-          <Collapse
-            bordered={false}
-            defaultActiveKey={['1']}
-            expandIcon={({ isActive }) => <Icon type="caret-right" rotate={isActive ? 90 : 0} />}
-          >
-            <Panel header="Leadership" key="4" style={customPanelStyle}>
-              <p>{text.leadershipText}</p>
-              <WhatWhenWhereForm type="Leadership" />
-            </Panel>
-          </Collapse>
-          <Collapse
-            bordered={false}
-            defaultActiveKey={['2']}
-            expandIcon={({ isActive }) => <Icon type="caret-right" rotate={isActive ? 90 : 0} />}
-          >
-            <Panel header="Skills" key="2" style={customPanelStyle}>
-              <p>{text.skillsText}</p>
-              <TagsForm type="Skills" />
-            </Panel>
-          </Collapse>
-          <Collapse
-            bordered={false}
-            defaultActiveKey={['3']}
-            expandIcon={({ isActive }) => <Icon type="caret-right" rotate={isActive ? 90 : 0} />}
-          >
-            <Panel header="Coursework" key="3" style={customPanelStyle}>
-              <p>{text.courseworkText}</p>
-              <TagsForm type="Coursework" />
-            </Panel>
-          </Collapse>
-          <Collapse
-            bordered={false}
-            defaultActiveKey={['1']}
-            expandIcon={({ isActive }) => <Icon type="caret-right" rotate={isActive ? 90 : 0} />}
-          >
-            <Panel header="Education" key="4" style={customPanelStyle}>
-              <p>{text.educationText}</p>
-              <EducationForm type="Education" />
-            </Panel>
-          </Collapse>
-          <Collapse
-            bordered={false}
-            defaultActiveKey={['1']}
-            expandIcon={({ isActive }) => <Icon type="caret-right" rotate={isActive ? 90 : 0} />}
-          >
-            <Panel header="References" key="6" style={customPanelStyle}>
-              <p>{text.referencesText}</p>
-              <ReferencesForm type="References" />
-            </Panel>
-          </Collapse>
-          <Collapse
-            bordered={false}
-            defaultActiveKey={['1']}
-            expandIcon={({ isActive }) => <Icon type="caret-right" rotate={isActive ? 90 : 0} />}
-          >
-            <Panel header="Favorite Articles" key="7" style={customPanelStyle}>
-              <p>{text.articlesText}</p>
-              <ArticleForm type="Articles" />
-            </Panel>
-          </Collapse>
-          <Collapse
-            bordered={false}
-            defaultActiveKey={['1']}
-            expandIcon={({ isActive }) => <Icon type="caret-right" rotate={isActive ? 90 : 0} />}
-          >
-            <Panel header="Socials" key="8" style={customPanelStyle}>
-              <p>{text.socialsText}</p>
-              <SocialForm type="Socials" />
-            </Panel>
-          </Collapse>
+          <div className="row">
+            <div className="col-xl-4">
+              <div
+                className={`card ${style.header}`}
+                style={{ backgroundImage: `url(${background})` }}
+              >
+                <div>
+                  <div className="card-body text-center">
+                    <Avatar src={photo} size="110" border="true" borderColor="white" />
+                    <br />
+                    <br />
+                    <Button.Group size="default">
+                      <Button style={{ width: 150 }}>Follow</Button>
+                      <Button style={{ width: 150 }}>Add to Friend</Button>
+                    </Button.Group>
+                    <br />
+                    <p className="text-white mt-2">{`Last activity: ${lastActivity}`}</p>
+                    <p className="text-white mt-2">
+                      {status === 'Online' && <Donut type="success" name={status} />}
+                      {status === 'Offline' && <Donut type="danger" name={status} />}
+                    </p>
+                  </div>
+                </div>
+              </div>
+              <div className="card">
+                <div className="card-body">
+                  <h5 className="mb-3 text-black">
+                    <strong>Actions</strong>
+                  </h5>
+                  <div className={style.actions}>
+                    <Button style={{ display: 'block', width: '100%' }}>Send Message</Button>
+                    <Button style={{ display: 'block', width: '100%' }}>Send File</Button>
+                    <Button style={{ display: 'block', width: '100%' }}>Access History</Button>
+                    <Button style={{ display: 'block', width: '100%' }}>Rename User</Button>
+                    <Button style={{ display: 'block', width: '100%' }}>Ban User</Button>
+                  </div>
+                </div>
+              </div>
+              <div className="card">
+                <div className="card-body">
+                  <h5 className="mb-3 text-black">
+                    <strong>Skills</strong>
+                  </h5>
+                  <TagsForm type="Skills" />
+                </div>
+              </div>
+              <div className="card">
+                <div className="card-body">
+                  <h5 className="mb-3 text-black">
+                    <strong>Coursework</strong>
+                  </h5>
+                  <TagsForm type="Coursework" />
+                </div>
+              </div>
+              <div className="card">
+                <div className="card-body">
+                  <h5 className="mb-3 text-black">
+                    <strong>Socials</strong>
+                  </h5>
+                  <SocialForm type="Socials" />
+                </div>
+              </div>
+              <div className="card">
+                <div className="card-body">
+                  <h5 className="mb-3 text-black">
+                    <strong>Favorite Articles</strong>
+                  </h5>
+                  <ArticleForm type="Articles" />
+                </div>
+              </div>
+            </div>
+            <div className="col-xl-8">
+              <div className={`card card-body mb-4 ${style.socialInfo}`}>
+                <div>
+                  <h2>
+                    <span className="text-black mr-2">
+                      <strong>{name}</strong>
+                    </span>
+                    <small className="text-muted">{nickname}</small>
+                  </h2>
+                  <p className="mb-1">{post}</p>
+                </div>
+                <div className={style.socialCounts}>
+                  <div className="text-center mr-3">
+                    <h2>{followersCount}</h2>
+                    <p className="mb-0">Followers</p>
+                  </div>
+                  <div className="text-center">
+                    <h2>{postsCount}</h2>
+                    <p className="mb-0">Posts</p>
+                  </div>
+                </div>
+              </div>
+              <div className="card">
+                <div className="card-body">
+                  <Tabs defaultActiveKey="1">
+                    <TabPane
+                      tab={
+                        <span>
+                          <i className="icmn-menu" /> Wall
+                        </span>
+                      }
+                      key="1"
+                    >
+                      <div className="py-3">
+                        <TextForm type="Intro" />
+                      </div>
+                      <hr />
+                      <h5>Experience</h5>
+                      <WhatWhereWhenForm type="Experience" />
+                      <hr />
+                      <h5>Education</h5>
+                      <EducationForm type="Education" />
+                      <hr />
+                      <h5>Leadership</h5>
+                      <WhatWhereWhenForm type="Leadership" />
+                      <hr />
+                      <h5>References</h5>
+                      <ReferencesForm type="References" />
+                      <hr />
+                    </TabPane>
+                    <TabPane
+                      tab={
+                        <span>
+                          <i className="icmn-bubbles" /> Builds
+                        </span>
+                      }
+                      key="2"
+                    >
+                      <BuildStatus />
+                    </TabPane>
+                    <TabPane
+                      tab={
+                        <span>
+                          <i className="icmn-cog" /> Settings
+                        </span>
+                      }
+                      key="3"
+                    >
+                      <SettingsForm />
+                    </TabPane>
+                  </Tabs>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     )
   }
 }
 
-export default ProfileApp
+export default NewProfileApp

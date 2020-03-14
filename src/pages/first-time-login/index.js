@@ -3,7 +3,6 @@ import { connect } from 'react-redux'
 import { withRouter } from 'react-router-dom'
 import { injectIntl } from 'react-intl'
 import { Row } from 'antd'
-import uuidv4 from 'uuid/v4'
 import './styles/draft.css'
 import './styles/plugin.css'
 import styles from './styles/style.module.scss'
@@ -79,19 +78,6 @@ class FirstTimeLogin extends React.Component {
 
   render() {
     const { showSearch, firstName } = this.state
-    const { dispatch, match } = this.props
-    const { params } = match
-    let { id, status } = params
-
-    if (!id) {
-      id = uuidv4()
-      status = 'new'
-    }
-
-    dispatch({
-      type: 'profile/CURRENT_POST',
-      payload: { status, id, saved: 'false' },
-    })
 
     return (
       <div className={styles.addPost}>

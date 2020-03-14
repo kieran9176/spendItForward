@@ -67,15 +67,12 @@ export default function profileReducer(state = initialState, action) {
     case actions.SET_STATE:
       return { ...state, ...action.payload }
     case actions.EDIT_PROFILE:
-      console.log('STATE', state, 'ACTION.PAYLOAD.DATA', action.payload.data)
       return { ...state, ...action.payload.data }
     case actions.EDIT_NAME:
-      console.log('EDIT_NAME reducer', action.payload[0])
       state.firstName = action.payload[0].first_name
       state.lastName = action.payload[0].last_name
       return state
     case actions.CURRENT_POST:
-      console.log('current post action payload', action.payload)
       state.currentPost = {
         id: action.payload.id ? action.payload.id : state.currentPost.id,
         status: action.payload.status ? action.payload.status : state.currentPost.id,
@@ -88,7 +85,6 @@ export default function profileReducer(state = initialState, action) {
     case actions.EDIT_POST_LOCALLY:
       state.posts = state.posts.map(post => {
         if (post.id === action.payload.id) {
-          console.log('edit post locally, action.payload.url', action.payload.url)
           return {
             id: action.payload.id,
             title: action.payload.title || post.title,
@@ -146,7 +142,6 @@ export default function profileReducer(state = initialState, action) {
       })
       return state
     case actions.EDIT_INTRO:
-      console.log(action.payload[0])
       state.intro = [action.payload[0]]
       return state
     case actions.EDIT_EDUCATION:

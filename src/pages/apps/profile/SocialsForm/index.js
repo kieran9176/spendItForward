@@ -1,6 +1,6 @@
 import React from 'react'
 import { connect } from 'react-redux'
-import { Form, Icon, Button, Modal, notification, Select, Input, Row, Col, Divider } from 'antd'
+import { Form, Icon, Button, Modal, notification, Select, Input } from 'antd'
 import socialTypes from './socials.json'
 
 const { Option } = Select
@@ -208,11 +208,9 @@ class SocialsForm extends React.Component {
   // https://github.com/ant-design/ant-design/issues/8880
 
   render() {
-    const { form, type, settings } = this.props
+    const { form, type } = this.props
     const { getFieldDecorator, getFieldsValue } = form
     const { visible } = this.state
-
-    const { isMobileView } = settings
 
     const initialValues = this.getInitialValues(type)
     const { title } = this.getFormAttributes(type)
@@ -224,79 +222,10 @@ class SocialsForm extends React.Component {
     const { keys } = getFieldsValue()
 
     const articleFormItem = keys.map((k, index) => {
-      if (!isMobileView) {
-        return (
-          <div key={k}>
-            <h5>
-              <strong style={{ marginRight: 8 }}>
-                {title} {index + 1}{' '}
-              </strong>
-              {keys.length > 1 ? (
-                <Icon
-                  className="dynamic-delete-button"
-                  type="minus-circle-o"
-                  onClick={() => this.showModal(k, index)}
-                />
-              ) : null}
-            </h5>
-            <Row gutter={24}>
-              <Col span={2}>
-                <Form.Item>
-                  {getFieldDecorator(`types[${index}]`, {
-                    validateTrigger: ['onChange', 'onBlur'],
-                    initialValue: index < initialValues.length ? initialValues[index].type : '',
-                    rules: [
-                      {
-                        required: true,
-                        whitespace: true,
-                        message: 'Please input social.',
-                      },
-                    ],
-                  })(
-                    <Select style={{ width: 120 }} onChange={this.handleChange}>
-                      {socialTypes.map(value => {
-                        // eslint-disable-next-line react/no-array-index-key
-                        return (
-                          <Option key={Math.random()} value={value.type}>
-                            {value.type}
-                          </Option>
-                        )
-                      })}
-                    </Select>,
-                  )}
-                </Form.Item>
-              </Col>
-              <Col span={12}>
-                <Form.Item>
-                  <Divider type="vertical" />
-                  {getFieldDecorator(`urls[${index}]`, {
-                    validateTrigger: ['onChange', 'onBlur'],
-                    initialValue: index < initialValues.length ? initialValues[index].url : '',
-                    rules: [
-                      {
-                        required: true,
-                        whitespace: true,
-                        message: 'Please input social.',
-                      },
-                    ],
-                  })(
-                    <Input
-                      placeholder="e.g. https://facebook.com/kieran.derfus"
-                      style={{ width: '50.2%', marginRight: 8 }}
-                    />,
-                  )}
-                </Form.Item>
-              </Col>
-            </Row>
-          </div>
-        )
-      }
       return (
         <div key={k}>
-          <h5>
-            <strong style={{ marginRight: 8 }}>
-              {title} {index + 1}{' '}
-            </strong>
+          <p>
+            {title} {index + 1}{' '}
             {keys.length > 1 ? (
               <Icon
                 className="dynamic-delete-button"
@@ -304,7 +233,7 @@ class SocialsForm extends React.Component {
                 onClick={() => this.showModal(k, index)}
               />
             ) : null}
-          </h5>
+          </p>
           <Form.Item>
             {getFieldDecorator(`types[${index}]`, {
               validateTrigger: ['onChange', 'onBlur'],
@@ -317,7 +246,7 @@ class SocialsForm extends React.Component {
                 },
               ],
             })(
-              <Select style={{ width: 185 }} onChange={this.handleChange}>
+              <Select style={{ width: '100%', marginRight: 8 }} onChange={this.handleChange}>
                 {socialTypes.map(value => {
                   // eslint-disable-next-line react/no-array-index-key
                   return (
@@ -342,11 +271,12 @@ class SocialsForm extends React.Component {
               ],
             })(
               <Input
-                placeholder="e.g. https://facebook.com/your.name"
-                style={{ width: '60%', marginRight: 8 }}
+                placeholder="e.g. https://facebook.com/kieran.derfus"
+                style={{ width: '100%', marginRight: 8 }}
               />,
             )}
           </Form.Item>
+          <hr />
         </div>
       )
     })
@@ -355,21 +285,13 @@ class SocialsForm extends React.Component {
       <Form onSubmit={this.handleSubmit}>
         {articleFormItem}
         <Form.Item>
-          {isMobileView ? (
-            <Button type="dashed" onClick={this.add} style={{ width: '60%' }}>
-              <Icon type="plus" /> Add field
-            </Button>
-          ) : (
-            <Button type="dashed" onClick={this.add} style={{ width: '34.4%' }}>
-              <Icon type="plus" /> Add field
-            </Button>
-          )}
-        </Form.Item>
-        <Form.Item>
-          <Button type="primary" htmlType="submit">
-            Save
+          <Button type="dashed" onClick={this.add} style={{ width: '100%', marginRight: 8 }}>
+            <Icon type="plus" /> Add field
           </Button>
         </Form.Item>
+        <Button type="primary" htmlType="submit">
+          Save
+        </Button>
         <Modal
           title="Remove Entry?"
           visible={visible}

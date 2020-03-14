@@ -106,8 +106,6 @@ export function* LOGIN_AFTER_SIGNUP(userSub, username, email, password) {
   const { UserStatus } = yield adminGetUserAsync(params).catch(err => console.log(err))
 
   if (UserStatus === 'CONFIRMED') {
-    console.log('theoretically should sign in')
-
     const payloadObj = {
       payload: {
         email,
@@ -185,11 +183,9 @@ export function* LOAD_CURRENT_ACCOUNT() {
     },
   })
 
-  const user = yield Auth.currentAuthenticatedUser()
-    // .then(() => true)
-    .catch(error => {
-      console.log(error)
-    })
+  const user = yield Auth.currentAuthenticatedUser().catch(error => {
+    console.log(error)
+  })
 
   if (user) {
     notification.success({
@@ -209,8 +205,6 @@ export function* LOAD_CURRENT_ACCOUNT() {
 
     // Call LOAD_CURRENT_PROFILE after we've fetched the 'sub' attribute from Cognito
     yield call(LOAD_CURRENT_PROFILE, username, sub)
-
-    console.log('attributes', attributes)
 
     yield put({
       type: 'user/SET_STATE',
@@ -255,9 +249,10 @@ export function* LOAD_CURRENT_ACCOUNT() {
 export function* LOGOUT() {
   yield Auth.signOut()
     .then(() => true)
-    .catch(err => console.log(err))
+    .catch(err => console.log('logout error', err))
 
-  // yield call(logout);
+  console.log('hit user logout saga')
+
   yield put({
     type: 'user/SET_STATE',
     payload: {

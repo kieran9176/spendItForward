@@ -117,9 +117,6 @@ class EducationForm extends React.Component {
   getPayloads = (type, values) => {
     const payloads = []
 
-    console.log('type', type)
-    console.log('values', values)
-
     switch (type) {
       case 'Education':
         for (let i = 0; i < values.keys.length; i += 1) {
@@ -147,7 +144,6 @@ class EducationForm extends React.Component {
     form.validateFields((err, values) => {
       if (!err) {
         const payload = this.getPayloads('Education', values)
-        console.log('payload', payload)
 
         dispatch({
           type: 'profile/EDIT_EDUCATION',
@@ -299,10 +295,8 @@ class EducationForm extends React.Component {
     const educationFormItem = keys.map((k, index) => {
       return (
         <div key={k}>
-          <h5>
-            <strong style={{ marginRight: 8 }}>
-              {type} {index + 1}{' '}
-            </strong>
+          <p>
+            {type} {index + 1}{' '}
             {keys.length > 1 ? (
               <Icon
                 className="dynamic-delete-button"
@@ -310,7 +304,7 @@ class EducationForm extends React.Component {
                 onClick={() => this.showModal(k, index)}
               />
             ) : null}
-          </h5>
+          </p>
           <Form.Item label={`${labels[0]} Type`}>
             {getFieldDecorator(`degrees[${index}]`, {
               initialValue:
@@ -324,7 +318,7 @@ class EducationForm extends React.Component {
               <Cascader
                 options={this.options}
                 expandTrigger="hover"
-                style={{ width: '60%', marginRight: 8 }}
+                style={{ width: '100%', marginRight: 8 }}
               />,
             )}
           </Form.Item>
@@ -378,7 +372,7 @@ class EducationForm extends React.Component {
                   message: 'Please input additional experience or delete this field.',
                 },
               ],
-            })(<Input placeholder="e.g. Philosophy" style={{ width: '60%', marginRight: 8 }} />)}
+            })(<Input placeholder="e.g. Philosophy" style={{ width: '100%', marginRight: 8 }} />)}
           </Form.Item>
         </div>
       )
@@ -388,15 +382,13 @@ class EducationForm extends React.Component {
       <Form onSubmit={this.handleSubmit}>
         {educationFormItem}
         <Form.Item>
-          <Button type="dashed" onClick={this.add} style={{ width: '60%' }}>
+          <Button type="dashed" onClick={this.add} style={{ width: '100%', marginRight: 8 }}>
             <Icon type="plus" /> Add field
           </Button>
         </Form.Item>
-        <Form.Item>
-          <Button type="primary" htmlType="submit">
-            Save
-          </Button>
-        </Form.Item>
+        <Button type="primary" htmlType="submit">
+          Save
+        </Button>
         <Modal
           title="Remove Entry?"
           visible={visible}
