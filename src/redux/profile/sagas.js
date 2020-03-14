@@ -17,8 +17,8 @@ export function* LOAD_CURRENT_PROFILE(username, sub) {
   if (!profileResponse.data.getProfile) {
     yield createProfile(username).then(async () => {
       profileResponse = await getProfile(sub)
-      const id = uuidv4()
-      createProfileResources(sub, id)
+      const repoId = uuidv4()
+      createProfileResources(sub, repoId)
       firstTimeLoginStatus = true
     })
   }
@@ -62,8 +62,8 @@ export function* LOAD_CURRENT_PROFILE(username, sub) {
         brags,
         assets,
         firstTimeLogin: {
-          firstName: 'TBD',
-          lastName: 'TBD',
+          first_name: 'TBD',
+          last_name: 'TBD',
           status: firstTimeLoginStatus,
         },
         siteMetadata: profile.site_metadata,
@@ -106,13 +106,6 @@ export function* LOAD_CURRENT_PROFILE(username, sub) {
       },
     })
 
-    // yield put({
-    //   type: 'profile/SET_STATE',
-    //   payload: {
-    //     loading: false,
-    //   },
-    // })
-
     yield put({
       type: 'builds/EDIT_BUILDS',
       payload: {
@@ -151,6 +144,39 @@ export function* LOAD_CURRENT_PROFILE(username, sub) {
   }
 }
 
+// export function* FIRST_TIME_LOGIN(username) {
+//
+//   console.log("hit first time login, username:", username);
+//
+//   yield put({
+//     type: 'profile/SET_STATE',
+//     payload: {
+//       username,
+//       firstName: 'TBD',
+//       lastName: 'TBD',
+//       firstTimeLogin: {
+//         firstName: 'TBD',
+//         lastName: 'TBD',
+//         status: true
+//       },
+//       assets: assetData
+//     }
+//   });
+//
+//   yield put({
+//     type: 'builds/EDIT_BUILDS',
+//     payload: {
+//       appId: 'PENDING',
+//       developResponse: { status: 'PENDING' },
+//       masterResponse: { status: 'PENDING' },
+//     }
+//   })
+// }
+
+export async function EDIT_FIRST_TIME_LOGIN(payload) {
+  console.log('SAGAS EDIT_FIRST_TIME_LOGIN', payload)
+}
+
 export async function EDIT_PROFILE({ payload }) {
   const { mutation, data } = payload
   const response = editProfile(mutation, data)
@@ -171,8 +197,6 @@ export async function EDIT_NAME({ payload }) {
 }
 
 export async function EDIT_POST({ payload }) {
-  console.log("SAVE_POST here's what we'll save:", payload)
-
   const response = editProfile('editPost', payload)
   response.then(values => {
     console.log('editProfile RESPONSE', response)
@@ -396,5 +420,6 @@ export default function* rootSaga() {
     takeEvery(actions.EDIT_SOCIALS, EDIT_SOCIALS),
     takeEvery(actions.DELETE_SOCIALS, DELETE_SOCIALS),
     takeEvery(actions.LOAD_CURRENT_PROFILE, LOAD_CURRENT_PROFILE),
+    takeEvery(actions.EDIT_FIRST_TIME_LOGIN, EDIT_FIRST_TIME_LOGIN),
   ])
 }

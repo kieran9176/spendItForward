@@ -53,7 +53,8 @@ class BuildStatus extends React.Component {
     const masterStatus = masterResponse.status
 
     const determineStatus = status => {
-      console.log('determining progress status')
+      console.log('determineStatus', status)
+
       switch (status) {
         case 'PENDING':
           return this.pending()

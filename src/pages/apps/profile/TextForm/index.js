@@ -228,7 +228,7 @@ class TextForm extends React.Component {
                   message: 'Please input additional experience or delete this field.',
                 },
               ],
-            })(<TextArea rows={4} style={{ width: '60%', marginRight: 8 }} />)}
+            })(<TextArea rows={4} style={{ width: '100%', marginRight: 8 }} />)}
           </Form.Item>
         </div>
       )
@@ -237,11 +237,10 @@ class TextForm extends React.Component {
     return (
       <Form onSubmit={this.handleSubmit}>
         {textFormItem}
-        <Form.Item>
-          <Button type="primary" htmlType="submit">
-            Save
-          </Button>
-        </Form.Item>
+        <Button className="mr-2" type="primary" htmlType="submit" style={{ width: 200 }}>
+          <i className="fa fa-send mr-2" />
+          Save Intro
+        </Button>
       </Form>
     )
   }

@@ -164,7 +164,6 @@ class ReferenceForm extends React.Component {
 
     switch (type) {
       case 'References':
-        console.log('references', references)
         return references || []
       default:
         notification.error({
@@ -222,10 +221,8 @@ class ReferenceForm extends React.Component {
     const referenceFormItem = keys.map((k, index) => {
       return (
         <div key={k}>
-          <h5>
-            <strong style={{ marginRight: 8 }}>
-              {title} {index + 1}{' '}
-            </strong>
+          <p>
+            {title} {index + 1}{' '}
             {keys.length > 1 ? (
               <Icon
                 className="dynamic-delete-button"
@@ -233,7 +230,7 @@ class ReferenceForm extends React.Component {
                 onClick={() => this.showModal(k, index)}
               />
             ) : null}
-          </h5>
+          </p>
           <Form.Item label={`${labels[0]} ${index + 1}`}>
             {getFieldDecorator(`text[${index}]`, {
               validateTrigger: ['onChange', 'onBlur'],
@@ -248,7 +245,7 @@ class ReferenceForm extends React.Component {
                   message: 'Please input a reference or delete this field.',
                 },
               ],
-            })(<TextArea rows={4} style={{ width: '60%', marginRight: 8 }} />)}
+            })(<TextArea rows={4} style={{ width: '100%', marginRight: 8 }} />)}
           </Form.Item>
           <Form.Item label={`${labels[1]} ${index + 1}`} required={false}>
             {getFieldDecorator(`authors[${index}]`, {
@@ -261,7 +258,7 @@ class ReferenceForm extends React.Component {
                   message: 'Please input additional articles or delete this field.',
                 },
               ],
-            })(<Input placeholder="e.g. EY" style={{ width: '60%', marginRight: 8 }} />)}
+            })(<Input placeholder="e.g. EY" style={{ width: '100%', marginRight: 8 }} />)}
           </Form.Item>
           <Form.Item label={`${labels[2]} ${index + 1}`} required={false}>
             {getFieldDecorator(`authorPositions[${index}]`, {
@@ -278,7 +275,7 @@ class ReferenceForm extends React.Component {
             })(
               <Input
                 placeholder="e.g. Senior Consultant"
-                style={{ width: '60%', marginRight: 8 }}
+                style={{ width: '100%', marginRight: 8 }}
               />,
             )}
           </Form.Item>
@@ -293,7 +290,7 @@ class ReferenceForm extends React.Component {
                   message: 'Please input author company or delete this field.',
                 },
               ],
-            })(<Input placeholder="e.g. EY" style={{ width: '60%', marginRight: 8 }} />)}
+            })(<Input placeholder="e.g. EY" style={{ width: '100%', marginRight: 8 }} />)}
           </Form.Item>
         </div>
       )
@@ -303,15 +300,13 @@ class ReferenceForm extends React.Component {
       <Form onSubmit={this.handleSubmit}>
         {referenceFormItem}
         <Form.Item>
-          <Button type="dashed" onClick={this.add} style={{ width: '60%' }}>
+          <Button type="dashed" onClick={this.add} style={{ width: '100%', marginRight: 8 }}>
             <Icon type="plus" /> Add field
           </Button>
         </Form.Item>
-        <Form.Item>
-          <Button type="primary" htmlType="submit">
-            Submit
-          </Button>
-        </Form.Item>
+        <Button type="primary" htmlType="submit">
+          Save
+        </Button>
         <Modal
           title="Remove Entry?"
           visible={visible}

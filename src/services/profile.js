@@ -24,7 +24,6 @@ export async function getProfile(accountId) {
 }
 
 export async function createProfile(username) {
-  console.log('create a new profile!')
   return API.graphql(
     graphqlOperation(mutations.createProfile, {
       input: {
@@ -82,23 +81,18 @@ const filterData = (mutation, data) => {
 
   switch (mutation) {
     case 'editExperience':
-      console.log('updateExperience FILTER DATA', data)
       return data.filter(obj => obj.changed !== false)
     case 'editLeadership':
-      console.log('updateLeadership FILTER DATA', data)
       return data.filter(obj => obj.changed !== false)
     case 'updateSkills':
-      console.log('filterData skills', skills)
       return skills.filter(skillsObj => skillsObj.action)
     case 'updateCoursework':
       return coursework.filter(
         courseworkObj => courseworkObj.action === 'add' || courseworkObj.action === 'remove',
       )
     case 'editArticles':
-      console.log('updateArticles FILTER DATA', data)
       return data.filter(articleObj => articleObj.changed !== false)
     case 'editBrags':
-      console.log('editBrags FILTER DATA', data)
       return data.filter(bragObj => bragObj.changed !== false)
     case 'updatePosts':
       return post
@@ -127,7 +121,6 @@ const createPayloads = (mutation, data) => {
         return null
       })
     case 'updatePosts':
-      console.log('POSTS CREATE PAYLOAD data', data)
       return data.id
         ? { input: data }
         : {
@@ -154,11 +147,9 @@ const performOperations = async (mutation, payloads) => {
         payloads.map(payload => {
           if (payload.id) {
             payload = pop(payload)
-            console.log('performOperations editIntro', payload)
             return API.graphql(graphqlOperation(mutations.updateIntro, { input: payload }))
           }
           payload = pop(payload)
-          console.log('performOperations createIntro', payload)
           return API.graphql(graphqlOperation(mutations.createIntro, { input: payload }))
         }),
       )
@@ -167,18 +158,15 @@ const performOperations = async (mutation, payloads) => {
         payloads.map(payload => {
           if (payload.id) {
             payload = pop(payload)
-            console.log('performOperations editExperience', payload)
             return API.graphql(graphqlOperation(mutations.updateExperience, { input: payload }))
           }
           payload = pop(payload)
-          console.log('performOperations createExperience', payload)
           return API.graphql(graphqlOperation(mutations.createExperience, { input: payload }))
         }),
       )
     case 'deleteExperience':
       return API.graphql(graphqlOperation(mutations.deleteExperience, { input: payloads.data }))
     case 'updateSkills':
-      console.log('PERFORM SKILLS OPS PAYLOADS', payloads)
       return Promise.all(
         payloads.map(payload => {
           return payload.input.id
@@ -187,7 +175,6 @@ const performOperations = async (mutation, payloads) => {
         }),
       )
     case 'updateCoursework':
-      console.log('PERFORM COURSEWORK OPS PAYLOADS', payloads)
       return Promise.all(
         payloads.map(payload => {
           return payload.input.id
@@ -196,31 +183,25 @@ const performOperations = async (mutation, payloads) => {
         }),
       )
     case 'editName':
-      console.log('payloads', payloads)
       return API.graphql(graphqlOperation(mutations.updateName, { input: payloads[0] }))
     case 'editAsset':
-      console.log('editAsset payload', payloads)
       if (payloads.id) {
         return API.graphql(graphqlOperation(mutations.updateAsset, { input: payloads }))
       }
       payloads = pop(payloads)
-      console.log('no ID payload', payloads)
       return API.graphql(graphqlOperation(mutations.createAsset, { input: payloads }))
     case 'editLeadership':
       return Promise.all(
         payloads.map(payload => {
           if (payload.id) {
             payload = pop(payload)
-            console.log('editLeadership', payload)
             return API.graphql(graphqlOperation(mutations.updateLeadership, { input: payload }))
           }
           payload = pop(payload)
-          console.log('createLeadership', payload)
           return API.graphql(graphqlOperation(mutations.createLeadership, { input: payload }))
         }),
       )
     case 'deleteLeadership':
-      console.log('removeLeadership payloads', payloads)
       return API.graphql(graphqlOperation(mutations.deleteLeadership, { input: payloads.data }))
     case 'editArticles':
       return Promise.all(
@@ -273,7 +254,6 @@ const performOperations = async (mutation, payloads) => {
     case 'deleteSocials':
       return API.graphql(graphqlOperation(mutations.deleteSocial, { input: payloads.data }))
     case 'editPost':
-      console.log('performOperations --> editPost payloads', payloads)
       if (payloads.status !== 'new') {
         payloads = {
           id: payloads.id,

@@ -8,7 +8,6 @@ import uuidv4 from 'uuid/v4'
 import styles from './style.module.scss'
 
 function beforeUpload(file, type) {
-  console.log('before upload file type', file.type)
   const isJpgOrPng = file.type === 'image/jpeg' || file.type === 'image/png'
   const isPdf = file.type === 'application/pdf'
 
@@ -18,7 +17,6 @@ function beforeUpload(file, type) {
         message: 'File-type not accepted.',
         description: 'You can only upload a JPG/PNG file.',
       })
-      console.log('You can only upload a JPG/PNG file!')
     }
     const isLt10M = file.size / 1024 / 1024 < 10
     if (!isLt10M) {
@@ -27,7 +25,6 @@ function beforeUpload(file, type) {
         message: 'File too large.',
         description: 'Image must be smaller than 5MB!',
       })
-      console.log('Image must be smaller than 5MB!')
     }
     return isJpgOrPng && isLt10M
   }
@@ -37,7 +34,6 @@ function beforeUpload(file, type) {
         message: 'File-type not accepted.',
         description: 'You can only upload a PDF.',
       })
-      console.log('You can only upload a PDF file!')
     }
     const isLt20M = file.size / 1024 / 1024 < 20
     if (!isLt20M) {
@@ -46,7 +42,6 @@ function beforeUpload(file, type) {
         message: 'File too large.',
         description: 'File must be smaller than 20MB!',
       })
-      console.log('File must be smaller than 20MB!')
     }
     return isPdf && isLt20M
   }
@@ -115,7 +110,6 @@ class Avatar extends React.Component {
     if (type === 'Resume') {
       if (assets) {
         const resume = assets.filter(asset => asset.type === 'resume')[0]
-        console.log('resume', resume)
         return resume
       }
       return { id: null, type: 'resume', url: '' }
@@ -139,19 +133,15 @@ class Avatar extends React.Component {
   }
 
   handleResumeChange = info => {
-    console.log('file', info.file)
-
     if (info.file.status === 'uploading') {
       this.setState({ loading: true })
       this.handleUpload(info.file.originFileObj).then(res => console.log(res))
     }
     if (info.file.status === 'done') {
-      console.log('file.status is done', info.file.status)
       this.setState({ loading: false })
     }
     if (info.file.status === 'error') {
       this.setState({ loading: false })
-      console.log('errored file', info.file)
     }
     if (info.file.status === 'removed') {
       this.setState({
@@ -228,8 +218,6 @@ class Avatar extends React.Component {
           progress: false,
         })
 
-        console.log('setting state (key) ...', key)
-
         this.setState({
           id,
           url: key,
@@ -255,8 +243,6 @@ class Avatar extends React.Component {
         initialValue: post ? post.image_url : null,
       })
     }
-
-    console.log('styles', styles)
 
     const uploadImageButton = (
       <div className={styles.avatarUploader}>
@@ -372,7 +358,6 @@ class Avatar extends React.Component {
             : []
         }
       >
-        {console.log('state', this.state)}
         <Button>
           <UploadOutlined /> Click to Upload
         </Button>

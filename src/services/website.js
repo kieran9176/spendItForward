@@ -63,8 +63,6 @@ const createPayload = (profile, email) => {
 export async function triggerDevelopmentBuild(sub, email) {
   const profileResponse = getProfileQuery(sub)
 
-  console.log('TRIGGER DEV BUILD')
-
   profileResponse.then(profileObj => {
     const payload = createPayload(profileObj, email)
 
@@ -80,12 +78,7 @@ export async function triggerDevelopmentBuild(sub, email) {
 }
 
 export async function triggerProductionBuild(accountId, repoUrl) {
-  console.log('accountId', accountId)
-  console.log('repoUrl', repoUrl)
-
   const repoName = repoUrl.substr(37)
-
-  console.log('repoName', repoName)
 
   AWS.config.update({
     accessKeyId: process.env.REACT_APP_S3_ACCESS_KEY_ID,
@@ -107,7 +100,6 @@ export async function triggerProductionBuild(accountId, repoUrl) {
   // Handle promise's fulfilled/rejected states
   publishTextPromise
     .then(function(data) {
-      console.log(`Message ${params.Message} send sent to the topic ${params.TopicArn}`)
       console.log(`MessageID is ${data.MessageId}`)
     })
     .catch(function(err) {
@@ -116,12 +108,20 @@ export async function triggerProductionBuild(accountId, repoUrl) {
 }
 
 export async function listAmplifyJobs(appId, branchName) {
-  const payload = {
-    appId,
-    branchName,
+  if (appId !== 'PENDING' && branchName) {
+    const payload = {
+      appId,
+      branchName,
+    }
+    const response = await buildStatusApi.post('/get-build-status', payload)
+
+    console.log('listAmplifyJobs Branch', branchName)
+    console.log('listAmplifyJobs Response', response)
+
+    if (response.data === '') {
+      return { status: 'SUCCEED' }
+    }
+    return response.data
   }
-
-  const response = await buildStatusApi.post('/get-build-status', payload)
-
-  return response.data
+  return { status: 'PENDING' }
 }

@@ -90,7 +90,6 @@ class ArticlesForm extends React.Component {
     const articles = []
     switch (type) {
       case 'Articles':
-        console.log('values', values)
         for (let i = 0; i < values.keys.length; i += 1) {
           articles.push({
             caption: values.captions[i] || null,
@@ -116,8 +115,6 @@ class ArticlesForm extends React.Component {
     form.validateFields((err, values) => {
       if (!err) {
         const payload = this.createPayloads(type, values)
-
-        console.log('payload', payload)
 
         dispatch({
           type: 'profile/EDIT_ARTICLES',
@@ -234,7 +231,12 @@ class ArticlesForm extends React.Component {
                   message: 'Please input additional articles or delete this field.',
                 },
               ],
-            })(<Input placeholder="e.g. EY" style={{ width: '60%', marginRight: 8 }} />)}
+            })(
+              <Input
+                placeholder="e.g. EY has record year"
+                style={{ width: '100%', marginRight: 8 }}
+              />,
+            )}
           </Form.Item>
           <Form.Item label={`${labels[1]} ${index + 1}`} required={false}>
             {getFieldDecorator(`captions[${index}]`, {
@@ -249,8 +251,8 @@ class ArticlesForm extends React.Component {
               ],
             })(
               <Input
-                placeholder="e.g. Senior Consultant"
-                style={{ width: '60%', marginRight: 8 }}
+                placeholder="e.g. > 1 trillion in revenue"
+                style={{ width: '100%', marginRight: 8 }}
               />,
             )}
           </Form.Item>
@@ -266,8 +268,9 @@ class ArticlesForm extends React.Component {
                   type: 'url',
                 },
               ],
-            })(<Input placeholder="consulting.ey" style={{ width: '60%', marginRight: 8 }} />)}
+            })(<Input placeholder="consulting.ey" style={{ width: '100%', marginRight: 8 }} />)}
           </Form.Item>
+          <hr />
         </div>
       )
     })
@@ -276,15 +279,13 @@ class ArticlesForm extends React.Component {
       <Form onSubmit={this.handleSubmit}>
         {articleFormItem}
         <Form.Item>
-          <Button type="dashed" onClick={this.add} style={{ width: '60%' }}>
+          <Button type="dashed" onClick={this.add} style={{ width: '100%', marginRight: 8 }}>
             <Icon type="plus" /> Add field
           </Button>
         </Form.Item>
-        <Form.Item>
-          <Button type="primary" htmlType="submit">
-            Save
-          </Button>
-        </Form.Item>
+        <Button type="primary" htmlType="submit">
+          Save
+        </Button>
         <Modal
           title="Remove Entry?"
           visible={visible}
