@@ -1,6 +1,7 @@
 import React from 'react'
 import { connect } from 'react-redux'
 import { Form, Input, Icon, Button, Modal, notification } from 'antd'
+import { formatUrl } from '../../../../services/profile'
 
 @connect(({ profile }) => ({ profile }))
 @Form.create({
@@ -23,16 +24,10 @@ import { Form, Input, Icon, Button, Modal, notification } from 'antd'
 class ArticlesForm extends React.Component {
   state = {
     visible: false,
+    disabled: true,
     k: null,
     index: null,
   }
-
-  // getPayloads(type, values) {
-  //   if (type === "Articles") {
-  //     return this.createPayloads("updateArticles", values)
-  //   }
-  //   return null
-  // }
 
   remove = () => {
     const { form, dispatch } = this.props
@@ -91,10 +86,11 @@ class ArticlesForm extends React.Component {
     switch (type) {
       case 'Articles':
         for (let i = 0; i < values.keys.length; i += 1) {
+          const formattedUrl = formatUrl(values.links[i])
           articles.push({
             caption: values.captions[i] || null,
             title: values.titles[i] || null,
-            url: values.links[i] || null,
+            url: formattedUrl || null,
             id: values.IDs[i] || null,
             changed: values.changed[i],
           })
@@ -114,6 +110,7 @@ class ArticlesForm extends React.Component {
     const { form, type, dispatch } = this.props
     form.validateFields((err, values) => {
       if (!err) {
+        this.setState({ disabled: true })
         const payload = this.createPayloads(type, values)
 
         dispatch({
@@ -188,13 +185,18 @@ class ArticlesForm extends React.Component {
     })
   }
 
+  onChange = e => {
+    e.preventDefault()
+    this.setState({ disabled: false })
+  }
+
   // if your form doesn't have the fields these you set, this error will appear!
   // https://github.com/ant-design/ant-design/issues/8880
 
   render() {
     const { form, type } = this.props
     const { getFieldDecorator, getFieldsValue } = form
-    const { visible } = this.state
+    const { visible, disabled } = this.state
 
     const initialValues = this.getInitialValues(type)
     const { title, labels } = this.getFormAttributes(type)
@@ -235,6 +237,7 @@ class ArticlesForm extends React.Component {
               <Input
                 placeholder="e.g. EY has record year"
                 style={{ width: '100%', marginRight: 8 }}
+                onChange={this.onChange}
               />,
             )}
           </Form.Item>
@@ -253,6 +256,7 @@ class ArticlesForm extends React.Component {
               <Input
                 placeholder="e.g. > 1 trillion in revenue"
                 style={{ width: '100%', marginRight: 8 }}
+                onChange={this.onChange}
               />,
             )}
           </Form.Item>
@@ -265,10 +269,15 @@ class ArticlesForm extends React.Component {
                   required: true,
                   whitespace: true,
                   message: 'Not a valid URL. Sample URL: https://chunesupply.com',
-                  type: 'url',
                 },
               ],
-            })(<Input placeholder="consulting.ey" style={{ width: '100%', marginRight: 8 }} />)}
+            })(
+              <Input
+                placeholder="consulting.ey"
+                style={{ width: '100%', marginRight: 8 }}
+                onChange={this.onChange}
+              />,
+            )}
           </Form.Item>
           <hr />
         </div>
@@ -283,7 +292,7 @@ class ArticlesForm extends React.Component {
             <Icon type="plus" /> Add field
           </Button>
         </Form.Item>
-        <Button type="primary" htmlType="submit">
+        <Button type="primary" htmlType="submit" disabled={disabled}>
           Save
         </Button>
         <Modal

@@ -19,6 +19,13 @@ export function notify(status, type) {
   }
 }
 
+export function formatUrl(url) {
+  console.log('url substr', url.substr(0, 8))
+  if (!url) return null
+  if (url.substr(0, 8) === 'https://') return url
+  return `https://${url}`
+}
+
 export async function getProfile(accountId) {
   return API.graphql(graphqlOperation(queries.getProfile, { account_id: accountId }))
 }
@@ -91,6 +98,7 @@ const filterData = (mutation, data) => {
         courseworkObj => courseworkObj.action === 'add' || courseworkObj.action === 'remove',
       )
     case 'editArticles':
+      console.log('editArticles Filter Data data', data)
       return data.filter(articleObj => articleObj.changed !== false)
     case 'editBrags':
       return data.filter(bragObj => bragObj.changed !== false)
@@ -207,6 +215,7 @@ const performOperations = async (mutation, payloads) => {
       return Promise.all(
         payloads.map(payload => {
           if (payload.id) {
+            payload = pop(payload)
             return API.graphql(graphqlOperation(mutations.updateArticle, { input: payload }))
           }
           payload = pop(payload)

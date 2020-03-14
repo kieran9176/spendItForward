@@ -25,6 +25,7 @@ const { TextArea } = Input
 class ReferenceForm extends React.Component {
   state = {
     visible: false,
+    disabled: true,
     k: null,
     index: null,
   }
@@ -40,10 +41,6 @@ class ReferenceForm extends React.Component {
     if (keys.length === 1) {
       return
     }
-
-    console.log('index', index)
-
-    console.log('IDs', IDs)
 
     if (IDs[index]) {
       console.log('dispatch deleteReferences')
@@ -120,6 +117,7 @@ class ReferenceForm extends React.Component {
     const { form, type, dispatch } = this.props
     form.validateFields((err, values) => {
       if (!err) {
+        this.setState({ disabled: true })
         const payload = this.createPayloads(type, values)
 
         console.log('payload', payload)
@@ -196,13 +194,17 @@ class ReferenceForm extends React.Component {
     })
   }
 
+  onChange = () => {
+    this.setState({ disabled: false })
+  }
+
   // if your form doesn't have the fields these you set, this error will appear!
   // https://github.com/ant-design/ant-design/issues/8880
 
   render() {
     const { form, type } = this.props
     const { getFieldDecorator, getFieldsValue } = form
-    const { visible } = this.state
+    const { visible, disabled } = this.state
 
     const initialValues = this.getInitialValues(type)
     const { title, labels } = this.getFormAttributes(type)
@@ -245,7 +247,13 @@ class ReferenceForm extends React.Component {
                   message: 'Please input a reference or delete this field.',
                 },
               ],
-            })(<TextArea rows={4} style={{ width: '100%', marginRight: 8 }} />)}
+            })(
+              <TextArea
+                rows={4}
+                style={{ width: '100%', marginRight: 8 }}
+                onChange={this.onChange}
+              />,
+            )}
           </Form.Item>
           <Form.Item label={`${labels[1]} ${index + 1}`} required={false}>
             {getFieldDecorator(`authors[${index}]`, {
@@ -258,7 +266,13 @@ class ReferenceForm extends React.Component {
                   message: 'Please input additional articles or delete this field.',
                 },
               ],
-            })(<Input placeholder="e.g. EY" style={{ width: '100%', marginRight: 8 }} />)}
+            })(
+              <Input
+                placeholder="e.g. EY"
+                style={{ width: '100%', marginRight: 8 }}
+                onChange={this.onChange}
+              />,
+            )}
           </Form.Item>
           <Form.Item label={`${labels[2]} ${index + 1}`} required={false}>
             {getFieldDecorator(`authorPositions[${index}]`, {
@@ -276,6 +290,7 @@ class ReferenceForm extends React.Component {
               <Input
                 placeholder="e.g. Senior Consultant"
                 style={{ width: '100%', marginRight: 8 }}
+                onChange={this.onChange}
               />,
             )}
           </Form.Item>
@@ -290,7 +305,13 @@ class ReferenceForm extends React.Component {
                   message: 'Please input author company or delete this field.',
                 },
               ],
-            })(<Input placeholder="e.g. EY" style={{ width: '100%', marginRight: 8 }} />)}
+            })(
+              <Input
+                placeholder="e.g. EY"
+                style={{ width: '100%', marginRight: 8 }}
+                onChange={this.onChange}
+              />,
+            )}
           </Form.Item>
         </div>
       )
@@ -304,7 +325,7 @@ class ReferenceForm extends React.Component {
             <Icon type="plus" /> Add field
           </Button>
         </Form.Item>
-        <Button type="primary" htmlType="submit">
+        <Button type="primary" htmlType="submit" disabled={disabled}>
           Save
         </Button>
         <Modal

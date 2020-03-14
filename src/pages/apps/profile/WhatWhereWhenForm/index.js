@@ -2,10 +2,9 @@ import React from 'react'
 import { connect } from 'react-redux'
 import { Form, Input, Icon, Button, DatePicker, Checkbox, Modal, notification } from 'antd'
 import moment from 'moment'
-// import style from '../style.module.scss'
+import { formatUrl } from '../../../../services/profile'
 
 const { MonthPicker } = DatePicker
-// const { Option } = Select;
 
 @connect(({ profile }) => ({ profile }))
 @Form.create({
@@ -28,11 +27,9 @@ const { MonthPicker } = DatePicker
 class WhatWhereWhenForm extends React.Component {
   state = {
     visible: false,
+    disabled: true,
     k: null,
     index: null,
-    // title: null,
-    // createMutation: null,
-    // deleteMutation: null,
     dispatchEdit: null,
     dispatchDelete: null,
     labels: [],
@@ -116,6 +113,7 @@ class WhatWhereWhenForm extends React.Component {
     switch (type) {
       case 'Experience':
         for (let i = 0; i < values.keys.length; i += 1) {
+          const formattedUrl = formatUrl(values.links[i])
           payloads.push({
             position: values.positions[i] || null,
             company: values.organizations[i] || null,
@@ -123,7 +121,7 @@ class WhatWhereWhenForm extends React.Component {
             end_date: !values.checkboxes[i]
               ? moment(values.endDates[i]).format('YYYY-MM')
               : 'Present' || null,
-            link: values.links[i] || null,
+            link: formattedUrl || null,
             id: values.IDs[i] || null,
             changed: values.changed[i],
           })
@@ -131,6 +129,7 @@ class WhatWhereWhenForm extends React.Component {
         return payloads
       case 'Leadership':
         for (let i = 0; i < values.keys.length; i += 1) {
+          const formattedUrl = formatUrl(values.links[i])
           payloads.push({
             position: values.positions[i] || null,
             organization: values.organizations[i] || null,
@@ -138,19 +137,19 @@ class WhatWhereWhenForm extends React.Component {
             end_date: !values.checkboxes[i]
               ? moment(values.endDates[i]).format('YYYY-MM')
               : 'Present',
-            link: values.links[i] || null,
+            link: formattedUrl || null,
             id: values.IDs[i] || null,
             changed: values.changed[i],
           })
         }
         return payloads
       case 'Brags':
-        console.log('createPayloads type Brags', values)
         for (let i = 0; i < values.keys.length; i += 1) {
+          const formattedUrl = formatUrl(values.links[i])
           payloads.push({
             what: values.positions[i] || null,
             where: values.organizations[i] || null,
-            url: values.links[i] || null,
+            url: formattedUrl || null,
             start_date: moment(values.startDates[i]).format('YYYY-MM'),
             end_date: !values.checkboxes[i]
               ? moment(values.endDates[i]).format('YYYY-MM')
@@ -161,12 +160,12 @@ class WhatWhereWhenForm extends React.Component {
         }
         return payloads
       case 'Articles':
-        console.log('values', values)
         for (let i = 0; i < values.keys.length; i += 1) {
+          const formattedUrl = formatUrl(values.links[i])
           payloads.push({
             caption: values.captions[i] || null,
             title: values.titles[i] || null,
-            url: values.links[i] || null,
+            url: formattedUrl || null,
             id: values.IDs[i] || null,
             changed: values.changed[i],
           })
@@ -202,6 +201,7 @@ class WhatWhereWhenForm extends React.Component {
       if (!err) {
         console.log('handleSubmit values', values)
 
+        this.setState({ disabled: true })
         const payload = this.createPayloads(type, values)
 
         dispatch({
@@ -239,6 +239,10 @@ class WhatWhereWhenForm extends React.Component {
     this.setState({
       visible: false,
     })
+  }
+
+  onChange = () => {
+    this.setState({ disabled: false })
   }
 
   setFormState = type => {
@@ -315,7 +319,7 @@ class WhatWhereWhenForm extends React.Component {
     const { form, type } = this.props
     const { getFieldDecorator, getFieldsValue } = form
 
-    const { visible, labels } = this.state
+    const { visible, labels, disabled } = this.state
     const initialValues = this.getInitialValues(type)
 
     getFieldDecorator('keys', { initialValue: initialValues.map((expObj, i) => i) })
@@ -351,7 +355,13 @@ class WhatWhereWhenForm extends React.Component {
                   message: 'Please input additional experience or delete this field.',
                 },
               ],
-            })(<Input placeholder="e.g. EY" style={{ width: '100%', marginRight: 8 }} />)}
+            })(
+              <Input
+                placeholder="e.g. EY"
+                style={{ width: '100%', marginRight: 8 }}
+                onChange={this.onChange}
+              />,
+            )}
           </Form.Item>
           <Form.Item label={`${labels[1]} ${index + 1} Hyperlink`} required={false}>
             {getFieldDecorator(`links[${index}]`, {
@@ -362,10 +372,16 @@ class WhatWhereWhenForm extends React.Component {
                   required: true,
                   whitespace: true,
                   message: 'Not a valid URL. Sample URL: https://chunesupply.com',
-                  type: 'url',
+                  // type: 'url',
                 },
               ],
-            })(<Input placeholder="consulting.ey" style={{ width: '100%', marginRight: 8 }} />)}
+            })(
+              <Input
+                placeholder="consulting.ey"
+                style={{ width: '100%', marginRight: 8 }}
+                onChange={this.onChange}
+              />,
+            )}
           </Form.Item>
           <Form.Item label={`${labels[2]} ${index + 1}`} required={false}>
             {getFieldDecorator(`positions[${index}]`, {
@@ -382,6 +398,7 @@ class WhatWhereWhenForm extends React.Component {
               <Input
                 placeholder="e.g. Senior Consultant"
                 style={{ width: '100%', marginRight: 8 }}
+                onChange={this.onChange}
               />,
             )}
           </Form.Item>
@@ -396,10 +413,14 @@ class WhatWhereWhenForm extends React.Component {
               ],
               initialValue:
                 index < initialValues.length ? moment(initialValues[index].start_date) : null,
-            })(<MonthPicker />)}
+            })(<MonthPicker onChange={this.onChange} />)}
           </Form.Item>
           <Form.Item>
-            <Checkbox onClick={e => this.toggleDisabled(e, index)} checked={checkboxes[index]}>
+            <Checkbox
+              onClick={e => this.toggleDisabled(e, index)}
+              checked={checkboxes[index]}
+              onChange={this.onChange}
+            >
               I currently work here.
             </Checkbox>
           </Form.Item>
@@ -408,7 +429,7 @@ class WhatWhereWhenForm extends React.Component {
               rules: [
                 {
                   type: 'object',
-                  required: true,
+                  required: false,
                   message: 'Please select end date.',
                 },
               ],
@@ -416,7 +437,7 @@ class WhatWhereWhenForm extends React.Component {
                 index < initialValues.length && initialValues[index].end_date !== 'Present'
                   ? moment(initialValues[index].end_date)
                   : null,
-            })(<MonthPicker disabled={checkboxes[index]} />)}
+            })(<MonthPicker disabled={checkboxes[index]} onChange={this.onChange} />)}
           </Form.Item>
         </div>
       )
@@ -430,7 +451,7 @@ class WhatWhereWhenForm extends React.Component {
             <Icon type="plus" /> Add field
           </Button>
         </Form.Item>
-        <Button type="primary" htmlType="submit">
+        <Button type="primary" htmlType="submit" disabled={disabled}>
           Save
         </Button>
         <Modal

@@ -23,6 +23,7 @@ import { Form, Cascader, Button, Input, Icon, Modal, notification } from 'antd'
 class EducationForm extends React.Component {
   state = {
     visible: false,
+    disabled: true,
     k: null,
     index: null,
   }
@@ -143,6 +144,7 @@ class EducationForm extends React.Component {
     const { form, dispatch } = this.props
     form.validateFields((err, values) => {
       if (!err) {
+        this.setState({ disabled: true })
         const payload = this.getPayloads('Education', values)
 
         dispatch({
@@ -274,14 +276,14 @@ class EducationForm extends React.Component {
     })
   }
 
-  onChange = value => {
-    console.log(value)
+  onChange = () => {
+    this.setState({ disabled: false })
   }
 
   render() {
     const { form, type } = this.props
     const { getFieldDecorator, getFieldsValue } = form
-    const { visible } = this.state
+    const { visible, disabled } = this.state
 
     const initialValues = this.getInitialValues(type)
     const { labels } = this.getFormAttributes(type)
@@ -319,6 +321,7 @@ class EducationForm extends React.Component {
                 options={this.options}
                 expandTrigger="hover"
                 style={{ width: '100%', marginRight: 8 }}
+                onChange={this.onChange}
               />,
             )}
           </Form.Item>
@@ -333,7 +336,13 @@ class EducationForm extends React.Component {
                   message: 'Please input additional experience or delete this field.',
                 },
               ],
-            })(<Input placeholder="e.g. Biology" style={{ width: '60%', marginRight: 8 }} />)}
+            })(
+              <Input
+                placeholder="e.g. Biology"
+                style={{ width: '60%', marginRight: 8 }}
+                onChange={this.onChange}
+              />,
+            )}
           </Form.Item>
           <Form.Item label={`${labels[2]}`}>
             {getFieldDecorator(`secondMajors[${index}]`, {
@@ -346,7 +355,13 @@ class EducationForm extends React.Component {
                   message: 'Please input additional experience or delete this field.',
                 },
               ],
-            })(<Input placeholder="e.g. EY" style={{ width: '60%', marginRight: 8 }} />)}
+            })(
+              <Input
+                placeholder="e.g. EY"
+                style={{ width: '60%', marginRight: 8 }}
+                onChange={this.onChange}
+              />,
+            )}
           </Form.Item>
           <Form.Item label={`${labels[3]}`}>
             {getFieldDecorator(`minors[${index}]`, {
@@ -359,7 +374,13 @@ class EducationForm extends React.Component {
                   message: 'Please input additional experience or delete this field.',
                 },
               ],
-            })(<Input placeholder="e.g. Art History" style={{ width: '60%', marginRight: 8 }} />)}
+            })(
+              <Input
+                placeholder="e.g. Art History"
+                style={{ width: '60%', marginRight: 8 }}
+                onChange={this.onChange}
+              />,
+            )}
           </Form.Item>
           <Form.Item label={`${labels[4]}`}>
             {getFieldDecorator(`secondMinors[${index}]`, {
@@ -372,7 +393,13 @@ class EducationForm extends React.Component {
                   message: 'Please input additional experience or delete this field.',
                 },
               ],
-            })(<Input placeholder="e.g. Philosophy" style={{ width: '100%', marginRight: 8 }} />)}
+            })(
+              <Input
+                placeholder="e.g. Philosophy"
+                style={{ width: '100%', marginRight: 8 }}
+                onChange={this.onChange}
+              />,
+            )}
           </Form.Item>
         </div>
       )
@@ -386,7 +413,7 @@ class EducationForm extends React.Component {
             <Icon type="plus" /> Add field
           </Button>
         </Form.Item>
-        <Button type="primary" htmlType="submit">
+        <Button type="primary" htmlType="submit" disabled={disabled}>
           Save
         </Button>
         <Modal

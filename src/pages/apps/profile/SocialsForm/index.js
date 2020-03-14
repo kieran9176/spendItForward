@@ -26,6 +26,7 @@ const { Option } = Select
 class SocialsForm extends React.Component {
   state = {
     visible: false,
+    disabled: true,
     k: null,
     index: null,
   }
@@ -126,6 +127,7 @@ class SocialsForm extends React.Component {
     const { form, type, dispatch } = this.props
     form.validateFields((err, values) => {
       if (!err) {
+        this.setState({ disabled: true })
         const payload = this.createPayloads(type, values)
 
         dispatch({
@@ -200,8 +202,8 @@ class SocialsForm extends React.Component {
     })
   }
 
-  handleChange = e => {
-    console.log('handleChange event', e)
+  onChange = () => {
+    this.setState({ disabled: false })
   }
 
   // if your form doesn't have the fields these you set, this error will appear!
@@ -210,7 +212,7 @@ class SocialsForm extends React.Component {
   render() {
     const { form, type } = this.props
     const { getFieldDecorator, getFieldsValue } = form
-    const { visible } = this.state
+    const { visible, disabled } = this.state
 
     const initialValues = this.getInitialValues(type)
     const { title } = this.getFormAttributes(type)
@@ -246,7 +248,7 @@ class SocialsForm extends React.Component {
                 },
               ],
             })(
-              <Select style={{ width: '100%', marginRight: 8 }} onChange={this.handleChange}>
+              <Select style={{ width: '100%', marginRight: 8 }} onChange={this.onChange}>
                 {socialTypes.map(value => {
                   // eslint-disable-next-line react/no-array-index-key
                   return (
@@ -273,6 +275,7 @@ class SocialsForm extends React.Component {
               <Input
                 placeholder="e.g. https://facebook.com/kieran.derfus"
                 style={{ width: '100%', marginRight: 8 }}
+                onChange={this.onChange}
               />,
             )}
           </Form.Item>
@@ -289,7 +292,7 @@ class SocialsForm extends React.Component {
             <Icon type="plus" /> Add field
           </Button>
         </Form.Item>
-        <Button type="primary" htmlType="submit">
+        <Button type="primary" htmlType="submit" disabled={disabled}>
           Save
         </Button>
         <Modal

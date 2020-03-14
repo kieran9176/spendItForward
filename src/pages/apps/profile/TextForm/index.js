@@ -2,10 +2,6 @@ import React from 'react'
 import { connect } from 'react-redux'
 import { Form, Input, Button, notification } from 'antd'
 import moment from 'moment'
-// import style from '../style.module.scss'
-
-// const { MonthPicker } = DatePicker;
-// const { Option } = Select;
 
 const { TextArea } = Input
 
@@ -29,12 +25,11 @@ const { TextArea } = Input
 })
 class TextForm extends React.Component {
   state = {
-    // visible: false,
+    disabled: true,
     k: null,
     index: null,
     dispatchEdit: null,
     dispatchDelete: null,
-    // labels: []
   }
 
   componentDidMount() {
@@ -126,6 +121,10 @@ class TextForm extends React.Component {
     }
   }
 
+  onChange = () => {
+    this.setState({ disabled: false })
+  }
+
   handleSubmit = e => {
     e.preventDefault()
     const { form, dispatch, type } = this.props
@@ -133,6 +132,7 @@ class TextForm extends React.Component {
 
     form.validateFields((err, values) => {
       if (!err) {
+        this.setState({ disabled: true })
         const payload = this.createPayloads(type, values)
 
         dispatch({
@@ -198,14 +198,13 @@ class TextForm extends React.Component {
   render() {
     const { form, type } = this.props
     const { getFieldDecorator, getFieldsValue } = form
+    const { disabled } = this.state
 
-    // const { labels } = this.state;
     const initialValues = this.getInitialValues(type)
 
     getFieldDecorator('keys', { initialValue: initialValues.map((expObj, i) => i) })
     getFieldDecorator('IDs', { initialValue: initialValues.map(expObj => expObj.id) })
     getFieldDecorator('changed', { initialValue: initialValues.map(() => false) })
-    // getFieldDecorator('checkboxes', { initialValue: initialValues.map ((expObj) => expObj.end_date === "Present")});
 
     const { keys } = getFieldsValue()
 
@@ -228,7 +227,13 @@ class TextForm extends React.Component {
                   message: 'Please input additional experience or delete this field.',
                 },
               ],
-            })(<TextArea rows={4} style={{ width: '100%', marginRight: 8 }} />)}
+            })(
+              <TextArea
+                rows={4}
+                style={{ width: '100%', marginRight: 8 }}
+                onChange={this.onChange}
+              />,
+            )}
           </Form.Item>
         </div>
       )
@@ -237,7 +242,13 @@ class TextForm extends React.Component {
     return (
       <Form onSubmit={this.handleSubmit}>
         {textFormItem}
-        <Button className="mr-2" type="primary" htmlType="submit" style={{ width: 200 }}>
+        <Button
+          className="mr-2"
+          type="primary"
+          htmlType="submit"
+          style={{ width: 200 }}
+          disabled={disabled}
+        >
           <i className="fa fa-send mr-2" />
           Save Intro
         </Button>
