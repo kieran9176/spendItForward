@@ -120,7 +120,7 @@ class NewProfileApp extends React.Component {
                     <TabPane
                       tab={
                         <span>
-                          <i className="icmn-menu" /> Profile
+                          <i className="icmn-profile" /> Profile
                         </span>
                       }
                       key="1"
@@ -145,7 +145,7 @@ class NewProfileApp extends React.Component {
                     <TabPane
                       tab={
                         <span>
-                          <i className="icmn-bubbles" /> Builds
+                          <i className="icmn-checkbox-checked" /> Builds
                         </span>
                       }
                       key="2"
@@ -155,7 +155,7 @@ class NewProfileApp extends React.Component {
                     <TabPane
                       tab={
                         <span>
-                          <i className="icmn-cog" /> Site Details
+                          <i className="icmn-info" /> Site Details
                         </span>
                       }
                       key="3"
