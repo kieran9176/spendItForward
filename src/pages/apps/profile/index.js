@@ -3,7 +3,6 @@ import { Button, Tabs } from 'antd'
 import { Helmet } from 'react-helmet'
 import Avatar from 'components/CleanUIComponents/Avatar'
 import Donut from 'components/CleanUIComponents/Donut'
-import SettingsForm from './SettingsForm'
 import data from './data.json'
 import style from './style.module.scss'
 import TextForm from './TextForm'
@@ -14,48 +13,31 @@ import WhatWhereWhenForm from './WhatWhereWhenForm'
 import EducationForm from './EducationForm'
 import ReferencesForm from './ReferenceForm'
 import ArticleForm from './ArticleForm'
+import Cart from '../../ecommerce/cart'
+import WrappedCartCheckoutForm from '../../ecommerce/cart/CheckoutForm'
+import NameForm from './NameForm'
 
 const { TabPane } = Tabs
 
 class NewProfileApp extends React.Component {
   state = {
-    name: '',
-    nickname: '',
     photo: '',
     background: '',
-    post: '',
-    postsCount: '',
-    followersCount: '',
     lastActivity: '',
     status: '',
   }
 
   componentWillMount() {
     this.setState({
-      name: data.name,
-      nickname: data.nickname,
       photo: data.photo,
       background: data.background,
-      post: data.post,
-      postsCount: data.postsCount,
-      followersCount: data.followersCount,
       lastActivity: data.lastActivity,
       status: data.status,
     })
   }
 
   render() {
-    const {
-      name,
-      nickname,
-      photo,
-      background,
-      post,
-      postsCount,
-      followersCount,
-      lastActivity,
-      status,
-    } = this.state
+    const { photo, background, lastActivity, status } = this.state
 
     return (
       <div>
@@ -63,6 +45,11 @@ class NewProfileApp extends React.Component {
         <div className={style.profile}>
           <div className="row">
             <div className="col-xl-4">
+              <div className="card">
+                <div className="card-body">
+                  <NameForm type="Name" />
+                </div>
+              </div>
               <div
                 className={`card ${style.header}`}
                 style={{ backgroundImage: `url(${background})` }}
@@ -133,34 +120,13 @@ class NewProfileApp extends React.Component {
               </div>
             </div>
             <div className="col-xl-8">
-              <div className={`card card-body mb-4 ${style.socialInfo}`}>
-                <div>
-                  <h2>
-                    <span className="text-black mr-2">
-                      <strong>{name}</strong>
-                    </span>
-                    <small className="text-muted">{nickname}</small>
-                  </h2>
-                  <p className="mb-1">{post}</p>
-                </div>
-                <div className={style.socialCounts}>
-                  <div className="text-center mr-3">
-                    <h2>{followersCount}</h2>
-                    <p className="mb-0">Followers</p>
-                  </div>
-                  <div className="text-center">
-                    <h2>{postsCount}</h2>
-                    <p className="mb-0">Posts</p>
-                  </div>
-                </div>
-              </div>
               <div className="card">
                 <div className="card-body">
                   <Tabs defaultActiveKey="1">
                     <TabPane
                       tab={
                         <span>
-                          <i className="icmn-menu" /> Wall
+                          <i className="icmn-menu" /> Profile
                         </span>
                       }
                       key="1"
@@ -195,12 +161,14 @@ class NewProfileApp extends React.Component {
                     <TabPane
                       tab={
                         <span>
-                          <i className="icmn-cog" /> Settings
+                          <i className="icmn-cog" /> Site Details
                         </span>
                       }
                       key="3"
                     >
-                      <SettingsForm />
+                      <Cart />
+                      <hr />
+                      <WrappedCartCheckoutForm />
                     </TabPane>
                   </Tabs>
                 </div>
