@@ -144,35 +144,6 @@ export function* LOAD_CURRENT_PROFILE(username, sub) {
   }
 }
 
-// export function* FIRST_TIME_LOGIN(username) {
-//
-//   console.log("hit first time login, username:", username);
-//
-//   yield put({
-//     type: 'profile/SET_STATE',
-//     payload: {
-//       username,
-//       firstName: 'TBD',
-//       lastName: 'TBD',
-//       firstTimeLogin: {
-//         firstName: 'TBD',
-//         lastName: 'TBD',
-//         status: true
-//       },
-//       assets: assetData
-//     }
-//   });
-//
-//   yield put({
-//     type: 'builds/EDIT_BUILDS',
-//     payload: {
-//       appId: 'PENDING',
-//       developResponse: { status: 'PENDING' },
-//       masterResponse: { status: 'PENDING' },
-//     }
-//   })
-// }
-
 export async function EDIT_FIRST_TIME_LOGIN(payload) {
   console.log('SAGAS EDIT_FIRST_TIME_LOGIN', payload)
 }

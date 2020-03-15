@@ -1,4 +1,5 @@
 import React from 'react'
+import { connect } from 'react-redux'
 import { Row, Col, Tabs, Collapse } from 'antd'
 import { Helmet } from 'react-helmet'
 import Avatar from 'components/ImageUpload/Avatar'
@@ -15,10 +16,12 @@ import ArticleForm from './ArticleForm'
 import Cart from '../../ecommerce/cart'
 import WrappedCartCheckoutForm from '../../ecommerce/cart/CheckoutForm'
 import NameForm from './NameForm'
+import FirstTimeLogin from '../../first-time-login'
 
 const { TabPane } = Tabs
 const { Panel } = Collapse
 
+@connect(({ profile }) => ({ profile }))
 class NewProfileApp extends React.Component {
   state = {
     background: '',
@@ -32,6 +35,13 @@ class NewProfileApp extends React.Component {
 
   render() {
     const { background } = this.state
+    const { profile } = this.props
+    const { firstTimeLogin } = profile
+    const { status } = firstTimeLogin
+
+    if (status === true) {
+      return <FirstTimeLogin />
+    }
 
     return (
       <div>

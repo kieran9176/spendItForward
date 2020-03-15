@@ -2,11 +2,13 @@ import React from 'react'
 import { connect } from 'react-redux'
 import { withRouter } from 'react-router-dom'
 import { injectIntl } from 'react-intl'
-import { Row } from 'antd'
+import { Col, Row } from 'antd'
 import './styles/draft.css'
 import './styles/plugin.css'
 import styles from './styles/style.module.scss'
 import Avatar from '../../components/ImageUpload/Avatar'
+import style from '../apps/profile/style.module.scss'
+import NameForm from '../apps/profile/NameForm'
 
 @withRouter
 @connect(({ profile }) => ({ profile }))
@@ -14,70 +16,36 @@ import Avatar from '../../components/ImageUpload/Avatar'
 class FirstTimeLogin extends React.Component {
   state = {
     showSearch: true,
-    firstName: null,
-    lastName: null,
+    // firstName: null,
+    // lastName: null,
   }
 
-  onChange = (changeType, e) => {
-    const { dispatch } = this.props
-    const { firstName } = this.state
-
-    e.preventDefault()
-    if (changeType === 'firstName') {
-      this.setState({
-        firstName: e.target.value,
-      })
-    } else if (changeType === 'lastName') {
-      this.setState({
-        lastName: e.target.value,
-      })
-      dispatch({
-        type: 'profile/EDIT_FIRST_TIME_LOGIN',
-        payload: { firstName, lastName: e.target.value, status: true },
-      })
-    }
-  }
+  // onChange = (changeType, e) => {
+  //   const { dispatch } = this.props
+  //   const { firstName } = this.state
+  //
+  //   e.preventDefault()
+  //   if (changeType === 'firstName') {
+  //     this.setState({
+  //       firstName: e.target.value,
+  //     })
+  //   } else if (changeType === 'lastName') {
+  //     this.setState({
+  //       lastName: e.target.value,
+  //     })
+  //     dispatch({
+  //       type: 'profile/EDIT_FIRST_TIME_LOGIN',
+  //       payload: { firstName, lastName: e.target.value, status: true },
+  //     })
+  //   }
+  // };
 
   focus = () => {
     this.editor.focus()
   }
 
-  showLastName = () => {
-    const { firstName } = this.state
-    if (firstName) {
-      return (
-        <input
-          type="title"
-          className={styles.firstTimeInput}
-          id="lastNameInput"
-          placeholder="Last Name"
-          ref={this.handleNode}
-          onChange={e => this.onChange('lastName', e)}
-        />
-      )
-    }
-    return null
-  }
-
-  showImageUpload = () => {
-    const { firstName, lastName } = this.state
-    if (firstName && lastName) {
-      return (
-        <Row>
-          <div className={styles.firstTimeBody}>
-            <div className={styles.searchInput}>
-              <h2>Mind uploading a pic?</h2>
-            </div>
-            <Avatar type="Primary" />
-          </div>
-        </Row>
-      )
-    }
-    return null
-  }
-
   render() {
-    const { showSearch, firstName } = this.state
+    const { showSearch } = this.state
 
     return (
       <div className={styles.addPost}>
@@ -93,24 +61,36 @@ class FirstTimeLogin extends React.Component {
                 <div className={styles.logoContainer}>
                   <img className={styles.logo} src="resources/images/logo.png" alt="" />
                 </div>
-                <Row>
-                  <div className={styles.firstTimeBody}>
-                    <div className={styles.searchInput}>
-                      Welcome,
-                      <input
-                        type="title"
-                        className={styles.firstTimeInput}
-                        id="firstNameInput"
-                        placeholder="First Name"
-                        ref={this.handleNode}
-                        onChange={e => this.onChange('firstName', e)}
-                        style={{ width: firstName ? `${firstName.length * 24.1}px` : '30%' }}
-                      />
-                      {this.showLastName()}
+                <h1>
+                  <strong>Welcome to Frame.</strong>
+                </h1>
+                <h3>Enter your name and upload a picture, and we&apos;ll get started!</h3>
+                <div className={style.profile}>
+                  <div className="row">
+                    <div className="col-xl-4">
+                      <div className="card">
+                        <hr />
+                        <NameForm type="Name" />
+                      </div>
+                      <hr />
+                      <div
+                        className={`card ${style.header}`}
+                        style={{ backgroundImage: `url("resources/images/photos/4.jpeg")` }}
+                      >
+                        <div className="card-body">
+                          <Row gutter={24} className={style.imageRow}>
+                            <Col span={12}>
+                              <div className={style.imageLabel}>Primary</div>
+                            </Col>
+                            <Col span={12}>
+                              <Avatar type="Primary" />
+                            </Col>
+                          </Row>
+                        </div>
+                      </div>
                     </div>
                   </div>
-                </Row>
-                {this.showImageUpload()}
+                </div>
               </div>
             </div>
           </div>
