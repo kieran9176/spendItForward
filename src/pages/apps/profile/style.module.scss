@@ -1,5 +1,29 @@
 @import 'assets/styles/mixins.scss';
 
+.imageLabel {
+  border: none;
+  outline: none;
+  font-weight: bold;
+  font-size: rem(35);
+  background-color: transparent;
+  padding-left: 0;
+  padding-top: rem(40);
+  font-style: italic;
+  color: #f1f1f1;
+
+  @media screen and (max-width: $sm-max-width) {
+    font-size: rem(30);
+  }
+}
+
+.imageRow {
+  padding-top: rem(10);
+}
+
+.imageCol {
+  padding-left: rem(15);
+}
+
 .header {
   background-size: cover;
 }

@@ -1,8 +1,7 @@
 import React from 'react'
-import { Button, Tabs } from 'antd'
+import { Button, Row, Col, Tabs } from 'antd'
 import { Helmet } from 'react-helmet'
-import Avatar from 'components/CleanUIComponents/Avatar'
-import Donut from 'components/CleanUIComponents/Donut'
+import Avatar from 'components/ImageUpload/Avatar'
 import data from './data.json'
 import style from './style.module.scss'
 import TextForm from './TextForm'
@@ -21,23 +20,17 @@ const { TabPane } = Tabs
 
 class NewProfileApp extends React.Component {
   state = {
-    photo: '',
     background: '',
-    lastActivity: '',
-    status: '',
   }
 
   componentWillMount() {
     this.setState({
-      photo: data.photo,
       background: data.background,
-      lastActivity: data.lastActivity,
-      status: data.status,
     })
   }
 
   render() {
-    const { photo, background, lastActivity, status } = this.state
+    const { background } = this.state
 
     return (
       <div>
@@ -54,22 +47,23 @@ class NewProfileApp extends React.Component {
                 className={`card ${style.header}`}
                 style={{ backgroundImage: `url(${background})` }}
               >
-                <div>
-                  <div className="card-body text-center">
-                    <Avatar src={photo} size="110" border="true" borderColor="white" />
-                    <br />
-                    <br />
-                    <Button.Group size="default">
-                      <Button style={{ width: 150 }}>Follow</Button>
-                      <Button style={{ width: 150 }}>Add to Friend</Button>
-                    </Button.Group>
-                    <br />
-                    <p className="text-white mt-2">{`Last activity: ${lastActivity}`}</p>
-                    <p className="text-white mt-2">
-                      {status === 'Online' && <Donut type="success" name={status} />}
-                      {status === 'Offline' && <Donut type="danger" name={status} />}
-                    </p>
-                  </div>
+                <div className="card-body">
+                  <Row gutter={24} className={style.imageRow}>
+                    <Col span={12}>
+                      <div className={style.imageLabel}>Primary</div>
+                    </Col>
+                    <Col span={12}>
+                      <Avatar type="Primary" />
+                    </Col>
+                  </Row>
+                  <Row gutter={24} className={style.imageRow}>
+                    <Col span={12}>
+                      <div className={style.imageLabel}>Secondary</div>
+                    </Col>
+                    <Col span={12}>
+                      <Avatar type="Secondary" />
+                    </Col>
+                  </Row>
                 </div>
               </div>
               <div className="card">
