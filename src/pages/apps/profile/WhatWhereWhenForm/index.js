@@ -334,8 +334,10 @@ class WhatWhereWhenForm extends React.Component {
     const companyFormItem = keys.map((k, index) => {
       return (
         <div key={k}>
-          <p>
-            {type} {index + 1}
+          <h5>
+            <strong style={{ marginRight: 8 }}>
+              {type} {index + 1}
+            </strong>
             {keys.length > 1 ? (
               <Icon
                 className="dynamic-delete-button"
@@ -343,7 +345,7 @@ class WhatWhereWhenForm extends React.Component {
                 onClick={() => this.showModal(k, index)}
               />
             ) : null}
-          </p>
+          </h5>
           <Form.Item label={`${labels[0]} ${index + 1}`} required={false}>
             {getFieldDecorator(`organizations[${index}]`, {
               validateTrigger: ['onChange', 'onBlur'],

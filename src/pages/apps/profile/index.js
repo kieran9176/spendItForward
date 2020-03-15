@@ -1,5 +1,5 @@
 import React from 'react'
-import { Button, Row, Col, Tabs } from 'antd'
+import { Row, Col, Tabs, Collapse } from 'antd'
 import { Helmet } from 'react-helmet'
 import Avatar from 'components/ImageUpload/Avatar'
 import data from './data.json'
@@ -17,6 +17,7 @@ import WrappedCartCheckoutForm from '../../ecommerce/cart/CheckoutForm'
 import NameForm from './NameForm'
 
 const { TabPane } = Tabs
+const { Panel } = Collapse
 
 class NewProfileApp extends React.Component {
   state = {
@@ -69,20 +70,6 @@ class NewProfileApp extends React.Component {
               <div className="card">
                 <div className="card-body">
                   <h5 className="mb-3 text-black">
-                    <strong>Actions</strong>
-                  </h5>
-                  <div className={style.actions}>
-                    <Button style={{ display: 'block', width: '100%' }}>Send Message</Button>
-                    <Button style={{ display: 'block', width: '100%' }}>Send File</Button>
-                    <Button style={{ display: 'block', width: '100%' }}>Access History</Button>
-                    <Button style={{ display: 'block', width: '100%' }}>Rename User</Button>
-                    <Button style={{ display: 'block', width: '100%' }}>Ban User</Button>
-                  </div>
-                </div>
-              </div>
-              <div className="card">
-                <div className="card-body">
-                  <h5 className="mb-3 text-black">
                     <strong>Skills</strong>
                   </h5>
                   <TagsForm type="Skills" />
@@ -104,14 +91,6 @@ class NewProfileApp extends React.Component {
                   <SocialForm type="Socials" />
                 </div>
               </div>
-              <div className="card">
-                <div className="card-body">
-                  <h5 className="mb-3 text-black">
-                    <strong>Favorite Articles</strong>
-                  </h5>
-                  <ArticleForm type="Articles" />
-                </div>
-              </div>
             </div>
             <div className="col-xl-8">
               <div className="card">
@@ -125,22 +104,26 @@ class NewProfileApp extends React.Component {
                       }
                       key="1"
                     >
-                      <div className="py-3">
-                        <TextForm type="Intro" />
-                      </div>
-                      <hr />
-                      <h5>Experience</h5>
-                      <WhatWhereWhenForm type="Experience" />
-                      <hr />
-                      <h5>Education</h5>
-                      <EducationForm type="Education" />
-                      <hr />
-                      <h5>Leadership</h5>
-                      <WhatWhereWhenForm type="Leadership" />
-                      <hr />
-                      <h5>References</h5>
-                      <ReferencesForm type="References" />
-                      <hr />
+                      <Collapse bordered={false} defaultActiveKey={['1', '2']}>
+                        <Panel header="Intro" key="1">
+                          <TextForm type="Intro" />
+                        </Panel>
+                        <Panel header="Experience" key="2">
+                          <WhatWhereWhenForm type="Experience" />
+                        </Panel>
+                        <Panel header="Education" key="3">
+                          <EducationForm type="Education" />
+                        </Panel>
+                        <Panel header="Leadership" key="4">
+                          <WhatWhereWhenForm type="Leadership" />
+                        </Panel>
+                        <Panel header="References" key="5">
+                          <ReferencesForm type="References" />
+                        </Panel>
+                        <Panel header="Favorite Articles" key="6">
+                          <ArticleForm type="Articles" />
+                        </Panel>
+                      </Collapse>
                     </TabPane>
                     <TabPane
                       tab={
