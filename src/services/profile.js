@@ -35,8 +35,8 @@ export async function createProfile(username) {
     graphqlOperation(mutations.createProfile, {
       input: {
         username,
-        first_name: 'TBD FirstName',
-        last_name: 'TBD LastName',
+        // first_name: null,
+        // last_name: null,
       },
     }),
   )

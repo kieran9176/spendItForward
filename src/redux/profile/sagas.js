@@ -12,7 +12,7 @@ import assetData from './data'
 
 export function* LOAD_CURRENT_PROFILE(username, sub) {
   let profileResponse = yield getProfile(sub)
-  let firstTimeLoginStatus = false
+  let firstTimeLoginStatus = true
 
   if (!profileResponse.data.getProfile) {
     yield createProfile(username).then(async () => {
@@ -144,9 +144,9 @@ export function* LOAD_CURRENT_PROFILE(username, sub) {
   }
 }
 
-export async function EDIT_FIRST_TIME_LOGIN(payload) {
-  console.log('SAGAS EDIT_FIRST_TIME_LOGIN', payload)
-}
+// export async function EDIT_FIRST_TIME_LOGIN(payload) {
+//   console.log('SAGAS EDIT_FIRST_TIME_LOGIN', payload)
+// }
 
 export async function EDIT_PROFILE({ payload }) {
   const { mutation, data } = payload
@@ -158,8 +158,6 @@ export async function EDIT_PROFILE({ payload }) {
 }
 
 export async function EDIT_NAME({ payload }) {
-  console.log('EDIT_NAME data', payload)
-
   const response = editProfile('editName', payload)
   response.then(values => {
     if (values === 'Could not update profile') notify('failure')
@@ -176,16 +174,25 @@ export async function EDIT_POST({ payload }) {
   })
 }
 
-export async function EDIT_PRIMARY({ payload }) {
-  console.log('edit primary payload', payload)
-
+export function* EDIT_PRIMARY({ payload }) {
   const payloadObj = { id: payload.id, type: 'primary', url: payload.url }
-  const response = editProfile('editAsset', payloadObj)
+  const response = yield editProfile('editAsset', payloadObj)
 
-  response.then(values => {
-    if (values === 'Could not update profile') notify('failure')
-    else notify('success', 'assets')
-  })
+  console.log('edit primary response', response)
+
+  if (response.error) {
+    notify('failure')
+  } else {
+    yield put({
+      type: 'profile/SET_STATE',
+      payload: {
+        assets: [
+          { type: 'primary', url: response.data.updateAsset.url, id: response.data.updateAsset.id },
+        ],
+      },
+    })
+    notify('success', 'assets')
+  }
 }
 
 export async function EDIT_SECONDARY({ payload }) {
@@ -391,6 +398,6 @@ export default function* rootSaga() {
     takeEvery(actions.EDIT_SOCIALS, EDIT_SOCIALS),
     takeEvery(actions.DELETE_SOCIALS, DELETE_SOCIALS),
     takeEvery(actions.LOAD_CURRENT_PROFILE, LOAD_CURRENT_PROFILE),
-    takeEvery(actions.EDIT_FIRST_TIME_LOGIN, EDIT_FIRST_TIME_LOGIN),
+    // takeEvery(actions.EDIT_FIRST_TIME_LOGIN, EDIT_FIRST_TIME_LOGIN),
   ])
 }

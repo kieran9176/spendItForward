@@ -252,18 +252,10 @@ class Avatar extends React.Component {
     )
 
     if (progress === 100 && firstTimeLogin.status === true) {
-      const { firstName, lastName } = firstTimeLogin
-
-      dispatch({
-        type: 'profile/EDIT_NAME',
-        payload: [{ first_name: firstName, last_name: lastName }],
-      })
-
       dispatch({
         type: 'profile/EDIT_FIRST_TIME_LOGIN',
         payload: 'Step 2',
       })
-
       return <Redirect to="/apps/profile" />
     }
 
