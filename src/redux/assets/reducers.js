@@ -23,17 +23,6 @@ export default function assetsReducer(state = initialState, action) {
           ...action.payload,
         }
       })
-    // if (action.payload.type === 'primary') {
-    //   return state.map((asset => {
-    //     if (asset.type !== 'primary') return asset;
-    //     // else?
-    //     return {
-    //       ...asset,
-    //       ...action.payload
-    //     }
-    //   }))
-    // }
-    // return [...state, ...action.payload];
     default:
       return state
   }

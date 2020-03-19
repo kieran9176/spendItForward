@@ -12,7 +12,7 @@ import assetData from './data'
 
 export function* LOAD_CURRENT_PROFILE(username, sub) {
   let profileResponse = yield getProfile(sub)
-  let firstTimeLoginStatus = true
+  let firstTimeLoginStatus = false
 
   if (!profileResponse.data.getProfile) {
     yield createProfile(username).then(async () => {
