@@ -60,7 +60,7 @@ export function* LOAD_CURRENT_PROFILE(username, sub) {
         education,
         socials,
         brags,
-        assets,
+        // assets,
         firstTimeLogin: {
           first_name: 'TBD',
           last_name: 'TBD',
@@ -113,6 +113,11 @@ export function* LOAD_CURRENT_PROFILE(username, sub) {
         developResponse: { status: 'PENDING' },
         masterResponse: { status: 'PENDING' },
       },
+    })
+
+    yield put({
+      type: 'assets/SET_STATE',
+      payload: assets,
     })
   } else {
     yield put({

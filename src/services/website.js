@@ -115,9 +115,6 @@ export async function listAmplifyJobs(appId, branchName) {
     }
     const response = await buildStatusApi.post('/get-build-status', payload)
 
-    console.log('listAmplifyJobs Branch', branchName)
-    console.log('listAmplifyJobs Response', response)
-
     if (response.data === '') {
       return { status: 'SUCCEED' }
     }
