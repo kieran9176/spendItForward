@@ -1,7 +1,6 @@
 import React from 'react'
 import { connect } from 'react-redux'
 import { withRouter } from 'react-router-dom'
-import { injectIntl } from 'react-intl'
 import { Col, Row } from 'antd'
 import './styles/draft.css'
 import './styles/plugin.css'
@@ -12,33 +11,10 @@ import NameForm from '../apps/profile/NameForm'
 
 @withRouter
 @connect(({ profile }) => ({ profile }))
-@injectIntl
 class FirstTimeLogin extends React.Component {
   state = {
     showSearch: true,
-    // firstName: null,
-    // lastName: null,
   }
-
-  // onChange = (changeType, e) => {
-  //   const { dispatch } = this.props
-  //   const { firstName } = this.state
-  //
-  //   e.preventDefault()
-  //   if (changeType === 'firstName') {
-  //     this.setState({
-  //       firstName: e.target.value,
-  //     })
-  //   } else if (changeType === 'lastName') {
-  //     this.setState({
-  //       lastName: e.target.value,
-  //     })
-  //     dispatch({
-  //       type: 'profile/EDIT_FIRST_TIME_LOGIN',
-  //       payload: { firstName, lastName: e.target.value, status: true },
-  //     })
-  //   }
-  // };
 
   focus = () => {
     this.editor.focus()

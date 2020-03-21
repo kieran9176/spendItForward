@@ -12,7 +12,7 @@ import assetData from './data'
 
 export function* LOAD_CURRENT_PROFILE(username, sub) {
   let profileResponse = yield getProfile(sub)
-  let firstTimeLoginStatus = true
+  let firstTimeLoginStatus = false
 
   if (!profileResponse.data.getProfile) {
     yield createProfile(username).then(async () => {
@@ -60,7 +60,6 @@ export function* LOAD_CURRENT_PROFILE(username, sub) {
         education,
         socials,
         brags,
-        assets,
         firstTimeLogin: {
           first_name: 'TBD',
           last_name: 'TBD',
@@ -113,6 +112,16 @@ export function* LOAD_CURRENT_PROFILE(username, sub) {
         developResponse: { status: 'PENDING' },
         masterResponse: { status: 'PENDING' },
       },
+    })
+
+    yield put({
+      type: 'assets/SET_STATE',
+      payload: assets,
+    })
+
+    yield put({
+      type: 'socials/SET_STATE',
+      payload: socials,
     })
   } else {
     yield put({

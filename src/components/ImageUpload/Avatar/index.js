@@ -1,7 +1,7 @@
 import React from 'react'
 import { connect } from 'react-redux'
 import { Redirect } from 'react-router'
-import { Form, Upload, Icon, message, Progress, Button, notification } from 'antd'
+import { Upload, Icon, message, Progress, Button, notification } from 'antd'
 import { UploadOutlined } from '@ant-design/icons'
 import AWS from 'aws-sdk'
 import uuidv4 from 'uuid/v4'
@@ -52,34 +52,48 @@ function beforeUpload(file, type) {
   return 'Type Not Recognized'
 }
 
-@connect(({ profile }) => ({ profile }))
-@Form.create()
+@connect(({ assets, profile }) => ({ assets, profile }))
 class Avatar extends React.Component {
+  _isMounted = false
+
   state = {
     loading: false,
     progress: false,
     dispatchEdit: null,
-    id: null,
   }
 
-  componentDidMount() {
+  async componentDidMount() {
     const { type } = this.props
-    this.setFormState(type)
+    // eslint-disable-next-line no-underscore-dangle
+    this._isMounted = true
+    await this.setFormState(type)
   }
 
-  setFormState = type => {
-    this.setState(this.getInitialValues(type))
+  componentWillUnmount() {
+    // eslint-disable-next-line no-underscore-dangle
+    this._isMounted = false
+  }
+
+  setFormState = async type => {
+    // this.setState(this.getInitialValues(type));
     switch (type) {
       case 'Primary':
-        this.setState({
-          dispatchEdit: 'profile/EDIT_PRIMARY',
-        })
-        return 'Primary Success'
+        // eslint-disable-next-line no-underscore-dangle
+        if (this._isMounted) {
+          this.setState({ dispatchEdit: 'assets/EDIT_ASSETS' })
+          // this.setState(this.getInitialValues(type));
+          return 'Primary Success'
+        }
+        return 'Primary Failure'
       case 'Secondary':
-        this.setState({
-          dispatchEdit: 'profile/EDIT_SECONDARY',
-        })
-        return 'Secondary Success'
+        // eslint-disable-next-line no-underscore-dangle
+        if (this._isMounted) {
+          this.setState({
+            dispatchEdit: 'assets/EDIT_ASSETS',
+          })
+          // this.setState(this.getInitialValues(type));
+        }
+        return 'Secondary Failure'
       case 'Resume':
         this.setState({
           dispatchEdit: 'profile/EDIT_RESUME',
@@ -96,10 +110,11 @@ class Avatar extends React.Component {
   }
 
   getInitialValues = type => {
-    const { profile, id } = this.props
-    const { assets, posts } = profile
+    const { assets, id, profile } = this.props
+    const { posts } = profile
 
     if (type === 'Primary') {
+      console.log('avatar/index.js getInitialValues assets', assets)
       if (assets) return assets.filter(asset => asset.type === 'primary')[0]
       return { id: null, type: 'primary', url: '' }
     }
@@ -146,7 +161,6 @@ class Avatar extends React.Component {
     if (info.file.status === 'removed') {
       this.setState({
         loading: false,
-        url: null,
       })
     }
   }
@@ -170,8 +184,21 @@ class Avatar extends React.Component {
   }
 
   async handleUpload(fileObj) {
-    const { dispatch } = this.props
-    const { dispatchEdit, id, type } = this.state
+    const { dispatch, assets, type } = this.props
+    const { dispatchEdit } = this.state
+    let id = null
+
+    if (type === 'Primary') {
+      // eslint-disable-next-line prefer-destructuring
+      id = assets[0].id
+      // eslint-disable-next-line prefer-destructuring
+    }
+
+    if (type === 'Secondary') {
+      // eslint-disable-next-line prefer-destructuring
+      id = assets[1] ? assets[1].id : null
+      // eslint-disable-next-line prefer-destructuring
+    }
 
     this.setState({
       loading: true,
@@ -218,30 +245,44 @@ class Avatar extends React.Component {
           progress: false,
         })
 
-        this.setState({
-          id,
-          url: key,
-        })
-
-        this.render()
+        // this.setState({
+        //   id,
+        //   url: key,
+        // })
 
         dispatch({
           type: dispatchEdit,
-          payload: { type, id, url: key },
+          payload: { type: type.toLowerCase(), id, url: key },
         })
         return 'Success'
       })
   }
 
   render() {
-    const { loading, progress, url, id } = this.state
-    const { form, post, type, profile, dispatch } = this.props
+    const { loading, progress } = this.state
+    const { type, profile, dispatch, assets } = this.props
     const { firstTimeLogin } = profile
 
-    if (form && post) {
-      form.getFieldDecorator('image_url', {
-        initialValue: post ? post.image_url : null,
-      })
+    // if (form && post) {
+    //   form.getFieldDecorator('image_url', {
+    //     initialValue: post ? post.image_url : null,
+    //   })
+    // }
+    let id = null
+    let url = null
+
+    if (type === 'Primary') {
+      // eslint-disable-next-line prefer-destructuring
+      id = assets[0].id
+      // eslint-disable-next-line prefer-destructuring
+      url = assets[0].url
+    }
+
+    if (type === 'Secondary') {
+      // eslint-disable-next-line prefer-destructuring
+      id = assets[1] ? assets[1].id : null
+      // eslint-disable-next-line prefer-destructuring
+      url = assets[1] ? assets[1].url : null
     }
 
     const uploadImageButton = (

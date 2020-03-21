@@ -5,24 +5,32 @@ import socialTypes from './socials.json'
 
 const { Option } = Select
 
-@connect(({ profile, settings }) => ({ profile, settings }))
-@Form.create({
-  onFieldsChange(props, changedFields) {
-    const { form } = props
-    const { changed } = form.getFieldsValue()
-
-    const fieldArr = Object.keys(changedFields)
-    if (fieldArr[0] !== 'changed' && fieldArr.length === 1) {
-      // makes sure we're ignoring 2 events: 1. when the 'changed' field is updated, 2. form submit (changes all fields)
-      for (let i = 0; i < changedFields[fieldArr[0]].length; i += 1) {
-        if (changedFields[fieldArr[0]][i]) {
-          changed[i] = true
-          form.setFieldsValue({ changed })
-        }
-      }
-    }
-  },
-})
+@connect(({ settings, socials }) => ({ settings, socials }))
+// @Form.create({
+//   onFieldsChange(props, changedFields) {
+//     const { form } = props
+//     const { changed } = form.getFieldsValue()
+//
+//     const fieldArr = Object.keys(changedFields)
+//
+//     console.log('fieldArr', fieldArr);
+//     console.log('fieldArr[0]', fieldArr[0]);
+//
+//     if (fieldArr[0] !== 'changed' && fieldArr.length === 1) {
+//       // makes sure we're ignoring 2 events: 1. when the 'changed' field is updated, 2. form submit (changes all fields)
+//       for (let i = 0; i < changedFields[fieldArr[0]].length; i += 1) {
+//         if (changedFields[fieldArr[0]][i]) {
+//           changed[i] = 'true'
+//           console.log('changed', changed)
+//           form.setFieldsValue({ changed })
+//
+//           console.log(form.getFieldsValue());
+//         }
+//       }
+//     }
+//   },
+// })
+@Form.create()
 class SocialsForm extends React.Component {
   state = {
     visible: false,
@@ -43,11 +51,9 @@ class SocialsForm extends React.Component {
       return
     }
 
-    console.log('delete Socials')
-
     if (IDs[index]) {
       dispatch({
-        type: 'profile/DELETE_SOCIALS',
+        type: 'socials/DELETE_SOCIALS',
         data: { id: IDs[index] },
       })
     }
@@ -104,6 +110,8 @@ class SocialsForm extends React.Component {
     const socials = []
     switch (type) {
       case 'Socials':
+        console.log('values!', values)
+        // eslint-disable-next-line no-case-declarations
         for (let i = 0; i < values.keys.length; i += 1) {
           const formattedUrl = this.formatUrl(values.urls[i])
           socials.push({
@@ -131,7 +139,7 @@ class SocialsForm extends React.Component {
         const payload = this.createPayloads(type, values)
 
         dispatch({
-          type: 'profile/EDIT_SOCIALS',
+          type: 'socials/EDIT_SOCIALS',
           payload,
         })
 
@@ -152,7 +160,7 @@ class SocialsForm extends React.Component {
           title: 'Social',
           createMutation: 'createSocial',
           deleteMutation: 'removeSocial',
-          dispatchType: 'profile/EDIT_SOCIALS',
+          dispatchType: 'socials/EDIT_SOCIALS',
           labels: ['Type', 'URL'],
         }
       default:
@@ -165,8 +173,8 @@ class SocialsForm extends React.Component {
   }
 
   getInitialValues = type => {
-    const { profile } = this.props
-    const { socials } = profile
+    const { socials } = this.props
+    // const { socials } = profile
 
     switch (type) {
       case 'Socials':
@@ -219,7 +227,7 @@ class SocialsForm extends React.Component {
 
     getFieldDecorator('keys', { initialValue: initialValues.map((articleObj, i) => i) })
     getFieldDecorator('IDs', { initialValue: initialValues.map(articleObj => articleObj.id) })
-    getFieldDecorator('changed', { initialValue: initialValues.map(() => false) })
+    // getFieldDecorator('changed', { initialValue: initialValues.map(() => false) })
 
     const { keys } = getFieldsValue()
 

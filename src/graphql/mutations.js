@@ -566,6 +566,7 @@ export const createAsset = `mutation CreateAsset($input: CreateAssetInput!) {
   createAsset(input: $input) {
     url
     type
+    id
   }
 }
 `
