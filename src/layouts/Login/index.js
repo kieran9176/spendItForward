@@ -1,5 +1,5 @@
 import React from 'react'
-import { Layout, Button } from 'antd'
+import { Layout } from 'antd'
 import { Link, withRouter } from 'react-router-dom'
 import styles from './style.module.scss'
 
@@ -7,22 +7,7 @@ import styles from './style.module.scss'
 class LoginLayout extends React.PureComponent {
   state = {
     backgroundNumber: 4,
-    backgroundEnabled: true,
-  }
-
-  changeBackground = () => {
-    const { backgroundNumber } = this.state
-    this.setState({
-      backgroundEnabled: true,
-      backgroundNumber: backgroundNumber === 5 ? 1 : backgroundNumber + 1,
-    })
-  }
-
-  toggleBackground = () => {
-    const { backgroundEnabled } = this.state
-    this.setState({
-      backgroundEnabled: !backgroundEnabled,
-    })
+    backgroundEnabled: false,
   }
 
   render() {
@@ -53,18 +38,6 @@ class LoginLayout extends React.PureComponent {
                     />
                   )}
                 </Link>
-              </div>
-              <div className={styles.controls}>
-                <div className="d-inline-block mr-3">
-                  <Button type="default" onClick={this.changeBackground}>
-                    Change Background
-                  </Button>
-                </div>
-                <div className="d-inline-block">
-                  <Button type="default" onClick={this.toggleBackground}>
-                    Toggle Background
-                  </Button>
-                </div>
               </div>
               <nav className={styles.navigation}>
                 <ul className={styles.navigationItems}>
