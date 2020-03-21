@@ -1,38 +1,55 @@
 import React, { Component, useState } from 'react'
 import { AutoComplete } from 'antd'
 import { Helmet } from 'react-helmet'
-// import { Link } from 'react-router-dom'
+// import { Redirect } from 'react-router-dom'
 import { connect } from 'react-redux'
 import styles from './style.module.scss'
+import searchBusinesses from '../../../services/spend'
 
 const { Option } = AutoComplete
 
 @connect(({ user }) => ({ user }))
 class Landing extends Component {
-  onSubmit = event => {
-    event.preventDefault()
-    console.log(event.values)
-  }
-
   render() {
+    let typingTimer
+    const doneTypingInterval = 1000
+
     const Complete = () => {
-      const [result, setResult] = useState([])
+      const handleSelect = businessId => {
+        const selectedBusiness = result.filter(business => business.id === businessId)[0]
+        console.log(selectedBusiness)
+      }
+
+      const searchYelp = async value => {
+        const yelpResponse = await searchBusinesses(value)
+        const { businesses } = yelpResponse.data
+        return businesses
+      }
 
       const handleSearch = value => {
+        clearTimeout(typingTimer)
+        if (value) {
+          typingTimer = setTimeout(doneTyping, doneTypingInterval, value)
+        }
+      }
+
+      const doneTyping = async value => {
+        const businesses = await searchYelp(value)
         let res = []
 
-        if (!value || value.indexOf('@') >= 0) {
+        if (!value) {
           res = []
         } else {
-          res = ['gmail.com', '163.com', 'qq.com'].map(domain => `${value}@${domain}`)
+          res = businesses
         }
-
         setResult(res)
       }
 
-      const children = result.map(email => (
-        <Option key={email} value={email}>
-          {email}
+      const [result, setResult] = useState([])
+
+      const children = result.map(business => (
+        <Option key={Math.random()} value={business.id}>
+          {business.name}
         </Option>
       ))
 
@@ -41,8 +58,9 @@ class Landing extends Component {
           style={{
             width: '100%',
           }}
-          onSearch={handleSearch}
           placeholder="Bars, Restaurants"
+          onSearch={handleSearch}
+          onSelect={handleSelect}
         >
           {children}
         </AutoComplete>
