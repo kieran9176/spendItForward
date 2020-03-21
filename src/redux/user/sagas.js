@@ -10,13 +10,13 @@ import actions from './actions'
 Amplify.configure({
   Auth: {
     // REQUIRED - Amazon Cognito Region
-    region: 'us-east-2',
+    region: '',
 
     // OPTIONAL - Amazon Cognito User Pool ID
-    userPoolId: 'us-east-2_NxYax0giI',
+    userPoolId: '',
 
     // OPTIONAL - Amazon Cognito Web Client ID (26-char alphanumeric string)
-    userPoolWebClientId: '2tqnr5livk9hffpi3uu407ue7d',
+    userPoolWebClientId: '',
 
     // OPTIONAL - Enforce user authentication prior to accessing AWS resources or not
     mandatorySignIn: false,

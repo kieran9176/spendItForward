@@ -77,7 +77,7 @@ const pop = obj => {
       throw new Error()
     }
   }
-  if (!delete obj.changed) {
+  if (!delete obj.changed || !delete obj.changedValue) {
     throw new Error()
   }
   return obj
@@ -102,6 +102,8 @@ const filterData = (mutation, data) => {
       return data.filter(articleObj => articleObj.changed !== false)
     case 'editBrags':
       return data.filter(bragObj => bragObj.changed !== false)
+    case 'editSocials':
+      return data.filter(socialObj => socialObj.changedValue !== false)
     case 'updatePosts':
       return post
     default:

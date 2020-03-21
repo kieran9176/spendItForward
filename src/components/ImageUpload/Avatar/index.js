@@ -60,7 +60,6 @@ class Avatar extends React.Component {
     loading: false,
     progress: false,
     dispatchEdit: null,
-    id: null,
   }
 
   async componentDidMount() {
@@ -68,7 +67,6 @@ class Avatar extends React.Component {
     // eslint-disable-next-line no-underscore-dangle
     this._isMounted = true
     await this.setFormState(type)
-    console.log('state after mounted', this.state)
   }
 
   componentWillUnmount() {
@@ -163,7 +161,6 @@ class Avatar extends React.Component {
     if (info.file.status === 'removed') {
       this.setState({
         loading: false,
-        url: null,
       })
     }
   }
@@ -199,7 +196,7 @@ class Avatar extends React.Component {
 
     if (type === 'Secondary') {
       // eslint-disable-next-line prefer-destructuring
-      id = assets[1].id
+      id = assets[1] ? assets[1].id : null
       // eslint-disable-next-line prefer-destructuring
     }
 
@@ -283,9 +280,9 @@ class Avatar extends React.Component {
 
     if (type === 'Secondary') {
       // eslint-disable-next-line prefer-destructuring
-      id = assets[1].id
+      id = assets[1] ? assets[1].id : null
       // eslint-disable-next-line prefer-destructuring
-      url = assets[1].url
+      url = assets[1] ? assets[1].url : null
     }
 
     const uploadImageButton = (

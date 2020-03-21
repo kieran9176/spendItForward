@@ -60,7 +60,6 @@ export function* LOAD_CURRENT_PROFILE(username, sub) {
         education,
         socials,
         brags,
-        // assets,
         firstTimeLogin: {
           first_name: 'TBD',
           last_name: 'TBD',
@@ -118,6 +117,11 @@ export function* LOAD_CURRENT_PROFILE(username, sub) {
     yield put({
       type: 'assets/SET_STATE',
       payload: assets,
+    })
+
+    yield put({
+      type: 'socials/SET_STATE',
+      payload: socials,
     })
   } else {
     yield put({

@@ -3,9 +3,6 @@ import { editProfile, notify } from 'services/profile'
 import actions from './actions'
 
 export function* EDIT_ASSETS({ payload }) {
-  // do something async
-  console.log('EDIT_ASSETS PAYLOAD', payload)
-
   const payloadObj = { id: payload.id, type: payload.type, url: payload.url }
   const response = yield editProfile('editAsset', payloadObj)
 
@@ -16,8 +13,10 @@ export function* EDIT_ASSETS({ payload }) {
       type: 'assets/SET_STATE',
       payload: {
         type: payload.type,
-        url: response.data.updateAsset.url,
-        id: response.data.updateAsset.id,
+        url: response.data.updateAsset
+          ? response.data.updateAsset.url
+          : response.data.createAsset.url,
+        id: response.data.updateAsset ? response.data.updateAsset.id : response.data.createAsset.id,
       },
     })
     notify('success', 'assets')
