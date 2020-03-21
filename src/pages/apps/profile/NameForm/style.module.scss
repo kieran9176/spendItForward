@@ -1,0 +1,36 @@
+@import 'assets/styles/mixins.scss';
+
+.firstNameInput {
+  border: none;
+  outline: none;
+  font-weight: bold;
+  font-size: rem(70);
+  background-color: transparent;
+  padding-left: 0;
+  padding-top: rem(35);
+  padding-bottom: rem(35);
+
+  @media screen and (max-width: $sm-max-width) {
+    font-size: rem(40);
+  }
+}
+
+.lastNameInput {
+  border: none;
+  outline: none;
+  font-weight: bold;
+  font-size: rem(70);
+  background-color: transparent;
+  padding-left: 0;
+  padding-top: rem(35);
+  padding-bottom: rem(35);
+
+  @media screen and (max-width: $sm-max-width) {
+    font-size: rem(40);
+  }
+}
+
+.saveButton {
+  padding-left: 0;
+  padding-top: rem(10);
+}

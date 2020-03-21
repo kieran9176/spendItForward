@@ -5,9 +5,9 @@ import { withRouter } from 'react-router-dom'
 import classNames from 'classnames'
 import TopBar from 'components/LayoutComponents/TopBar'
 import Menu from 'components/LayoutComponents/Menu'
-import Footer from 'components/LayoutComponents/Footer'
+// import Footer from 'components/LayoutComponents/Footer'
 import Breadcrumbs from 'components/LayoutComponents/Breadcrumbs'
-import Settings from 'components/LayoutComponents/Settings'
+// import Settings from 'components/LayoutComponents/Settings'
 
 const mapStateToProps = ({ settings }) => ({
   isBorderless: settings.isBorderless,
@@ -41,7 +41,6 @@ class MainLayout extends React.PureComponent {
       >
         <BackTop />
         <Menu />
-        <Settings />
         <Layout>
           <Layout.Header>
             <TopBar />
@@ -50,9 +49,6 @@ class MainLayout extends React.PureComponent {
             <Breadcrumbs />
             <div className="utils__content">{children}</div>
           </Layout.Content>
-          <Layout.Footer>
-            <Footer />
-          </Layout.Footer>
         </Layout>
       </Layout>
     )

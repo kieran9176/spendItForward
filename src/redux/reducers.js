@@ -4,6 +4,9 @@ import user from './user/reducers'
 import menu from './menu/reducers'
 import settings from './settings/reducers'
 import profile from './profile/reducers'
+import builds from './builds/reducers'
+import assets from './assets/reducers'
+import socials from './socials/reducers'
 
 export default history =>
   combineReducers({
@@ -11,5 +14,8 @@ export default history =>
     user,
     menu,
     settings,
-    profile
+    profile,
+    builds,
+    assets,
+    socials,
   })

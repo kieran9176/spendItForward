@@ -1,31 +1,14 @@
 import React from 'react'
 import { Icon, Collapse } from 'antd'
 import { Helmet } from 'react-helmet'
-import {connect} from 'react-redux'
+import { connect } from 'react-redux'
 import Avatar from 'components/ImageUpload/Avatar'
 import styles from './style.module.scss'
-// import data from './data.json'
 
-// const props = {
-//   name: 'file',
-//   action: '//jsonplaceholder.typicode.com/posts/',
-//   headers: {
-//     authorization: 'authorization-text',
-//   },
-//   onChange(info) {
-//     if (info.file.status === 'done') {
-//       message.success(`${info.file.name} file uploaded successfully`)
-//     } else if (info.file.status === 'error') {
-//       message.error(`${info.file.name} file upload failed.`)
-//     }
-//   },
-// }
-
-@connect(({profile}) => ({profile}))
+@connect(({ profile }) => ({ profile }))
 class GalleryList extends React.Component {
-
   render() {
-    const { Panel } = Collapse;
+    const { Panel } = Collapse
 
     const customPanelStyle = {
       background: '#ffffff',
@@ -33,7 +16,7 @@ class GalleryList extends React.Component {
       marginBottom: 24,
       border: 0,
       overflow: 'hidden',
-    };
+    }
 
     return (
       <div>
@@ -42,7 +25,7 @@ class GalleryList extends React.Component {
           <Collapse
             bordered={false}
             defaultActiveKey={['2']}
-            expandIcon={({isActive}) => <Icon type="caret-right" rotate={isActive ? 90 : 0} />}
+            expandIcon={({ isActive }) => <Icon type="caret-right" rotate={isActive ? 90 : 0} />}
           >
             <Panel header="Primary" key="1" style={customPanelStyle}>
               <Avatar type="Primary" />
@@ -51,10 +34,19 @@ class GalleryList extends React.Component {
           <Collapse
             bordered={false}
             defaultActiveKey={['2']}
-            expandIcon={({isActive}) => <Icon type="caret-right" rotate={isActive ? 90 : 0} />}
+            expandIcon={({ isActive }) => <Icon type="caret-right" rotate={isActive ? 90 : 0} />}
           >
             <Panel header="Secondary" key="1" style={customPanelStyle}>
               <Avatar type="Secondary" />
+            </Panel>
+          </Collapse>
+          <Collapse
+            bordered={false}
+            defaultActiveKey={['2']}
+            expandIcon={({ isActive }) => <Icon type="caret-right" rotate={isActive ? 90 : 0} />}
+          >
+            <Panel header="Resume" key="1" style={customPanelStyle}>
+              <Avatar type="Resume" />
             </Panel>
           </Collapse>
         </div>

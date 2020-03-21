@@ -79,7 +79,7 @@ export const onCreateProfile = `subscription OnCreateProfile(
     }
   }
 }
-`;
+`
 export const onUpdateProfile = `subscription OnUpdateProfile(
   $id: ID
   $account_id: String
@@ -158,7 +158,7 @@ export const onUpdateProfile = `subscription OnUpdateProfile(
     }
   }
 }
-`;
+`
 export const onDeleteProfile = `subscription OnDeleteProfile(
   $id: ID
   $account_id: String
@@ -237,7 +237,7 @@ export const onDeleteProfile = `subscription OnDeleteProfile(
     }
   }
 }
-`;
+`
 export const onCreateArticle = `subscription OnCreateArticle(
   $id: ID
   $account_id: String
@@ -259,7 +259,7 @@ export const onCreateArticle = `subscription OnCreateArticle(
     url
   }
 }
-`;
+`
 export const onUpdateArticle = `subscription OnUpdateArticle(
   $id: ID
   $account_id: String
@@ -281,7 +281,7 @@ export const onUpdateArticle = `subscription OnUpdateArticle(
     url
   }
 }
-`;
+`
 export const onDeleteArticle = `subscription OnDeleteArticle(
   $id: ID
   $account_id: String
@@ -303,7 +303,7 @@ export const onDeleteArticle = `subscription OnDeleteArticle(
     url
   }
 }
-`;
+`
 export const onCreateReference = `subscription OnCreateReference(
   $id: ID
   $account_id: String
@@ -326,7 +326,7 @@ export const onCreateReference = `subscription OnCreateReference(
     author_company
   }
 }
-`;
+`
 export const onUpdateReference = `subscription OnUpdateReference(
   $id: ID
   $account_id: String
@@ -349,7 +349,7 @@ export const onUpdateReference = `subscription OnUpdateReference(
     author_company
   }
 }
-`;
+`
 export const onDeleteReference = `subscription OnDeleteReference(
   $id: ID
   $account_id: String
@@ -372,7 +372,7 @@ export const onDeleteReference = `subscription OnDeleteReference(
     author_company
   }
 }
-`;
+`
 export const onCreateExperience = `subscription OnCreateExperience(
   $id: ID
   $account_id: String
@@ -395,7 +395,7 @@ export const onCreateExperience = `subscription OnCreateExperience(
     link
   }
 }
-`;
+`
 export const onUpdateExperience = `subscription OnUpdateExperience(
   $id: ID
   $account_id: String
@@ -418,7 +418,7 @@ export const onUpdateExperience = `subscription OnUpdateExperience(
     link
   }
 }
-`;
+`
 export const onDeleteExperience = `subscription OnDeleteExperience(
   $id: ID
   $account_id: String
@@ -441,7 +441,7 @@ export const onDeleteExperience = `subscription OnDeleteExperience(
     link
   }
 }
-`;
+`
 export const onCreateLeadership = `subscription OnCreateLeadership(
   $id: ID
   $account_id: String
@@ -464,7 +464,7 @@ export const onCreateLeadership = `subscription OnCreateLeadership(
     link
   }
 }
-`;
+`
 export const onUpdateLeadership = `subscription OnUpdateLeadership(
   $id: ID
   $account_id: String
@@ -487,7 +487,7 @@ export const onUpdateLeadership = `subscription OnUpdateLeadership(
     link
   }
 }
-`;
+`
 export const onDeleteLeadership = `subscription OnDeleteLeadership(
   $id: ID
   $account_id: String
@@ -510,7 +510,7 @@ export const onDeleteLeadership = `subscription OnDeleteLeadership(
     link
   }
 }
-`;
+`
 export const onCreateOther = `subscription OnCreateOther($id: ID, $account_id: String, $content: AWSJSON) {
   onCreateOther(id: $id, account_id: $account_id, content: $content) {
     id
@@ -518,7 +518,7 @@ export const onCreateOther = `subscription OnCreateOther($id: ID, $account_id: S
     content
   }
 }
-`;
+`
 export const onUpdateOther = `subscription OnUpdateOther($id: ID, $account_id: String, $content: AWSJSON) {
   onUpdateOther(id: $id, account_id: $account_id, content: $content) {
     id
@@ -526,7 +526,7 @@ export const onUpdateOther = `subscription OnUpdateOther($id: ID, $account_id: S
     content
   }
 }
-`;
+`
 export const onDeleteOther = `subscription OnDeleteOther($id: ID, $account_id: String, $content: AWSJSON) {
   onDeleteOther(id: $id, account_id: $account_id, content: $content) {
     id
@@ -534,7 +534,7 @@ export const onDeleteOther = `subscription OnDeleteOther($id: ID, $account_id: S
     content
   }
 }
-`;
+`
 export const onCreateIntro = `subscription OnCreateIntro($id: ID, $account_id: String, $content: String) {
   onCreateIntro(id: $id, account_id: $account_id, content: $content) {
     id
@@ -542,7 +542,7 @@ export const onCreateIntro = `subscription OnCreateIntro($id: ID, $account_id: S
     content
   }
 }
-`;
+`
 export const onUpdateIntro = `subscription OnUpdateIntro($id: ID, $account_id: String, $content: String) {
   onUpdateIntro(id: $id, account_id: $account_id, content: $content) {
     id
@@ -550,7 +550,7 @@ export const onUpdateIntro = `subscription OnUpdateIntro($id: ID, $account_id: S
     content
   }
 }
-`;
+`
 export const onDeleteIntro = `subscription OnDeleteIntro($id: ID, $account_id: String, $content: String) {
   onDeleteIntro(id: $id, account_id: $account_id, content: $content) {
     id
@@ -558,7 +558,7 @@ export const onDeleteIntro = `subscription OnDeleteIntro($id: ID, $account_id: S
     content
   }
 }
-`;
+`
 export const onCreateSkill = `subscription OnCreateSkill($id: ID, $account_id: String, $content: String) {
   onCreateSkill(id: $id, account_id: $account_id, content: $content) {
     id
@@ -566,7 +566,7 @@ export const onCreateSkill = `subscription OnCreateSkill($id: ID, $account_id: S
     content
   }
 }
-`;
+`
 export const onUpdateSkill = `subscription OnUpdateSkill($id: ID, $account_id: String, $content: String) {
   onUpdateSkill(id: $id, account_id: $account_id, content: $content) {
     id
@@ -574,7 +574,7 @@ export const onUpdateSkill = `subscription OnUpdateSkill($id: ID, $account_id: S
     content
   }
 }
-`;
+`
 export const onDeleteSkill = `subscription OnDeleteSkill($id: ID, $account_id: String, $content: String) {
   onDeleteSkill(id: $id, account_id: $account_id, content: $content) {
     id
@@ -582,7 +582,7 @@ export const onDeleteSkill = `subscription OnDeleteSkill($id: ID, $account_id: S
     content
   }
 }
-`;
+`
 export const onCreateCoursework = `subscription OnCreateCoursework(
   $id: ID
   $account_id: String
@@ -598,7 +598,7 @@ export const onCreateCoursework = `subscription OnCreateCoursework(
     course_name
   }
 }
-`;
+`
 export const onUpdateCoursework = `subscription OnUpdateCoursework(
   $id: ID
   $account_id: String
@@ -614,7 +614,7 @@ export const onUpdateCoursework = `subscription OnUpdateCoursework(
     course_name
   }
 }
-`;
+`
 export const onDeleteCoursework = `subscription OnDeleteCoursework(
   $id: ID
   $account_id: String
@@ -630,7 +630,7 @@ export const onDeleteCoursework = `subscription OnDeleteCoursework(
     course_name
   }
 }
-`;
+`
 export const onCreateContact = `subscription OnCreateContact(
   $id: ID
   $account_id: String
@@ -649,7 +649,7 @@ export const onCreateContact = `subscription OnCreateContact(
     phone
   }
 }
-`;
+`
 export const onUpdateContact = `subscription OnUpdateContact(
   $id: ID
   $account_id: String
@@ -668,7 +668,7 @@ export const onUpdateContact = `subscription OnUpdateContact(
     phone
   }
 }
-`;
+`
 export const onDeleteContact = `subscription OnDeleteContact(
   $id: ID
   $account_id: String
@@ -687,4 +687,39 @@ export const onDeleteContact = `subscription OnDeleteContact(
     phone
   }
 }
-`;
+`
+export const onCreateSiteMetadata = `subscription OnCreateSiteMetadata(
+  $id: ID
+  $development_url: AWSURL
+  $production_url: AWSURL
+  $appId: String
+  $repoUrl: String
+) {
+  onCreateSiteMetadata(
+    id: $id
+    development_url: $development_url
+    production_url: $production_url
+    appId: $appId
+    repoUrl: $repoUrl
+  ) {
+    id
+    development_url
+    production_url
+    appId
+    repoUrl
+  }
+}
+`
+
+export const onCreateSiteMetadata2 = `subscription onCreateSiteMetadata($account_id: String) {
+  onCreateSiteMetadata (
+    account_id: $account_id
+  ) {
+    id
+    development_url
+    appId
+    repoUrl
+    theme
+  }
+}
+`

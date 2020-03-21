@@ -16,7 +16,7 @@ const initialState = {
     isMobileMenuOpen: false,
     isLightTheme: true,
     isSettingsOpen: false,
-    isMenuTop: false,
+    isMenuTop: true,
     isMenuCollapsed: false,
     isBorderless: true,
     isSquaredBorders: false,

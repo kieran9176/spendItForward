@@ -1,128 +1,171 @@
 import React from 'react'
 import { connect } from 'react-redux'
-import { Collapse, Icon, Button } from 'antd'
+import { Row, Col, Tabs, Collapse } from 'antd'
 import { Helmet } from 'react-helmet'
-import EducationForm from './EducationForm'
-import WhatWhenWhereForm from './WhatWhereWhenForm'
-import TagsForm from './TagsForm'
-import ArticleForm from './ArticleForm';
+import Avatar from 'components/ImageUpload/Avatar'
+import data from './data.json'
 import style from './style.module.scss'
-import { triggerDevelopmentBuild } from "../../../services/website"
+import TextForm from './TextForm'
+import TagsForm from './TagsForm'
+import SocialForm from './SocialsForm'
+import BuildStatus from './BuildStatus'
+import WhatWhereWhenForm from './WhatWhereWhenForm'
+import EducationForm from './EducationForm'
+import ReferencesForm from './ReferenceForm'
+import ArticleForm from './ArticleForm'
+import Cart from '../../ecommerce/cart'
+import WrappedCartCheckoutForm from '../../ecommerce/cart/CheckoutForm'
+import NameForm from './NameForm'
+import FirstTimeLogin from '../../first-time-login'
+
+const { TabPane } = Tabs
+const { Panel } = Collapse
 
 @connect(({ profile }) => ({ profile }))
-class ProfileApp extends React.Component {
+class NewProfileApp extends React.Component {
+  state = {
+    background: '',
+  }
 
-  handleClick = async (e) => {
-    e.preventDefault();
-    const { profile } = this.props
-    const { sub } = profile
-    const response = await triggerDevelopmentBuild(sub);
-    console.log("handleClick Response", response)
-  };
+  componentWillMount() {
+    this.setState({
+      background: data.background,
+    })
+  }
 
   render() {
+    const { background } = this.state
+    const { profile } = this.props
+    const { firstTimeLogin } = profile
+    const { status } = firstTimeLogin
 
-    const {Panel} = Collapse;
-
-    const text = {
-      experienceText: "Input any professional experience you have. If you don't have any, no worries! This is an optional section.",
-      skillsText: "You got mad skillz?",
-      courseworkText: "Tell us about all that ish you done learnt.",
-      educationText: "Maths? Science? MBA in Craft Beer Brewing?",
-      leadershipText: "If your actions inspire others to dream more, learn more, do more and become more, you are a leader.",
-      bragsText: "Brag about yourself. You deserve it.",
-      articlesText: "What have you been reading lately?"
-    };
-
-    const customPanelStyle = {
-      background: '#ffffff',
-      borderRadius: 4,
-      marginBottom: 24,
-      border: 0,
-      overflow: 'hidden',
-    };
+    if (status === true) {
+      return <FirstTimeLogin />
+    }
 
     return (
       <div>
         <Helmet title="Profile" />
         <div className={style.profile}>
-          <Button type="primary" onClick={this.handleClick} style={{marginBottom: 24}}>
-            Build Development Site
-          </Button>
-          <Collapse
-            bordered={false}
-            defaultActiveKey={['2']}
-            expandIcon={({isActive}) => <Icon type="caret-right" rotate={isActive ? 90 : 0} />}
-          >
-            <Panel header="Experience" key="1" style={customPanelStyle}>
-              <p>{text.experienceText}</p>
-              <WhatWhenWhereForm type="Experience" />
-            </Panel>
-          </Collapse>
-          <Collapse
-            bordered={false}
-            defaultActiveKey={['2']}
-            expandIcon={({isActive}) => <Icon type="caret-right" rotate={isActive ? 90 : 0} />}
-          >
-            <Panel header="Skills" key="2" style={customPanelStyle}>
-              <p>{text.skillsText}</p>
-              <TagsForm type="Skills" />
-            </Panel>
-          </Collapse>
-          <Collapse
-            bordered={false}
-            defaultActiveKey={['3']}
-            expandIcon={({isActive}) => <Icon type="caret-right" rotate={isActive ? 90 : 0} />}
-          >
-            <Panel header="Coursework" key="3" style={customPanelStyle}>
-              <p>{text.courseworkText}</p>
-              <TagsForm type="Coursework" />
-            </Panel>
-          </Collapse>
-          <Collapse
-            bordered={false}
-            defaultActiveKey={['1']}
-            expandIcon={({isActive}) => <Icon type="caret-right" rotate={isActive ? 90 : 0} />}
-          >
-            <Panel header="Education" key="4" style={customPanelStyle}>
-              <p>{text.educationText}</p>
-              <EducationForm type="Education" />
-            </Panel>
-          </Collapse>
-          <Collapse
-            bordered={false}
-            defaultActiveKey={['1']}
-            expandIcon={({isActive}) => <Icon type="caret-right" rotate={isActive ? 90 : 0} />}
-          >
-            <Panel header="Leadership" key="4" style={customPanelStyle}>
-              <p>{text.leadershipText}</p>
-              <WhatWhenWhereForm type="Leadership" />
-            </Panel>
-          </Collapse>
-          <Collapse
-            bordered={false}
-            defaultActiveKey={['1']}
-            expandIcon={({isActive}) => <Icon type="caret-right" rotate={isActive ? 90 : 0} />}
-          >
-            <Panel header="Above and Beyond / Brags" key="5" style={customPanelStyle}>
-              <p>{text.bragsText}</p>
-              <WhatWhenWhereForm type="Brags" />
-            </Panel>
-          </Collapse>
-          <Collapse
-            bordered={false}
-            defaultActiveKey={['1']}
-            expandIcon={({isActive}) => <Icon type="caret-right" rotate={isActive ? 90 : 0} />}
-          >
-            <Panel header="Favorite Articles" key="6" style={customPanelStyle}>
-              <p>{text.articlesText}</p>
-              <ArticleForm type="Articles" />
-            </Panel>
-          </Collapse>
+          <div className="row">
+            <div className="col-xl-4">
+              <div className="card">
+                <div className="card-body">
+                  <NameForm type="Name" />
+                </div>
+              </div>
+              <div
+                className={`card ${style.header}`}
+                style={{ backgroundImage: `url(${background})` }}
+              >
+                <div className="card-body">
+                  <Row gutter={24} className={style.imageRow}>
+                    <Col span={12}>
+                      <div className={style.imageLabel}>Primary</div>
+                    </Col>
+                    <Col span={12}>
+                      <Avatar type="Primary" />
+                    </Col>
+                  </Row>
+                  <Row gutter={24} className={style.imageRow}>
+                    <Col span={12}>
+                      <div className={style.imageLabel}>Secondary</div>
+                    </Col>
+                    <Col span={12}>
+                      <Avatar type="Secondary" />
+                    </Col>
+                  </Row>
+                </div>
+              </div>
+              <div className="card">
+                <div className="card-body">
+                  <h5 className="mb-3 text-black">
+                    <strong>Skills</strong>
+                  </h5>
+                  <TagsForm type="Skills" />
+                </div>
+              </div>
+              <div className="card">
+                <div className="card-body">
+                  <h5 className="mb-3 text-black">
+                    <strong>Coursework</strong>
+                  </h5>
+                  <TagsForm type="Coursework" />
+                </div>
+              </div>
+              <div className="card">
+                <div className="card-body">
+                  <h5 className="mb-3 text-black">
+                    <strong>Socials</strong>
+                  </h5>
+                  <SocialForm type="Socials" />
+                </div>
+              </div>
+            </div>
+            <div className="col-xl-8">
+              <div className="card">
+                <div className="card-body">
+                  <Tabs defaultActiveKey="1">
+                    <TabPane
+                      tab={
+                        <span>
+                          <i className="icmn-profile" /> Profile
+                        </span>
+                      }
+                      key="1"
+                    >
+                      <Collapse bordered={false} defaultActiveKey={['1', '2']}>
+                        <Panel header="Intro" key="1">
+                          <TextForm type="Intro" />
+                        </Panel>
+                        <Panel header="Experience" key="2">
+                          <WhatWhereWhenForm type="Experience" />
+                        </Panel>
+                        <Panel header="Education" key="3">
+                          <EducationForm type="Education" />
+                        </Panel>
+                        <Panel header="Leadership" key="4">
+                          <WhatWhereWhenForm type="Leadership" />
+                        </Panel>
+                        <Panel header="References" key="5">
+                          <ReferencesForm type="References" />
+                        </Panel>
+                        <Panel header="Favorite Articles" key="6">
+                          <ArticleForm type="Articles" />
+                        </Panel>
+                      </Collapse>
+                    </TabPane>
+                    <TabPane
+                      tab={
+                        <span>
+                          <i className="icmn-checkbox-checked" /> Builds
+                        </span>
+                      }
+                      key="2"
+                    >
+                      <BuildStatus />
+                    </TabPane>
+                    <TabPane
+                      tab={
+                        <span>
+                          <i className="icmn-info" /> Site Details
+                        </span>
+                      }
+                      key="3"
+                    >
+                      <Cart />
+                      <hr />
+                      <WrappedCartCheckoutForm />
+                    </TabPane>
+                  </Tabs>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     )
   }
 }
 
-export default ProfileApp
+export default NewProfileApp
