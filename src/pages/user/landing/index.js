@@ -1,10 +1,11 @@
 import React, { Component, useState } from 'react'
-import { AutoComplete } from 'antd'
+import { AutoComplete, Button } from 'antd'
 import { Helmet } from 'react-helmet'
+import { loadStripe } from '@stripe/stripe-js'
 // import { Redirect } from 'react-router-dom'
 import { connect } from 'react-redux'
 import styles from './style.module.scss'
-import searchBusinesses from '../../../services/spend'
+import { searchBusinesses, createStripeCheckout } from '../../../services/spend'
 
 const { Option } = AutoComplete
 
@@ -12,12 +13,28 @@ const { Option } = AutoComplete
 class Landing extends Component {
   render() {
     let typingTimer
-    const doneTypingInterval = 1000
+    const doneTypingInterval = 400
 
     const Complete = () => {
+      const [SelectedBusiness, setSelectedBusiness] = useState({})
+
+      const handleCheckout = async () => {
+        const stripe = await loadStripe('pk_test_c9Cn5LjrnyRlocPlGdthMSKv003cAp3yZR')
+        const session = await createStripeCheckout(SelectedBusiness)
+
+        const { error } = await stripe.redirectToCheckout({
+          sessionId: session.data.id,
+        })
+
+        if (error) {
+          console.log('Yikes boss')
+        }
+      }
+
       const handleSelect = businessId => {
-        const selectedBusiness = result.filter(business => business.id === businessId)[0]
-        console.log(selectedBusiness)
+        const selectedBusinessObj = result.filter(business => business.id === businessId)[0]
+        console.log(selectedBusinessObj)
+        setSelectedBusiness(selectedBusinessObj)
       }
 
       const searchYelp = async value => {
@@ -54,16 +71,23 @@ class Landing extends Component {
       ))
 
       return (
-        <AutoComplete
-          style={{
-            width: '100%',
-          }}
-          placeholder="Bars, Restaurants"
-          onSearch={handleSearch}
-          onSelect={handleSelect}
-        >
-          {children}
-        </AutoComplete>
+        <div>
+          <AutoComplete
+            style={{
+              width: '100%',
+            }}
+            placeholder="Bars, Restaurants"
+            onSearch={handleSearch}
+            onSelect={handleSelect}
+          >
+            {children}
+          </AutoComplete>
+          <div className="form-actions">
+            <Button type="primary" onClick={handleCheckout}>
+              Checkout
+            </Button>
+          </div>
+        </div>
       )
     }
 
