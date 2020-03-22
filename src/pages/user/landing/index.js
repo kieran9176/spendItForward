@@ -1,6 +1,5 @@
 import React, { Component, useState } from 'react'
 import { AutoComplete, Button, InputNumber, notification } from 'antd'
-import { ForwardOutlined } from '@ant-design/icons'
 import { Helmet } from 'react-helmet'
 import { loadStripe } from '@stripe/stripe-js'
 import { connect } from 'react-redux'
@@ -132,17 +131,13 @@ class Landing extends Component {
     return (
       <div>
         <Helmet title="Landing" />
-        <div className={styles.block}>
-          <div className={`${styles.title} login-heading`}>
-            <h1>
-              <strong>SPEND IT</strong>
-              <ForwardOutlined />
-              <strong>FORWARD</strong>
-            </h1>
-          </div>
-          <div className={styles.inner}>
-            <Complete />
-          </div>
+        <div className={`${styles.title} login-heading`}>
+          <h1>
+            <strong>SPEND IT FORWARD</strong>
+          </h1>
+        </div>
+        <div className={styles.inner}>
+          <Complete />
         </div>
       </div>
     )
