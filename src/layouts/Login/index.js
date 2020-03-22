@@ -42,14 +42,6 @@ class LoginLayout extends React.PureComponent {
               <nav className={styles.navigation}>
                 <ul className={styles.navigationItems}>
                   <li>
-                    <a href="javascript: void(0);">&larr; Back</a>
-                  </li>
-                  <li>
-                    <a className={styles.navigationActive} href="javascript: void(0);">
-                      Login
-                    </a>
-                  </li>
-                  <li>
                     <a href="javascript: void(0);">About</a>
                   </li>
                   <li>

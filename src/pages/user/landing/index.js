@@ -1,5 +1,6 @@
 import React, { Component, useState } from 'react'
 import { AutoComplete, Button, InputNumber, notification } from 'antd'
+import { ForwardOutlined } from '@ant-design/icons'
 import { Helmet } from 'react-helmet'
 import { loadStripe } from '@stripe/stripe-js'
 import { connect } from 'react-redux'
@@ -35,7 +36,7 @@ class Landing extends Component {
       const handleSelect = businessId => {
         const selectedBusinessObj = result.filter(business => business.id === businessId)[0]
         setSelectedBusiness(selectedBusinessObj)
-        setVisible(true)
+        setDisabled(false)
       }
 
       const searchYelp = async value => {
@@ -64,13 +65,10 @@ class Landing extends Component {
       }
 
       const onChange = value => {
-        console.log('value!', value)
-        setDisabled(false)
         setAmountValue(value)
       }
 
       const [result, setResult] = useState([])
-      const [visible, setVisible] = useState(false)
       const [disabled, setDisabled] = useState(true)
 
       const children = result.map(business => (
@@ -80,7 +78,6 @@ class Landing extends Component {
       ))
 
       const amountStyle = {
-        fontSize: 20,
         size: 'large',
         width: '100%',
       }
@@ -94,7 +91,7 @@ class Landing extends Component {
           <div>
             <div className="form-actions">
               <InputNumber
-                defaultValue={10}
+                defaultValue={amountValue}
                 formatter={value => `$ ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
                 parser={value => value.replace(/\$\s?|(,*)/g, '')}
                 onChange={onChange}
@@ -127,29 +124,24 @@ class Landing extends Component {
           >
             {children}
           </AutoComplete>
-          {visible ? amount() : null}
+          {amount()}
         </div>
       )
     }
 
     return (
       <div>
-        <Helmet title="Login" />
-        <div className={`${styles.title} login-heading`}>
-          <h1>
-            <strong>SPEND IT --&gt; FORWARD</strong>
-          </h1>
-          <p>
-            <strong>Let&#39;s get started.</strong>
-          </p>
-        </div>
+        <Helmet title="Landing" />
         <div className={styles.block}>
-          <div className="row">
-            <div className="col-xl-12">
-              <div className={styles.inner}>
-                <Complete />
-              </div>
-            </div>
+          <div className={`${styles.title} login-heading`}>
+            <h1>
+              <strong>SPEND IT</strong>
+              <ForwardOutlined />
+              <strong>FORWARD</strong>
+            </h1>
+          </div>
+          <div className={styles.inner}>
+            <Complete />
           </div>
         </div>
       </div>
