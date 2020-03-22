@@ -29,13 +29,10 @@ class LoginLayout extends React.PureComponent {
               <div className={styles.logo}>
                 <Link to="/">
                   {!backgroundEnabled && (
-                    <img src="resources/images/logo.png" alt="Clean UI React Admin Template" />
+                    <img src="resources/images/logo.png" alt="Spend It Forward" />
                   )}
                   {backgroundEnabled && (
-                    <img
-                      src="resources/images/logo-inverse.png"
-                      alt="Clean UI React Admin Template"
-                    />
+                    <img src="resources/images/logo-inverse.png" alt="Spend It Forward" />
                   )}
                 </Link>
               </div>
@@ -69,7 +66,7 @@ class LoginLayout extends React.PureComponent {
                   <a href="javascript: void(0);">Contacts</a>
                 </li>
               </ul>
-              <p>&copy; 2019 Mediatec. All rights reserved.</p>
+              <p>&copy; 2020 Spend It Forward. All rights reserved.</p>
             </div>
           </div>
         </Layout.Content>
