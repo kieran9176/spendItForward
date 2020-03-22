@@ -22,6 +22,11 @@ const routes = [
     exact: true,
   },
   {
+    path: '/user/landing',
+    component: loadable(() => import('pages/user/landing')),
+    exact: true,
+  },
+  {
     path: '/user/forgot',
     component: loadable(() => import('pages/user/forgot')),
     exact: true,
