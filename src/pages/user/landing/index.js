@@ -20,6 +20,9 @@ class Landing extends Component {
 
       const handleCheckout = async () => {
         const stripe = await loadStripe(`${process.env.REACT_APP_STRIPE_PUBLISHABLE_API_KEY}`)
+
+        console.log({ ...SelectedBusiness, ...{ amountValue } })
+
         const session = await createStripeCheckout({ ...SelectedBusiness, ...{ amountValue } })
         const { error } = await stripe.redirectToCheckout({
           sessionId: session.data.id,
