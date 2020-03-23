@@ -1,9 +1,9 @@
 import React, { Component, useState } from 'react'
-import { AutoComplete, Button, InputNumber, notification } from 'antd'
+import { AutoComplete, Button, InputNumber, notification, Spin } from 'antd'
 import { Helmet } from 'react-helmet'
 import { loadStripe } from '@stripe/stripe-js'
 import { connect } from 'react-redux'
-import styles from './style.module.scss'
+import styles from '../style.module.scss'
 import { searchBusinesses, createStripeCheckout } from '../../../services/spend'
 
 const { Option } = AutoComplete
@@ -39,7 +39,9 @@ class Landing extends Component {
       }
 
       const searchYelp = async value => {
+        setLoading(true)
         const yelpResponse = await searchBusinesses(value)
+        setLoading(false)
         const { businesses } = yelpResponse.data
         return businesses
       }
@@ -69,12 +71,29 @@ class Landing extends Component {
 
       const [result, setResult] = useState([])
       const [disabled, setDisabled] = useState(true)
+      const [loading, setLoading] = useState(false)
 
       const children = result.map(business => (
         <Option key={Math.random()} value={business.id}>
           {business.name}
         </Option>
       ))
+
+      const spinStyle = {
+        textAlign: 'center',
+        borderRadius: '4px',
+        margin: '20px 0',
+        marginBottom: '20px',
+        padding: '30px 50px',
+      }
+
+      const spin = (
+        <Option key={Math.random()} style={{ backgroundColor: '#FFF' }}>
+          <div style={spinStyle}>
+            <Spin />
+          </div>
+        </Option>
+      )
 
       const amountStyle = {
         size: 'large',
@@ -95,6 +114,8 @@ class Landing extends Component {
                 parser={value => value.replace(/\$\s?|(,*)/g, '')}
                 onChange={onChange}
                 style={amountStyle}
+                max={100}
+                min={1}
               />
             </div>
             <div className="form-actions">
@@ -121,7 +142,7 @@ class Landing extends Component {
             onSearch={handleSearch}
             onSelect={handleSelect}
           >
-            {children}
+            {loading ? spin : children}
           </AutoComplete>
           {amount()}
         </div>
