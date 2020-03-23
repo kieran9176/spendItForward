@@ -8,16 +8,17 @@
 
 .title {
   margin: 0 auto;
-  max-width: rem(740);
+  max-width: 100%;
   text-align: center;
-  padding-left: rem(20);
-  padding-right: rem(20);
+  padding-left: rem(9);
+  //padding-right: rem(20);
   h1 {
     font-weight: 900;
     margin-bottom: rem(30);
+    color: #ffc058;
+    letter-spacing: rem(10);
   }
 }
-
 .block {
   padding: rem(40) rem(40) rem(80);
   width: 100%;

@@ -3,7 +3,7 @@ import { AutoComplete, Button, InputNumber, notification, Spin } from 'antd'
 import { Helmet } from 'react-helmet'
 import { loadStripe } from '@stripe/stripe-js'
 import { connect } from 'react-redux'
-import styles from './style.module.scss'
+import styles from '../style.module.scss'
 import { searchBusinesses, createStripeCheckout } from '../../../services/spend'
 
 const { Option } = AutoComplete
