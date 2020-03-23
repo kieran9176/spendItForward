@@ -114,6 +114,8 @@ class Landing extends Component {
                 parser={value => value.replace(/\$\s?|(,*)/g, '')}
                 onChange={onChange}
                 style={amountStyle}
+                max={100}
+                min={1}
               />
             </div>
             <div className="form-actions">
