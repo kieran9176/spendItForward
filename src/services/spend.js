@@ -1,16 +1,5 @@
 import axios from 'axios'
 
-// let checkoutBaseUrl = ''
-// let checkoutRoute = ''
-// if (process.env.NODE_ENV === 'production') {
-//   checkoutBaseUrl = 'https://ksepaeguo0.execute-api.us-east-2.amazonaws.com/default'
-//   checkoutRoute = '/create-stripe-checkout'
-// } else {
-//   console.log('DEV ENVIRONMENT')
-//   checkoutBaseUrl = 'https://1tjoax1tti.execute-api.us-east-2.amazonaws.com/default'
-//   checkoutRoute = '/dev-create-stripe-checkout'
-// }
-
 const spend = axios.create({
   baseURL: 'https://ksepaeguo0.execute-api.us-east-2.amazonaws.com/default',
   headers: {
